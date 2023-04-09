@@ -1,0 +1,16 @@
+node_modules
+*.DS_Store
+/public/uploads
+/public/files
+/public/images
+/public/dest
+build
+index-main.html
+/.idea/
+/public/robots.txt
+/public/temp
+/html
+
+# JetBrains IDE
+.idea/
+.vscode
