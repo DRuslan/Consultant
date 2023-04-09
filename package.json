@@ -1,0 +1,26 @@
+{
+  "name": "consultant",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DRuslan/Consultant.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DRuslan/Consultant/issues"
+  },
+  "homepage": "https://github.com/DRuslan/Consultant#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
