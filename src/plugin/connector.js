@@ -1,9 +1,21 @@
-// myPlugin.js
-(function () {
-    window.myPluginSettings = {
-      apiKey: 'YOUR_API_KEY',
-      enableFeatureX: true,
-      // Другие параметры плагина
-    };
-  })();
-  
+export default {
+  install(Vue) {
+    // Vue.config.globalProperties.$widjet = function(params) {
+    //   return params
+    // }
+    let initWidjet = {};
+
+    Vue.config.globalProperties.$widjet = function(params) {
+      if (params) {
+        initWidjet = params
+      }
+      return initWidjet
+    }
+
+    if (window.widjetOuter) {
+      return initWidjet = window.widjetOuter;
+    } else {
+      return initWidjet = {};
+    }
+  }
+};

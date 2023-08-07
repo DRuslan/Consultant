@@ -1,8 +1,7 @@
 <template>
   <div>
     <h1>Hello, Vue 3 with Webpack 5!</h1>
-    <p>API Key: {{ $myPluginSettings.apiKey }}</p>
-    <p>API Key: {{ widjetParamsOuter.apiKey }}</p>
+    <h2>{{ $widjet(widjetParams) }}</h2>
     <panel />
   </div>
 </template>
@@ -13,15 +12,12 @@ export default {
   name: 'App',
   components: {panel},
   data() {
-    widjetParamsOuter = {}
+    return {
+      widjetParams: {}
+    }
   },
-  setup () {
-    const pluginParams = window.myPluginSettings;
-    this.widjetParamsOuter = pluginParams;
+  mounted() {
+    this.widjetParams = window.widjetOuter
   }
 };
 </script>
-
-<style>
-/* Ваши стили здесь */
-</style>
