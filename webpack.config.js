@@ -35,6 +35,11 @@ module.exports = {
     filename: 'js/[name].js',
     path: environment.paths.output,
   },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    }
+  },
   module: {
     rules: [
       {
@@ -51,7 +56,7 @@ module.exports = {
         use: ['babel-loader'],
       },
       {
-        test: /\.(png|gif|jpe?g|svg)$/i,
+        test: /\.(png|gif|jpe?g)$/i,
         type: 'asset',
         parser: {
           dataUrlCondition: {
@@ -72,6 +77,13 @@ module.exports = {
         },
         generator: {
           filename: 'images/design/[name].[hash:6][ext]',
+        },
+      },
+      {
+        test: /\.svg$/,
+        type: 'asset/source', // Измените тип обработки на 'asset/source'
+        generator: {
+          filename: 'icons/[name].[hash:6][ext]', // Путь для сохранения файлов
         },
       },
     ],
