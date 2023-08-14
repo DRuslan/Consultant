@@ -4,11 +4,16 @@
     :class="[
       { col__hr_right: hr === 'right' },
       { col__hr_left: hr === 'left' },
+      { col_left: hr === 'left' },
+      { col_right: hr === 'right' },
     ]"
   >
     <div
       class="col__container"
-      :class="[{ col__container_s: size === 's' }, { col__container_m: size === 'm' }]"
+      :class="[
+        { col__container_s: size === 's' },
+        { col__container_m: size === 'm' },
+      ]"
     >
       <slot />
     </div>
@@ -23,6 +28,16 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  position: {
+    type: String,
+    default: 'm',
+    validator: (value) => ["left", "right"].includes(value),
+  },
+  size: {
+    type: String,
+    default: 'm',
+    validator: (value) => ["s", "m"].includes(value),
+  }
 });
 </script>
 
@@ -31,6 +46,8 @@ const props = defineProps({
   height: 100%;
   position: relative;
   box-sizing: border-box;
+  &_left {margin-left: auto}
+  &_right {margin-right: initial;}
   &__hr {
     &::before {
       content: "";
@@ -53,7 +70,8 @@ const props = defineProps({
     }
   }
 
-  &__size {
+  &__container {
+    height: 100%;
     &_s {
       padding-left: 0px;
       padding-right: 0px;

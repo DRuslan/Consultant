@@ -1,14 +1,14 @@
 <template>
   <div class="widjet">
-    <PanelCol hr="right">
+    <PanelCol position="left" size="s" hr="right">
       <WidjetLink />
     </PanelCol>
 
-    <PanelCol size="m">
-      <WidjetContact />
+    <PanelCol position="left" hr="right">
+      <WidjetContact :fields="entryData.contact" />
     </PanelCol>
 
-    <PanelCol hr="left">
+    <PanelCol size="s" hr="left">
       <WidjetLink />
     </PanelCol>
   </div>
@@ -39,6 +39,5 @@ const props = defineProps({
   background: #3B6EC7;
   z-index: -1;
   display: flex;
-  justify-content: space-between;
 }
 </style>
