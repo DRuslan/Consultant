@@ -5,7 +5,7 @@
     </PanelCol>
 
     <PanelCol position="left" hr="right">
-      <WidjetContact :fields="entryData.contact" />
+      <WidjetContact :fields="toRefs(entryData.contact)" />
     </PanelCol>
 
     <PanelCol size="s" hr="left">
@@ -13,6 +13,22 @@
     </PanelCol>
   </div>
 </template>
+
+<!-- <script>
+import PanelCol from "./PanelCol.vue";
+import WidjetLink from "./WidjetLink.vue";
+import WidjetContact from "./WidjetContact.vue";
+
+export default {
+  components: { PanelCol, WidjetLink, WidjetContact },
+  props: {
+    entryData: {
+      type: Object,
+      required: true,
+    },
+  },
+};
+</script> -->
 
 <script setup>
 import { defineProps } from "vue";
@@ -23,7 +39,7 @@ import WidjetContact from "./WidjetContact.vue";
 
 const props = defineProps({
   entryData: {
-    type: Array,
+    type: Object,
     required: true,
   },
 });
@@ -36,7 +52,7 @@ const props = defineProps({
   position: fixed;
   bottom: 0;
   left: 0;
-  background: #3B6EC7;
+  background: #3b6ec7;
   z-index: -1;
   display: flex;
 }

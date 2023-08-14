@@ -1,13 +1,13 @@
 <template>
   <div class="social">
     <div class="social__item">
-      <!-- <Icon size="m" :name="'fields.icon'" /> -->
-      <!-- <p>{{ getf.icon }}</p> -->
+      <!-- <Icon size="m" :name="toRefs(getIcon())" /> -->
+      <p>{{ fields.icon }}</p>
     </div>
   </div>
 </template>
 
-<script>
+<!-- <script>
 export default {
   props: {
     fields: {
@@ -19,10 +19,10 @@ export default {
     console.log(this.fields);
   }
 };
-</script>
+</script> -->
 
-<!-- <script setup>
-import { defineProps, onBeforeMount, ref } from "vue";
+<script setup>
+import { defineProps, onBeforeMount, ref, toRefs } from "vue";
 import Icon from "./Base/Icon.vue";
 
 const props = defineProps({
@@ -32,19 +32,15 @@ const props = defineProps({
   },
 });
 
-const mergedFields = {
-  ...props.fields,
-}; -->
+// console.log(fields);
 
-<!-- // const getFields = ref([]);
+// function getIcon () {
+//   console.log(props.fields.icon);
+//   // console.log(typeof props.fields.icon);
+//   // return props.fields.icon;
+// }
+</script>
 
-// onBeforeMount(() => {
-//   getFields.value = props.fields.map(item);
-//   console.log(getFields.value);
-// }); -->
-
-
-<!-- </script> -->
 
 <style lang="scss" scoped>
 .social {
