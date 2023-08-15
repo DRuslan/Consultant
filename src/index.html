@@ -14,7 +14,7 @@
             color: "#fff",
             contact: {
                 btnText: "Контакты",
-                icon: "geo",
+                iconName: "geo",
                 title: "ООО СТ-Проект",
                 phone: "8-800-333-01-93",
                 email: "info@network-technologies.ru",
@@ -23,19 +23,45 @@
                     "г. Новосибирск, ул. Ядринцевская, 23, офис 223",
                 ],
             },
-            social: {
-                vk: "",
-                tg: "",
+            social: [
+                {
+                    link: "link",
+                    iconName: "whatsapp"
+                },
+                {
+                    link: "link",
+                    iconName: "tg"
+                },
+            ],
+            catalog: {
+                btnText: "Каталог ELTEX 2023",
+                iconName: "pdf",
+                iconDop: "download"
             },
-            feedback: false,
-            fastmail: false,
-            onlineConsultant: {
-                img: '',
-                name: '',
-                description: '',
-                btnCloseText: '',
-                btnWriteText: '',
-            }
+            fastmail: {
+                btnText: "Быстрая отправка письма",
+                iconName: "mail",
+            },
+            onlineConsultant: [
+                {
+                    img: '',
+                    name: '',
+                    description: '',
+                    btnCloseText: '',
+                    btnWriteText: '',
+                    iconName: "mail",
+                    btnText: "Онлайн-инжинер",
+                },
+                {
+                    img: '',
+                    name: '',
+                    description: '',
+                    btnCloseText: '',
+                    btnWriteText: '',
+                    iconName: "mail",
+                    btnText: "Онлайн-консультант",
+                }
+            ]
         }
     </script>
 </body>

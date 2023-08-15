@@ -5,7 +5,27 @@
     </PanelCol>
 
     <PanelCol position="left" hr="right">
-      <WidjetContact :fields="toRefs(entryData.contact)" />
+      <WidjetContact v-bind="entryData.contact" />
+    </PanelCol>
+
+    <PanelCol position="left" hr="right">
+      <WidjetSocial :social="entryData.social" />
+    </PanelCol>
+
+    <PanelCol position="left" hr="right">
+      <WidjetCatalog v-bind="entryData.catalog" />
+    </PanelCol>
+
+    <PanelCol position="left" hr="right">
+      <WidjetCatalog v-bind="entryData.fastmail" />
+    </PanelCol>
+
+    <PanelCol position="right" hr="left">
+      <WidjetCatalog v-bind="entryData.fastmail" />
+    </PanelCol>
+
+    <PanelCol position="right" hr="left">
+      <WidjetCatalog v-bind="entryData.fastmail" />
     </PanelCol>
 
     <PanelCol size="s" hr="left">
@@ -14,28 +34,14 @@
   </div>
 </template>
 
-<!-- <script>
-import PanelCol from "./PanelCol.vue";
-import WidjetLink from "./WidjetLink.vue";
-import WidjetContact from "./WidjetContact.vue";
-
-export default {
-  components: { PanelCol, WidjetLink, WidjetContact },
-  props: {
-    entryData: {
-      type: Object,
-      required: true,
-    },
-  },
-};
-</script> -->
-
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, toRaw } from "vue";
 
 import PanelCol from "./PanelCol.vue";
 import WidjetLink from "./WidjetLink.vue";
 import WidjetContact from "./WidjetContact.vue";
+import WidjetSocial from "./WidjetSocial.vue";
+import WidjetCatalog from "./WidjetCatalog.vue";
 
 const props = defineProps({
   entryData: {

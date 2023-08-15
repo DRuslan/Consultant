@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div v-if="iconName"
     class="icon"
     :class="[
       { icon__size_s: size === 's' },
@@ -15,9 +15,8 @@
 <script>
 export default {
   props: {
-    name: {
+    iconName: {
       type: String,
-      required: true,
       validator: (value) => ["phone", "mail", "geo"].includes(value),
     },
     size: {
@@ -28,7 +27,9 @@ export default {
   },
   computed: {
     getPath () {
-        return require(`@/icons/${this.name}.svg?raw`)
+      return require(`@/icons/${this.iconName}.svg?raw`)
+      // const convertedObgIcon = JSON.parse(this.name);
+      // return require(`@/icons/${JSON.stringify(JSON.stringify(convertedObgIcon))}.svg?raw`)
     }
   }
 };
@@ -39,7 +40,7 @@ export default {
   flex: none;
   display: inline-block;
   fill: currentColor;
-  stroke: currentColor;
+  // stroke: currentColor;
   &__size {
     &_s {
       width: 16px;
