@@ -10,17 +10,34 @@
 
     <script>
         window.widjetOuter = {
-            name: "Ruslan",
-            color: "#fff",
+            global: {
+                color: "#3B6EC7",
+            },
             contact: {
                 btnText: "Контакты",
                 iconName: "geo",
                 title: "ООО СТ-Проект",
-                phone: "8-800-333-01-93",
-                email: "info@network-technologies.ru",
-                addresses: [
-                    "г. Москва, ул. Шарикоподшипниковская, 38 ст 1",
-                    "г. Новосибирск, ул. Ядринцевская, 23, офис 223",
+                email: [
+                    {
+                        iconName: 'geo',
+                        value: "info@network-technologies.ru"
+                    }
+                ],
+                phone: [
+                    {
+                        iconName: 'geo',
+                        value: "8-800-333-01-93"
+                    }
+                ],
+                address: [
+                    {
+                        iconName: 'geo',
+                        value: "г. Москва, ул. Шарикоподшипниковская, 38 ст 1",
+                    },
+                    {
+                        iconName: 'geo',
+                        value: "г. Новосибирск, ул. Ядринцевская, 23, офис 223",
+                    },
                 ],
             },
             social: [

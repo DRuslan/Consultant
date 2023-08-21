@@ -1,5 +1,6 @@
 <template>
-  <div class="widjet">
+  <div class="widjet" :style="{ backgroundColor: $widjet().global.color }">
+    
     <div class="widjet__col">
       <PanelCol hr="right" @click="showWindow('Contact')">
         <WidjetContact v-bind="entryData.contact" />
@@ -32,23 +33,17 @@
       </PanelCol>
     </div>
 
-    <Window :isVisible="isWindowVisible" @close="hideWindow" v-bind:dataWindow="entryData.contact">
-      <template v-if="windowType === 'Contact'" v-slot:header>
-        Contact Header
-      </template>
-      <template v-else-if="windowType === 'Social'" v-slot:header>
-        Social Header
-      </template>
-      <!-- Добавьте другие условия для разных типов окон -->
-      <template v-slot:body>
-        Window Content
-      </template>
-    </Window>
+    <Window 
+      :isVisible="isWindowVisible"
+      @close="hideWindow"
+      :windowType="windowType"
+      v-bind:dataWindow="entryData.contact"
+    />
   </div>
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { computed, defineProps, onUpdated, ref } from "vue";
 
 import PanelCol from "./PanelCol.vue";
 import WidjetLink from "./WidjetLink.vue";
@@ -66,6 +61,10 @@ const props = defineProps({
 
 const isWindowVisible = ref(false);
 const windowType = ref(""); // Переменная для определения типа окна
+
+computed(() => {
+ return  console.log($getGlobalColor);
+})
 
 function showWindow(type) {
   windowType.value = type;
@@ -85,7 +84,6 @@ function hideWindow() {
   position: fixed;
   bottom: 0;
   left: 0;
-  background: #3b6ec7;
   z-index: -1;
   display: flex;
   justify-content: space-between;

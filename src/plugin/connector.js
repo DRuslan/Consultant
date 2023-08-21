@@ -1,21 +1,22 @@
 export default {
   install(Vue) {
-    // Vue.config.globalProperties.$widjet = function(params) {
-    //   return params
-    // }
     let initWidjet = {};
 
+    const isEmpty = (obj) => {
+      return Object.keys(obj).length === 0;
+    };
+
     Vue.config.globalProperties.$widjet = function(params) {
-      if (params) {
-        initWidjet = params
+      if (params && !isEmpty(params)) {
+        initWidjet = params;
       }
       return initWidjet
     }
 
-    if (window.widjetOuter) {
+    if (window.widjetOuter && !isEmpty(window.widjetOuter)) {
       return initWidjet = window.widjetOuter;
-    } else {
-      return initWidjet = {};
     }
+
+    return initWidjet; 
   }
 };

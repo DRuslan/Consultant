@@ -1,28 +1,84 @@
 <template>
-  <transition name="modal-animation">
-    <div v-show="isVisible" class="window">
-      <slot name="header"></slot>
-      <slot name="body"></slot>
-      <slot name="footer"></slot>
-      <button @click.self="$emit('close')">X</button>
+  <Wrapper :isVisible="isVisible">
+    <div class="window">
+      <div :style="{ backgroundColor: $widjet().global.color }" class="window__header">
+        <div class="window__header_title">
+          <Icon size="m" icon-name="geo"></Icon>
+          <p>{{ titleHeader }}</p>
+          <!-- <p>{{ dataWindow.btnText.value }}</p> -->
+        </div>
+        <Icon size="m" icon-name="arrow" @click="$emit('close')" class="window__header_icon"></Icon>
+      </div>
+      <div class="window__body">
+        <p class="window__body_title">
+          {{ title }}
+        </p>
+        <ul>
+          <!-- <li>{{ email }}</li>
+          <li>{{ phone }}</li>
+          <li>{{ address }}</li>
+          <li>{{ address }}</li> -->
+          <li v-for="(item, index) in fields" :key="index">
+            <div v-if="index !== 'address'" v-for="el in item">
+              <Icon size="m" :icon-name="el.iconName"></Icon>  
+              <p>{{ el.value }}</p>
+            </div>
+          </li>
+          <!-- <li v-if="fields && fields.address" v-for="(addressItem, addressIndex) in fields.address" :key="addressIndex">
+            <p>{{ addressItem }}</p>
+          </li> -->
+
+        </ul>
+      </div>
+      <div class="window__footer"></div>
     </div>
-  </transition>
+  </Wrapper>
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import Wrapper from './WindowWrapper.vue'
+import { ref, defineProps, computed } from "vue";
+import Icon from "../Base/Icon.vue";
 
 const props = defineProps({
   isVisible: Boolean,
+  windowType: String,
+  dataWindow: Object
 });
+
+const fields = computed(() => { return props.dataWindow ? props.dataWindow : null });
+const titleHeader = computed(() => { return props.dataWindow ? props.dataWindow.btnText : null });
 </script>
 
 <style lang="scss" scoped>
 .window {
-  position: absolute;
-  top: 0;
-  z-index: 5;
-  transform: translateY(-100%);
+  border-radius: 8px;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 13px;
+    width: 300px;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    &_title {
+      display: flex;
+      align-items: center;
+      p {
+        margin-left: 8px;
+      }
+    }
+    &_icon {
+      cursor: pointer;
+    }
+  }
+
+  &__body {
+    ul {
+      li {
+        list-style: none;
+      }
+    }
+  }
 }
 
 .modal-animation-enter-active,

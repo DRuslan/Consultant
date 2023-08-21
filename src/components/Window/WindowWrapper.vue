@@ -1,6 +1,7 @@
 <template>
     <transition name="modal-animation">
-      <div v-show="isVisible" class="window">
+      <div v-show="isVisible" class="wrapper">
+        <slot />
         <button @click.self="$emit('close')">X</button>
       </div>
     </transition>
@@ -15,7 +16,7 @@
   </script>
   
   <style lang="scss" scoped>
-  .window {
+  .wrapper {
     position: absolute;
     top: 0;
     z-index: 5;

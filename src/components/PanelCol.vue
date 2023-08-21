@@ -67,6 +67,7 @@ const props = defineProps({
 
   &__container {
     height: 100%;
+    cursor: pointer;
     &_s {
       padding-left: 0px;
       padding-right: 0px;
