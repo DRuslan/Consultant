@@ -28,11 +28,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  position: {
-    type: String,
-    default: 'm',
-    validator: (value) => ["left", "right"].includes(value),
-  },
   size: {
     type: String,
     default: 'm',
