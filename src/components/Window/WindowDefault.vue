@@ -3,41 +3,32 @@
     <div class="window">
       <div :style="{ backgroundColor: $widjet().global.color }" class="window__header">
         <div class="window__header_title">
-          <Icon size="m" icon-name="geo"></Icon>
-          <p>{{ titleHeader }}</p>
-          <!-- <p>{{ dataWindow.btnText.value }}</p> -->
+          <Icon size="m" :icon-name="dataWindow.window.header.iconName"></Icon>
+          <p>{{ dataWindow.window.header.title }}</p>
         </div>
         <Icon size="m" icon-name="arrow" @click="$emit('close')" class="window__header_icon"></Icon>
       </div>
       <div class="window__body">
         <p class="window__body_title">
-          {{ title }}
+          {{ dataWindow.window.body.title }}
         </p>
-        <ul>
-          <!-- <li>{{ email }}</li>
-          <li>{{ phone }}</li>
-          <li>{{ address }}</li>
-          <li>{{ address }}</li> -->
-          <li v-for="(item, index) in fields" :key="index">
-            <div v-if="index !== 'address'" v-for="el in item">
-              <Icon size="m" :icon-name="el.iconName"></Icon>  
-              <p>{{ el.value }}</p>
-            </div>
-          </li>
-          <!-- <li v-if="fields && fields.address" v-for="(addressItem, addressIndex) in fields.address" :key="addressIndex">
-            <p>{{ addressItem }}</p>
-          </li> -->
 
+        <ul class="list">
+          <template v-for="(item, index) in dataWindow.window.body" :key="index">
+            <li v-if="index !== title" class="list__item">
+              <Icon size="m" :icon-name="item.iconName"></Icon>  
+              <p>{{ item.value }}</p>
+            </li>
+          </template>
         </ul>
       </div>
-      <div class="window__footer"></div>
     </div>
   </Wrapper>
 </template>
 
 <script setup>
 import Wrapper from './WindowWrapper.vue'
-import { ref, defineProps, computed } from "vue";
+import { defineProps } from "vue";
 import Icon from "../Base/Icon.vue";
 
 const props = defineProps({
@@ -45,19 +36,17 @@ const props = defineProps({
   windowType: String,
   dataWindow: Object
 });
-
-const fields = computed(() => { return props.dataWindow ? props.dataWindow : null });
-const titleHeader = computed(() => { return props.dataWindow ? props.dataWindow.btnText : null });
 </script>
 
 <style lang="scss" scoped>
 .window {
   border-radius: 8px;
+  width: 300px;
   &__header {
     display: flex;
     justify-content: space-between;
     padding: 15px 13px;
-    width: 300px;
+    width: 100%;
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
     &_title {
@@ -73,10 +62,22 @@ const titleHeader = computed(() => { return props.dataWindow ? props.dataWindow.
   }
 
   &__body {
-    ul {
-      li {
-        list-style: none;
-      }
+    background: #fff;
+    color: #000;
+    width: 100%;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    padding: 24px;
+    &_title {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+  }
+
+  .list {
+    &__item {
+      list-style: none;
+      display: flex;
     }
   }
 }

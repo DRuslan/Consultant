@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <div id="app"></div>
 
@@ -14,31 +16,41 @@
                 color: "#3B6EC7",
             },
             contact: {
-                btnText: "Контакты",
-                iconName: "geo",
-                title: "ООО СТ-Проект",
-                email: [
-                    {
-                        iconName: 'geo',
-                        value: "info@network-technologies.ru"
-                    }
-                ],
-                phone: [
-                    {
-                        iconName: 'geo',
-                        value: "8-800-333-01-93"
-                    }
-                ],
-                address: [
-                    {
-                        iconName: 'geo',
-                        value: "г. Москва, ул. Шарикоподшипниковская, 38 ст 1",
+                button: {
+                    btnText: "Контакты",
+                    btnIconName: "geo",
+                },
+                window: {
+                    header: {
+                        title: "Контакты",
+                        iconName: "geo",
                     },
-                    {
-                        iconName: 'geo',
-                        value: "г. Новосибирск, ул. Ядринцевская, 23, офис 223",
+                    body: {
+                        title: "ООО СТ-Проект",
+                        email: [
+                            {
+                                iconName: 'mail',
+                                value: "info@network-technologies.ru"
+                            }
+                        ],
+                        phone: [
+                            {
+                                iconName: 'phone',
+                                value: "8-800-333-01-93"
+                            }
+                        ],
+                        address: [
+                            {
+                                iconName: 'geo',
+                                value: "г. Москва, ул. Шарикоподшипниковская, 38 ст 1",
+                            },
+                            {
+                                iconName: 'geo',
+                                value: "г. Новосибирск, ул. Ядринцевская, 23, офис 223",
+                            },
+                        ],
                     },
-                ],
+                }
             },
             social: [
                 {
@@ -82,4 +94,5 @@
         }
     </script>
 </body>
+
 </html>

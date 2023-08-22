@@ -2,7 +2,6 @@
     <transition name="modal-animation">
       <div v-show="isVisible" class="wrapper">
         <slot />
-        <button @click.self="$emit('close')">X</button>
       </div>
     </transition>
   </template>

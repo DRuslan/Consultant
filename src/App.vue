@@ -16,8 +16,11 @@ export default {
       widjetParams: {}
     }
   },
-  mounted() {
-    this.widjetParams = window.widjetOuter
+
+  
+
+  created() {
+    this.widjetParams =  this.$widjet(window.widjetOuter)
   }
 };
 </script>

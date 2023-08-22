@@ -3,7 +3,7 @@
     
     <div class="widjet__col">
       <PanelCol hr="right" @click="showWindow('Contact')">
-        <WidjetContact v-bind="entryData.contact" />
+        <WidjetContact v-bind="entryData.contact.button" />
       </PanelCol>
 
       <PanelCol hr="right">
@@ -37,7 +37,7 @@
       :isVisible="isWindowVisible"
       @close="hideWindow"
       :windowType="windowType"
-      v-bind:dataWindow="entryData.contact"
+      :dataWindow="entryData.contact"
     />
   </div>
 </template>
