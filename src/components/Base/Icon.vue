@@ -27,7 +27,12 @@ export default {
   },
   computed: {
     getPath () {
-      return require(`@/icons/${this.iconName}.svg?raw`)
+      const svgContents = require(`@/icons/${this.iconName}.svg?raw`);
+      const modifiedSvgContents = svgContents.replace(
+        /<svg/g,
+        `<svg class="icon_custom" fill="currentColor"`
+      );
+      return modifiedSvgContents
       // const convertedObgIcon = JSON.parse(this.name);
       // return require(`@/icons/${JSON.stringify(JSON.stringify(convertedObgIcon))}.svg?raw`)
     }
@@ -35,11 +40,28 @@ export default {
 };
 </script>
 
+<style lang="scss">
+.icon {
+    &_custom {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    svg, path {
+      width: inherit;
+      height: 100%;
+    }
+  }
+</style>
+
 <style lang="scss" scoped>
 .icon {
   flex: none;
   display: inline-block;
   fill: currentColor;
+  text-align: center;
   // stroke: currentColor;
   &__size {
     &_s {
