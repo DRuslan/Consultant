@@ -15,7 +15,7 @@
 
         <ul class="list">
           <template v-for="(item, index) in dataWindow.window.body" :key="index">
-            <li v-if="index !== title" class="list__item">
+            <li class="list__item">
               <Icon size="m" :icon-name="item.iconName"></Icon>  
               <p>{{ item.value }}</p>
             </li>

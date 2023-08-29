@@ -1,6 +1,6 @@
 <template>
   <div class="contact">
-    <Icon class="contact__icon" size="m" :icon-name="iconName" />
+    <Icon class="contact__icon" size="m" :icon-name="btnIconName" />
     <p>{{ btnText }}</p>
   </div>
 </template>
@@ -11,7 +11,7 @@ import { defineProps } from "vue";
 import Icon from "./Base/Icon.vue";
 
 const props = defineProps({
-  iconName: String,
+  btnIconName: String,
   btnText: String,
 });
 
