@@ -1,7 +1,8 @@
 <template>
   <div class="contact">
-    <Icon class="contact__icon" size="m" :icon-name="btnIconName" />
-    <p>{{ btnText }}</p>
+    <Icon class="contact__icon" size="m" :icon-name="icon" />
+    <p>{{ text }}</p>
+    <Icon v-if="iconDop" class="contact__icon_dop" size="m" :icon-name="iconDop" />
   </div>
 </template>
 
@@ -11,8 +12,9 @@ import { defineProps } from "vue";
 import Icon from "./Base/Icon.vue";
 
 const props = defineProps({
-  btnIconName: String,
-  btnText: String,
+  text: String,
+  icon: String,
+  iconDop: String
 });
 
 </script>
@@ -26,6 +28,9 @@ const props = defineProps({
   height: 100%;
   &__icon {
     margin-right: 12px;
+    &_dop {
+      margin-left: 8px;
+    }
   }
 }
 </style>

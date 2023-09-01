@@ -17,8 +17,8 @@
             },
             contact: {
                 button: {
-                    btnText: "Контакты",
-                    btnIconName: "geo",
+                    text: "Контакты",
+                    icon: "geo",
                 },
                 window: {
                     header: {
@@ -63,32 +63,51 @@
                 },
             ],
             catalog: {
-                btnText: "Каталог ELTEX 2023",
-                iconName: "pdf",
-                iconDop: "download"
+                button: {
+                    text: "Каталог ELTEX 2023",
+                    icon: "pdf",
+                    iconDop: "download"
+                }
             },
             fastmail: {
-                btnText: "Быстрая отправка письма",
-                iconName: "mail",
+                button: {
+                    text: "Быстрая отправка письма",
+                    icon: "mail",
+                },
+                window: {
+                    header: {
+                        title: "Отправьте нам письмо",
+                        iconName: "mail",
+                    },
+                    body: {
+                        form: {
+                            field: {}
+                        }
+                    },
+                }
             },
             onlineConsultant: [
                 {
+                    button: {
+                        icon: "tools",
+                        text: "Онлайн-инжинер",  
+                    },
                     img: '',
-                    name: '',
-                    description: '',
-                    btnCloseText: '',
-                    btnWriteText: '',
-                    iconName: "mail",
-                    btnText: "Онлайн-инжинер",
+                    name: 'Раджа',
+                    description: 'Здравствуйте! Чем могу помочь.?',
+                    CloseText: 'Закрыть',
+                    WriteText: 'Ответить',
                 },
                 {
+                    button: {
+                        icon: "chat",
+                        text: "Онлайн-консультант",  
+                    },
                     img: '',
-                    name: '',
-                    description: '',
-                    btnCloseText: '',
-                    btnWriteText: '',
-                    iconName: "mail",
-                    btnText: "Онлайн-консультант",
+                    name: 'Артём',
+                    description: 'Здравствуйте! Чем могу помочь.?',
+                    CloseText: 'Закрыть',
+                    WriteText: 'Ответить',
                 }
             ]
         }

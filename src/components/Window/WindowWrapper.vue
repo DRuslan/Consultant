@@ -1,7 +1,8 @@
 <template>
   <transition name="modal-animation">
     <div v-show="isVisible" class="wrapper" :style="{left: `${position}px`}">
-      <div
+      <div 
+        v-if="headerIcon || headerTitle"
         :style="{ backgroundColor: $widjet().global.color }"
         class="wrapper__header"
       >
