@@ -27,7 +27,7 @@ const props = defineProps({
   width: 100%;
   height: 100%;
   &__icon {
-    margin-right: 12px;
+    margin-right: 8px;
     &_dop {
       margin-left: 8px;
     }

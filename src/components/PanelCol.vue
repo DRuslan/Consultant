@@ -13,6 +13,7 @@
       :class="[
         { col__container_s: size === 's' },
         { col__container_m: size === 'm' },
+        { col__container_l: size === 'l' },
       ]"
     >
       <slot />
@@ -31,7 +32,7 @@ const props = defineProps({
   size: {
     type: String,
     default: 'm',
-    validator: (value) => ["s", "m"].includes(value),
+    validator: (value) => ["s", "m", "l"].includes(value),
   }
 });
 </script>
@@ -67,6 +68,9 @@ const props = defineProps({
 
   &__container {
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     &_s {
       padding-left: 0px;
@@ -76,6 +80,10 @@ const props = defineProps({
     &_m {
       padding-left: 40px;
       padding-right: 40px;
+    }
+
+    &_l {
+      width: 300px;
     }
   }
 }
