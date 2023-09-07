@@ -25,6 +25,7 @@ export default {
   },
   methods: {
     send() {
+      alert('dsa')
     //   if (!this.validate()) {
     //     this.notifyError('Заполните обязательные поля');
     //     return true;

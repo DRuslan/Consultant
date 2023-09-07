@@ -8,19 +8,28 @@
     <div class="window">
       <div class="window__body">
         <img class="window__img" :src="dataWindow.window.body.img" alt="" />
-        <p class="window__title">{{ dataWindow.window.body.title }}</p>
-        <div class="window__content">
-          <p class="window__description">{{ dataWindow.window.body.description }}</p>
+        <div class="window__content" v-if="activeMessenger.length === 0">
+          <p class="window__title">{{ dataWindow.window.body.title }}</p>
+          <p class="window__description">
+            {{ dataWindow.window.body.description }}
+          </p>
           <ul class="list">
             <li
               class="list__item"
               v-for="item in dataWindow.window.body.messengers"
               :key="item"
+              @click="selectMessenger(item)"
             >
               <Icon size="m" :icon-name="item.icon" />
               <p>{{ item.name }}</p>
             </li>
           </ul>
+        </div>
+        <div class="window__content" v-if="activeMessenger.length != 0">
+            <p class="window__title">
+                Укажите данные {{`${activeMessenger.type}`}} для отправки каталога
+            </p>
+            <p @click="backMessenger">Назад</p>
         </div>
       </div>
       <div
@@ -34,7 +43,7 @@
 <script setup>
 import Wrapper from "./WindowWrapper.vue";
 import Icon from "../Base/Icon.vue";
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 
 const props = defineProps({
   isVisible: Boolean,
@@ -43,6 +52,17 @@ const props = defineProps({
   figurePos: String,
   positionX: Number,
 });
+
+let activeMessenger = ref('');
+
+function selectMessenger (typeMessenger) {
+    activeMessenger.value = typeMessenger;
+}
+
+function backMessenger () {
+    activeMessenger.value = '';
+}
+
 </script>
     
 <style lang="scss" scoped>

@@ -1,0 +1,122 @@
+<template>
+    <div class="input-file">
+      <div class="input-file__button">
+        <label>
+          <input type="file" accept="image/*,application/pdf" @change="onFileSelected">
+          <Icon size="s" iconName="pin"/>
+            <p>Прикрепить файл</p>
+        </label>
+      </div>
+      <p v-if="selectedFile != null" class="input-file__name t_small">{{getFileName}}</p>
+    </div>
+  </template>
+  
+  <script>
+  import Icon from "../../Icon.vue";
+  export default {
+    name: "InputFile",
+    components: {Icon},
+    props: {
+      value: {
+        type: Object,
+        default: null,
+      }
+    },
+    data() {
+      return {
+        selectedFile: null
+      }
+    },
+    watch: {
+      value(newVal, oldVal) {
+        this.selectedFile = newVal;
+      },
+    },
+    methods: {
+      onFileSelected(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const fileType = file.type;
+          if (
+            fileType === 'image/jpeg'
+            || fileType === 'image/jpg'
+            || fileType === 'image/png'
+            || fileType === 'image/heic'
+            || fileType === 'application/pdf'
+          ) {
+            this.selectedFile = file;
+            alert('Файл успешно выбран');
+          } else {
+            alert('Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF')
+            this.selectedFile = null;
+          }
+        } else {
+          this.selectedFile = null;
+        }
+        this.$emit('update:modelValue', this.selectedFile);
+      },
+    },
+    computed: {
+      getFileName() {
+        if (this.selectedFile == null) return "";
+        return this.selectedFile.name;
+      }
+    }
+  }
+  </script>
+  
+  <style scoped lang="scss">
+  .input-file{
+    position: relative;
+  
+    &__button{
+      overflow: hidden;
+      color: red;
+      fill: red;
+      border-radius: 4px;
+      border: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      transition: all .3s linear;
+  
+      &:hover {
+        cursor: pointer;
+      }
+  
+      input[type="file"]{
+        display: none;
+      }
+  
+      label {
+        cursor: inherit;
+        display: flex;
+        align-items: center;
+  
+        .v-icon{
+          height: 24px;
+          width: 18px;
+        }
+      }
+
+      p {
+        font-size: 10px;
+        margin-left: 6px;
+      }
+    }
+  
+    &__name{
+      position: absolute;
+      bottom: -15px;
+      right: 0;
+      text-align: right;
+      width: 250px;
+      height: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  </style>

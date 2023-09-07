@@ -57,8 +57,7 @@
   
   <style lang="scss" scoped>
       .textaria {
-          font-family: 'Montserrat', sans-serif;
-          @include text_3;
+          font-size: 14px;
           width: 100%;
           resize: none;
           padding: 11px 24px;
