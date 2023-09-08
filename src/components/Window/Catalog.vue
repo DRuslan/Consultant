@@ -29,7 +29,8 @@
             <p class="window__title">
                 Укажите данные {{`${activeMessenger.type}`}} для отправки каталога
             </p>
-            <p @click="backMessenger">Назад</p>
+            <CatalogForm></CatalogForm>
+            <p @click="backMessenger">Выьбрать другой мессенджер</p>
         </div>
       </div>
       <div
@@ -43,6 +44,7 @@
 <script setup>
 import Wrapper from "./WindowWrapper.vue";
 import Icon from "../Base/Icon.vue";
+import CatalogForm from "../Base/Form/Catalog.vue";
 import { defineProps, ref } from "vue";
 
 const props = defineProps({
@@ -88,11 +90,16 @@ function backMessenger () {
   }
 
   &__content {
+    text-align: center;
     p {
-      font-size: 14px;
       color: #5b5b5b;
-      text-align: center;
     }
+  }
+
+  &__title {
+    font-size: 14px;
+    text-align: center;
+    text-transform: uppercase;
   }
   .figure {
     background: transparent;
@@ -140,6 +147,11 @@ function backMessenger () {
       background: #ededed;
       padding: 8px;
       margin-bottom: 8px;
+      cursor: pointer;
+      transition: all .3s ease-in-out;
+      &:hover {
+        opacity: .7;
+      }
       &:nth-last-child(-n + 2) {
         margin-bottom: 0;
       }
