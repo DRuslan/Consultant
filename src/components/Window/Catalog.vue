@@ -27,10 +27,9 @@
         </div>
         <div class="window__content" v-if="activeMessenger.length != 0">
             <p class="window__title">
-                Укажите данные {{`${activeMessenger.type}`}} для отправки каталога
+                Укажите данные <Icon size="s" :icon-name="activeMessenger.icon" /> {{ activeMessenger.name }} для отправки каталога
             </p>
-            <CatalogForm></CatalogForm>
-            <p @click="backMessenger">Выьбрать другой мессенджер</p>
+            <CatalogForm @backStep="backMessenger"></CatalogForm>
         </div>
       </div>
       <div
@@ -82,7 +81,7 @@ function backMessenger () {
     font-weight: bold;
     color: #5b5b5b;
     text-align: center;
-    margin-bottom: 12px;
+    margin: 0 -12px 12px;
   }
 
   &__description {
@@ -97,7 +96,7 @@ function backMessenger () {
   }
 
   &__title {
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
     text-transform: uppercase;
   }

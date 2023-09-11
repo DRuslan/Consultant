@@ -65,6 +65,7 @@
      
     small {
       cursor: pointer;
+      font-size: 8px;
     //   @include text_5;
     }
   
@@ -89,7 +90,7 @@
   
     .link {
       text-decoration: underline;
-      font-size: 12px;
+      font-size: 8px;
       &__white {
         color: #fff;
       }
