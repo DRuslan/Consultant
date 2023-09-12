@@ -18,6 +18,8 @@
       </PanelCol>
     </div>
 
+    <button @click="openModal('form1')"></button>
+
     <div class="widjet__col">
       <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_0')">
         <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"  />
@@ -78,6 +80,8 @@
       :positionX="windowPosition"
       figurePos="center"
     />
+
+    <ModalsContainer />
   </div>
 </template>
 
@@ -93,6 +97,8 @@ import WindowFast from "./Window/Fast.vue";
 import WindowCatalog from "./Window/Catalog.vue";
 import WindowManager from "./Window/Manager.vue";
 import Feedback from "./Base/Form/Feedback.vue";
+import ModalsContainer from "./Base/Modals/ModalContainer.vue";
+import {openModal} from "../store/modals";
 
 const props = defineProps({
   entryData: {
