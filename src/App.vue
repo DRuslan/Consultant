@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <h1>Hello, Vue 3 with Webpack 5!</h1>
-    <!-- <h2>{{ widjetParams }}</h2>  -->
     <panel :entry-data="widjetParams"></panel>
-  </div>
 </template>
 
 <script>
@@ -16,9 +12,6 @@ export default {
       widjetParams: {}
     }
   },
-
-  
-
   created() {
     this.widjetParams =  this.$widjet(window.widjetOuter)
   }

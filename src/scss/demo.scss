@@ -1,10 +1,10 @@
-body {
+#v-consultant {
   background: $body-background-color;
   color: $foreground-color;
   font-size: 1.3em;
 }
 
-main {
+#v-consultant main {
   background: $foreground-color;
   color: $black;
   margin: 20px auto;
@@ -37,39 +37,39 @@ main {
   }
 }
 
-address {
+#v-consultant address {
   color: $accent-color;
 }
 
-pre {
+#v-consultant pre {
   margin: 10px;
   padding: 20px;
 }
 
-.logo {
+#v-consultant .logo {
   margin: 0 auto;
   display: block;
 }
 
-ul {
+#v-consultant ul {
   list-style-type: square;
   list-style-position: inside;
 }
 
-ol {
+#v-consultant ol {
   list-style-type: decimal;
   list-style-position: inside;
 }
 
-ul ul,
-ol ul {
+#v-consultant ul ul,
+#v-consultant ol ul {
   list-style-type: circle;
   list-style-position: inside;
   margin-left: 15px;
 }
 
-ol ol,
-ul ol {
+#v-consultant ol ol,
+#v-consultant ul ol {
   list-style-type: lower-latin;
   list-style-position: inside;
   margin-left: 15px;
