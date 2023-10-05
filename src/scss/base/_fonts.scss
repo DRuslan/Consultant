@@ -23,9 +23,12 @@
 //   font-style: bold;
 // }
 
-#v-consultant {
-  font-family: Arial, Helvetica, sans-serif;
-  p {
+#v-consultant .col__container {  
+  p, span, h1, h2, h3 {
     font-size: 14px;
   }
+}
+
+#v-consultant * {   
+  font-family: Arial, sans-serif;
 }
