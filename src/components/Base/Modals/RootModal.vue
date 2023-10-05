@@ -1,7 +1,7 @@
 <template>
     <transition name="modal-animation">
       <div v-show="modalActive" class="modal" @keydown.esc="close" @click.self="close" tabindex="0">
-        <transition name="modal-animation-inner">
+        <transition name="modal-animation-inner" :class="[`modal__radius_${size}`]">
           <div v-show="modalActive" class="modal__inner" :class="[`modal__size_${size}`]">
             <div class="modal__close" @click="close">
               <Icon size="m" icon-name="close" />
@@ -21,6 +21,11 @@
       modalActive: {
         type: Boolean,
         required: true,
+      },
+      radius: {
+        type: String,
+        default: 'm',
+        validator: (value) => ['s', 'm', 'l'].indexOf(value) !== -1,
       },
       size: {
         type: String,
@@ -100,6 +105,7 @@
       position: relative;
       width: 750px;
       min-width: 300px;
+      max-height: 90%;
       // height: 65%;
       min-height: 300px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -125,6 +131,10 @@
   
     &__size_m {
       //max-width: 736px;
+    }
+
+    &__radius_m {
+      border-radius: 12px;
     }
   }
   

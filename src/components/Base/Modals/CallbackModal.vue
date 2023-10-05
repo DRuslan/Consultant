@@ -6,9 +6,7 @@
   >
     <div class="image-modal__container">
       <div class="image-modal__body">
-        <!-- <div class="image-modal__body__container"> -->
-        <div class="image-modal__form" :style="{ color: $widjet().global.color }">
-          <!-- <div class="image-modal__body__text" :style="{ color: $widjet().global.color }"> -->
+        <div class="image-modal__inner" :style="{ color: $widjet().global.textPrimary }">
           <p class="image-modal__headline">
             {{
               modalData.title !== ""
@@ -16,6 +14,7 @@
                 : "Рассчитать стоимость проекта"
             }}
           </p>
+          <CallbackForm class="image-modal__form" :btnText="modalData.button.text"/>
           <p class="image-modal__subtitle">
             {{
               modalData.subTitle !== ""
@@ -23,7 +22,13 @@
                 : "и получите консультацию от наших специалистов"
             }}
           </p>
-          <!-- </div> -->
+          <a 
+            href="#" class="image-modal__political" 
+            :style="{ color: $widjet().global.dopPrimary }"
+            @click.prevent="openPoliticalModal"
+          >
+            Пользовательское соглашение
+          </a>
         </div>
         <div class="image-modal__image">
           <img
@@ -33,7 +38,6 @@
             alt=""
           />
         </div>
-        <!-- </div> -->
       </div>
     </div>
   </RootModal>
@@ -41,25 +45,24 @@
   
   <script>
 import RootModal from "./RootModal.vue";
+import CallbackForm from "../Form/Callback.vue";
+import {openModal} from "../../../store/modals";
+
 export default {
   name: "ImageModal",
-  components: { RootModal },
+  components: { RootModal, CallbackForm },
   props: {
     modalData: {
       type: Object,
-      default: {
-        isActive: false,
-        title: "Рассчитать стоимость проекта",
-        subTitle: "и получите консультацию от наших специалистов",
-        image: "/modals/1.jpg",
-        formName: "modal-form",
-      },
     },
   },
   methods: {
     close() {
       this.$emit("close");
     },
+    openPoliticalModal () {
+      openModal('politic');
+    }
   },
 };
 </script>
@@ -70,6 +73,7 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
+    border-radius: 12px;
   }
 
   &__body {
@@ -81,26 +85,42 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-radius: 12px;
+  }
+
+  &__inner {
+    width: 463px;
   }
 
   &__headline {
-      font-weight: bold;
-      font-size: 24px;
-    }
+    font-weight: bold;
+    font-size: 24px;
+  }
 
-    &__subtitle {
-      font-size: 16px;
-    }
+  &__subtitle {
+    font-size: 16px;
+    margin-top: 30px;
+  }
 
-    &__form {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      max-width: 422px;
+  &__political {
+    font-size: 14px;
+    transition: all .3s ease-in-out;
+    margin-top: 30px;
+    display: inline-block;
+    &:hover {
+        opacity: .67;
     }
+  }
 
-    &__image {
+  &__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+  &__image {
     width: 180px;
     border-radius: 50%;
     @media screen and (min-width: 768px) {

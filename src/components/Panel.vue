@@ -18,7 +18,7 @@
       </PanelCol>
     </div>
 
-    <button @click="openModal('form1')"></button>
+    <button @click="openModal('callBack')"></button>
 
     <div class="widjet__col">
       <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_0')">
