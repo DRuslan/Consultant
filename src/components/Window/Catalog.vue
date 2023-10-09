@@ -86,12 +86,14 @@ function backMessenger () {
 
   &__description {
     margin-bottom: 24px;
+    font-size: 13px;
   }
 
   &__content {
     text-align: center;
     p {
       color: #5b5b5b;
+      font-size: 12px;
     }
   }
 

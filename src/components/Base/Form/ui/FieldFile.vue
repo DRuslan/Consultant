@@ -1,17 +1,17 @@
 <template>
     <div class="input-file">
       <div class="input-file__button">
-        <label>
+        <label :style="{ color: $widjet().global.dopPrimary }">
           <input type="file" accept="image/*,application/pdf" @change="onFileSelected">
           <Icon size="s" iconName="pin"/>
             <p>Прикрепить файл</p>
         </label>
+        <p v-if="selectedFile != null" class="input-file__name t_small" :style="{ color: $widjet().global.dopPrimary }">{{getFileName}}</p>
       </div>
-      <p v-if="selectedFile != null" class="input-file__name t_small">{{getFileName}}</p>
     </div>
   </template>
   
-  <script>
+<script>
   import Icon from "../../Icon.vue";
   export default {
     name: "InputFile",
@@ -65,14 +65,12 @@
   }
   </script>
   
-  <style scoped lang="scss">
+<style scoped lang="scss">
   .input-file{
     position: relative;
   
     &__button{
       overflow: hidden;
-      color: red;
-      fill: red;
       border-radius: 4px;
       border: 0;
       display: flex;
@@ -117,6 +115,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-size: 12px;
     }
   }
   </style>

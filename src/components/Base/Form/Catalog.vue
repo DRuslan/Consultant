@@ -22,17 +22,23 @@ import Political from "./ui/Political.vue";
 import { ref } from "vue";
 
 let form = ref({
-    phone: {
-        value: "",        
-    }
-})
+  FIO: {
+    value: "",
+    rules: ["required"],
+    error: "",
+  },
+  phone: {
+    value: "",
+    rules: ["required"],
+    error: "",
+  },
+});
 
 let checkPolit = ref(true);
 
 function isChecked(value) {
-    checkPolit.value = value;
+  checkPolit.value = value;
 }
-
 </script>
   
 <style lang="scss" scoped>
@@ -55,9 +61,9 @@ function isChecked(value) {
     border-radius: 2px;
     width: 100%;
     text-transform: uppercase;
-    transition: all .3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     &:disabled {
-      opacity: .4;
+      opacity: 0.4;
       cursor: not-allowed;
     }
   }
@@ -68,6 +74,6 @@ function isChecked(value) {
   font-size: 10px;
   text-align: left;
   margin-bottom: 26px;
-  color: #3B6EC7;
+  color: #3b6ec7;
 }
 </style>

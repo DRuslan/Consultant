@@ -40,6 +40,7 @@
     &__main {
         height: 100%;
         overflow: scroll;
+        font-size: 14px;
     }
   }
   </style>

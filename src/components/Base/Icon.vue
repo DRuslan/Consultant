@@ -17,7 +17,6 @@ export default {
   props: {
     iconName: {
       type: String,
-      validator: (value) => ["phone", "mail", "geo"].includes(value),
     },
     size: {
       type: String,

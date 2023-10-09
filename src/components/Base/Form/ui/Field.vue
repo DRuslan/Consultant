@@ -25,6 +25,15 @@ import { ref, computed } from "vue";
       type: String,
       default: 'm',
       validator: (value) => ['s', 'm', 'l'].indexOf(value) !== -1,
+    },
+    rules: {
+      type: Array,
+      required: false,
+      default: []
+    },
+    error: {
+      type: Boolean,
+      default: false,
     }
   });
 

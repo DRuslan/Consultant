@@ -53,6 +53,7 @@ const props = defineProps({
       align-items: center;
       p {
         margin-left: 8px;
+        font-size: 14px;
       }
     }
     &_icon {
