@@ -10,7 +10,6 @@
 // import validate from '@/mixins/validate';
 // import notification from "@/mixins/NotificationMixin";
 import axios from 'axios';
-import validate from "../../../../plugin/validate.js";
 export default {
   name: "FormContainer",
 //   mixins: [validate, notification],
@@ -27,15 +26,15 @@ export default {
   },
   methods: {
     send() {
-      alert('dsa');
-
-      axios.get('https://my-json-server.typicode.com/DRuslan/json-server-data/users')
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      })
+      if (!this.$validate(this.form)) {
+        axios.get('https://my-json-server.typicode.com/DRuslan/json-server-data/users')
+        .then(response => {
+          // console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        })
+      }
 
     //   if (!this.validate()) {
     //     this.notifyError('Заполните обязательные поля');

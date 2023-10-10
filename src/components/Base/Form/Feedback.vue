@@ -1,15 +1,18 @@
 <template>
-  <Container>
+  <Container :form="form">
     <Field 
-      v-for="field in getTextFields()"
+      v-for="field in $getTextFields(form)"
+      :key="field"
       class="field" 
-      :placeholder="form.Phone.placeholder"
-      v-model="form.value"
-      :value="form.value"
-      @input="form.error = ''"
-      :rules="form.rules"
+      :placeholder="field.placeholder"
+      v-model="field.value"
+      :value="field.value"
+      @input="field.error = ''"
+      :errorMessage="field.error"
+      :rules="field.rules"
+      type="text"
     />
-    <TextArea class="field" placeholder="Ваше сообщение*" rows="4" col="3" />
+    <TextArea class="field" :placeholder="form.message.placeholder" rows="4" col="3" v-model="form.message.value" />
     <div class="field-row">
       <FieldFile />
       <button type="submit">Отправить</button>
@@ -23,23 +26,22 @@ import Container from "./ui/Container.vue";
 import Field from "./ui/Field.vue";
 import FieldFile from "./ui/FieldFile.vue";
 import TextArea from "./ui/Textaria.vue";
-import getTextFields from "../../../plugin/formsHelper.js";
 
 const form = ref({
-  FIO: {
-    type: "text",
-    name: "Имя",
-    placeholder: "Введите ваш телефон",
-    value: "",
-    rules: ["required"],
-    error: "",
-  },
   Phone: {
     type: "text",
     name: "Телефон",
     placeholder: "Введите ваш телефон",
     value: "",
     rules: ["required", "phone"],
+    error: "",
+  },
+  message: {
+    type: "textarea",
+    name: "Сообщение",
+    placeholder: "Ваше сообщение",
+    value: "",
+    rules: ["required"],
     error: "",
   },
 });

@@ -1,5 +1,5 @@
 <template>
-  <input
+  <!-- <input
     class="v-input"
     :value="value"
     @input="onInput"
@@ -11,43 +11,73 @@
       `${disabled ? 'v-input__disabled' : ''}`,
     ]"
     :disabled="disabled"
+  /> -->
+  <input
+    class="v-input"
+    :type="type"
+    :placeholder="placeholder"
+    :value="value"
+    @input="onInput"
+    :class="[
+      `v-input__size_${size}`,
+      `${isError ? 'v-input__error' : ''}`,
+      `${disabled ? 'v-input__disabled' : ''}`,
+    ]"
+    :disabled="disabled"
   />
+  {{ getMessage }}
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, defineProps, defineEmits } from "vue";
 
-  const props = defineProps({
-    value: String,
-    placeholder: String,
+const props = defineProps({
+  value: String,
+  placeholder: String,
+  type: String,
+  size: {
     type: String,
-    size: {
-      type: String,
-      default: 'm',
-      validator: (value) => ['s', 'm', 'l'].indexOf(value) !== -1,
-    },
-    rules: {
-      type: Array,
-      required: false,
-      default: []
-    },
-    error: {
-      type: Boolean,
-      default: false,
-    }
-  });
+    default: "m",
+    validator: (value) => ["s", "m", "l"].indexOf(value) !== -1,
+  },
+  rules: {
+    type: Array,
+    required: false,
+    default: [],
+  },
+  errorMessage: {
+    type: String,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  error: {
+    type: String,
+  },
+});
 
-  let input = ref("");
+const emit = defineEmits(["update:modelValue"]);
 
-  const isError = computed(() => {
-    return input.value === "" ? true : false;
-  });
+let input = ref("");
 
-  let onInput = (event) => {
-    $emit('update:modelValue', event.target.value);
-  }
-    
+// const isError = computed(() => {
+//   return input.value === "" ? true : false;
 
+// });
+console.log(props.errorMessage);
+
+const getMessage = computed(() => {
+  return props.errorMessage;
+});
+
+const isError = computed(() => {
+  return props.errorMessage.length !== 0;
+});
+
+const onInput = (event) => {
+  emit("update:modelValue", event.target.value);
+};
 </script>
 
 <style lang="scss" scoped>

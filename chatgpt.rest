@@ -1,0 +1,16 @@
+###
+# @name Generate completion
+# @description Generate a completion using GPT-3.5
+###
+
+### Request ###
+POST https://ask.chadgpt.ru/api/public/gpt-3.5
+Content-Type: application/json
+Authorization: Bearer chad-03d19ca4cae14e65b73020a0da6debd4pp2hoke7
+
+request_json = {
+    "message": "Как думаешь, сколько будет 2+9?",
+    "api_key": CHAD_API_KEY,
+}
+
+### Response 200 ###
