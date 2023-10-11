@@ -5,7 +5,7 @@ import validate from '../plugin/validate'
 /* Your JS Code goes here */
 import { createApp } from 'vue';
 import App from '../App.vue';
-
+import '../scss/app.scss'
 const app = createApp(App);
 app.use(WidjetConnect);
 app.use(formsHelper);

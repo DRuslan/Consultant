@@ -53,7 +53,8 @@ export default {
                     const formattedErrorMsg = errorMsg.replace(/\{(\d+)\}/g, (match, index) => {
                         return ruleParams[index] || match;
                     }).replace("{name}", fieldCurrent.name);
-                    fieldCurrent.error = formattedErrorMsg;
+                    fieldCurrent.errorMessage = formattedErrorMsg;
+                    console.log('fieldCurrent', fieldCurrent);
                     console.log("Ошибка валидации формы: "+formattedErrorMsg);
                 } else {
                     fieldCurrent.error = '';

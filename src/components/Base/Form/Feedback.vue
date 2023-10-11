@@ -1,18 +1,17 @@
 <template>
   <Container :form="form">
-    <Field 
+    <Field
       v-for="field in $getTextFields(form)"
       :key="field"
-      class="field" 
       :placeholder="field.placeholder"
       v-model="field.value"
       :value="field.value"
-      @input="field.error = ''"
-      :errorMessage="field.error"
+      @input="field.errorMessage = ''"
+      :errorMessage="field.errorMessage"
       :rules="field.rules"
+      :name="field.name"
       type="text"
     />
-    <TextArea class="field" :placeholder="form.message.placeholder" rows="4" col="3" v-model="form.message.value" />
     <div class="field-row">
       <FieldFile />
       <button type="submit">Отправить</button>
@@ -25,7 +24,6 @@ import { ref } from "vue";
 import Container from "./ui/Container.vue";
 import Field from "./ui/Field.vue";
 import FieldFile from "./ui/FieldFile.vue";
-import TextArea from "./ui/Textaria.vue";
 
 const form = ref({
   Phone: {
@@ -34,15 +32,15 @@ const form = ref({
     placeholder: "Введите ваш телефон",
     value: "",
     rules: ["required", "phone"],
-    error: "",
+    errorMessage: "",
   },
   message: {
-    type: "textarea",
+    type: "text",
     name: "Сообщение",
     placeholder: "Ваше сообщение",
     value: "",
     rules: ["required"],
-    error: "",
+    errorMessage: "",
   },
 });
 </script>

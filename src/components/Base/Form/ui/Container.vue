@@ -7,12 +7,9 @@
   </template>
 
 <script>
-// import validate from '@/mixins/validate';
-// import notification from "@/mixins/NotificationMixin";
 import axios from 'axios';
 export default {
   name: "FormContainer",
-//   mixins: [validate, notification],
   props: {
     form: {
       type: Object,

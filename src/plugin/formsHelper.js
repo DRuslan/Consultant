@@ -6,6 +6,7 @@ export default {
             console.log(textFields);
             for (const key in form) {
                 if (Object.prototype.hasOwnProperty.call(form, key) && form[key].type === "text") {
+                    console.log(form[key]);
                     textFields.push(form[key]);
                 }
             }
