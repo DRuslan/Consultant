@@ -21,12 +21,12 @@
     <button @click="openModal('callBack')"></button>
 
     <div class="widjet__col">
-      <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_0')">
+      <!-- <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_0')">
         <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"  />
-      </PanelCol>
+      </PanelCol> -->
 
       <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_1')">
-        <WidjetDefault v-bind="entryData.onlineConsultant[1].button" class="widjet__content"/>
+        <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"/>
       </PanelCol>
 
       <PanelCol size="s" hr="left">
@@ -63,20 +63,21 @@
       figurePos="center"
     />
 
-    <WindowManager 
+    <!-- <WindowManager 
       :isVisible="isWindowVisible"
       @close="hideWindow"
       :windowType="windowType"
       :dataWindow="entryData.onlineConsultant[0]"
       :positionX="windowPosition"
       figurePos="center"
-    />
+    /> -->
 
     <WindowManager 
       :isVisible="isWindowVisible"
       @close="hideWindow"
+      @showChat="showWindowChat"
       :windowType="windowType"
-      :dataWindow="entryData.onlineConsultant[1]"
+      :dataWindow="entryData.onlineConsultant[0]"
       :positionX="windowPosition"
       figurePos="center"
     />
@@ -125,6 +126,11 @@ function showWindow(event, type) {
     isWindowVisible.value = true;
     isWindowAlreadyVisible = true;
   // }
+}
+
+function showWindowChat (e, el) {
+  // isWindowVisible.value = false;
+  windowType.value = 'Chat'
 }
 
 function hideWindow() {

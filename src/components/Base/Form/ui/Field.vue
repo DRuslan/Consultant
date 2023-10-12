@@ -119,8 +119,9 @@ const onInput = (event) => {
   width: 100%;
   resize: none;
   padding: 11px 24px;
-
+  border-radius: 4px;
   &__error {
+    border-color: red;
   }
 }
 </style>

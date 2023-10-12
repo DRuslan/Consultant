@@ -8,13 +8,13 @@
     <div class="window" :style="{ backgroundColor: $widjet().global.color }">
       <div class="manager">
         <div class="manager__img">
-            <img :src="dataWindow.img" alt="">
+            <img :src="dataWindow.window.body.img" alt="">
         </div>
-        <div class="manager__name">{{ dataWindow.name }}</div>
-        <p class="manager__description">{{ dataWindow.description }}</p>
+        <div class="manager__name">{{ dataWindow.window.body.name }}</div>
+        <p class="manager__description">{{ dataWindow.window.body.description }}</p>
         <div class="manager__btns">
-            <button class="manager__btn" @click="$emit('close')"> {{ dataWindow.CloseText }} </button>
-            <button class="manager__btn"> {{ dataWindow.WriteText }} </button>
+            <button class="manager__btn" @click="$emit('close')"> {{ dataWindow.window.body.CloseText }} </button>
+            <button class="manager__btn" @click="showChat"> {{ dataWindow.window.body.WriteText }} </button>
         </div>
       </div>
       <div
@@ -24,10 +24,19 @@
       ></div>
     </div>
   </Wrapper>
+  <Chat 
+    v-if="windowType === 'Chat'" 
+    windowType="Chat" 
+    :isVisible="isVisible" 
+    :positionX="positionX"
+    @close="$emit('close')"
+    :dataWindow="$widjet().chat[0]"
+  /> 
 </template>
   
   <script setup>
 import Wrapper from "./WindowWrapper.vue";
+import Chat from "./Chat.vue";
 import { defineProps } from "vue";
 
 const props = defineProps({
@@ -37,6 +46,17 @@ const props = defineProps({
   figurePos: String,
   positionX: Number,
 });
+
+  const emit = defineEmits(["showChat"]);
+
+  const showChat = (event) => {
+    emit("showChat", event.target);
+  };
+
+
+  // showChat (() => {
+  //   windowType = 'Chat'
+  // })
 </script>
   
   <style lang="scss" scoped>
