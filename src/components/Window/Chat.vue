@@ -30,6 +30,7 @@
         </div>
         <form action="#" @submit="send" class="chat__form">
           <div class="chat__row">
+            <FieldFile :title="false"  :style="{padding: '0 0 0 10px'}"/>
             <textarea name="message" id="" cols="30" rows="1"></textarea>
             <button type="submit">
               <Icon class="tg-icon" size="m" icon-name="tg_send"></Icon>
@@ -47,6 +48,7 @@
     
 <script setup>
 import Icon from "../Base/Icon.vue";
+import FieldFile from "../../components/Base/Form/ui/FieldFile.vue";
 import Wrapper from "./WindowWrapper.vue";
 import { defineProps } from "vue";
 
@@ -125,7 +127,7 @@ const props = defineProps({
     textarea {
       border-radius: 4px;
       width: 100%;
-      padding: 12px;
+      padding: 12px 8px;
       resize: none;
       border: none;
     }

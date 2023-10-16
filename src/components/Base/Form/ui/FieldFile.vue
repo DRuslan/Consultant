@@ -1,10 +1,10 @@
 <template>
     <div class="input-file">
       <div class="input-file__button">
-        <label :style="{ color: $widjet().global.dopPrimary }">
+        <label :style="{ color: $widjet().global.dopPrimary }" :class="{ background: 'red'}">
           <input type="file" accept="image/*,application/pdf" @change="onFileSelected">
           <Icon size="s" iconName="pin"/>
-            <p>Прикрепить файл</p>
+            <p v-if="title">Прикрепить файл</p>
         </label>
         <p v-if="selectedFile != null" class="input-file__name t_small" :style="{ color: $widjet().global.dopPrimary }">{{getFileName}}</p>
       </div>
@@ -20,11 +20,19 @@
       value: {
         type: Object,
         default: null,
+      },
+      title: {
+        type: Boolean,
+        default: true,
+      }, 
+      disabled: {
+        type: Boolean,
+        default: false,
       }
     },
     data() {
       return {
-        selectedFile: null
+        selectedFile: null,
       }
     },
     watch: {
@@ -68,7 +76,6 @@
 <style scoped lang="scss">
   .input-file{
     position: relative;
-  
     &__button{
       overflow: hidden;
       border-radius: 4px;
