@@ -14,7 +14,9 @@
         <p class="manager__description">{{ dataWindow.window.body.description }}</p>
         <div class="manager__btns">
             <button class="manager__btn" @click="$emit('close')"> {{ dataWindow.window.body.CloseText }} </button>
-            <button class="manager__btn" @click="showChat"> {{ dataWindow.window.body.WriteText }} </button>
+            <button class="manager__btn" @click="showChat" > 
+              {{ dataWindow.window.body.WriteText }} 
+            </button>
         </div>
       </div>
       <div
@@ -47,16 +49,16 @@ const props = defineProps({
   positionX: Number,
 });
 
-  const emit = defineEmits(["showChat"]);
+  const emit = defineEmits(["showChat", "autoShowChat"]);
+
+  const autoShowChat = () => {
+    emit("autoShowChat");
+  };
 
   const showChat = (event) => {
     emit("showChat", event.target);
   };
 
-
-  // showChat (() => {
-  //   windowType = 'Chat'
-  // })
 </script>
   
   <style lang="scss" scoped>

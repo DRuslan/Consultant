@@ -11,8 +11,8 @@
       :style="{ backgroundColor: $widjet().global.color }"
     >
       <div class="chat">
-        <div class="chat__message" :style="{ color: $widjet().global.textPrimary }">
-          <div class="bot">
+        <div class="chat__inner" :style="{ color: $widjet().global.textPrimary }">
+          <div class="chat__message bot">
             <div class="bot__img">
               <img src="../../images/content/manager.png" alt="" />
             </div>
@@ -22,8 +22,8 @@
               </p>
             </div>
           </div>
-          <div class="client">
-            <div class="client__message">
+          <div class="chat__message client">
+            <div class="client__message" >
                 <p>Хочу купить коммутаторы и 20 штук 24 портовый шлюзов</p>
             </div>
           </div>
@@ -102,11 +102,22 @@ const props = defineProps({
   background: #e7e8ed;
   min-height: 200px;
   justify-content: flex-end;
-  &__message {
+  &__inner {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    max-height: 365px;
+    padding: 16px 6px 16px;
+    overflow: scroll;
+  }
+  &__message {
+    max-width: 270px;
+    margin-bottom: 12px;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
   &__form {
     padding-top: 12px;
@@ -143,8 +154,8 @@ const props = defineProps({
 .bot {
   display: flex;
   justify-content: space-between;
-  width: 270px;
-  margin: 0 auto;
+  align-self: flex-start;
+  width: 100%;
   &__img {
     img {
       width: 41px;
@@ -158,7 +169,7 @@ const props = defineProps({
     position: relative;
     border-radius: 0 8px 8px 8px;
     padding: 12px;
-    width: 218px;
+    max-width: 218px;
 
     &:after {
       content: "";
@@ -169,6 +180,30 @@ const props = defineProps({
       border-top: 10px solid #fff; /* Добавляем треугольник */
       transform: rotate(225deg);
     }
+  }
+}
+
+.client { 
+  align-self: flex-end;
+  position: relative;
+  padding-right: 10px;
+  &:after {
+    content: "";
+    position: absolute; /* Абсолютное позиционирование */
+    right: 0px;
+    bottom: 5px; /* Положение треугольника */
+    border: 10px solid transparent; /* Прозрачные границы */
+    border-top: 10px solid #D8E1EA; /* Добавляем треугольник */
+    transform: rotate(135deg);
+  }
+  &__message {
+    width: 100%;
+    background-color: #D8E1EA;
+    padding: 12px;
+    border-radius: 12px;
+    border-bottom-right-radius: 0;
+    max-width: 218px;
+    padding-right: 10px;
   }
 }
 </style>

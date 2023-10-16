@@ -76,6 +76,7 @@
       :isVisible="isWindowVisible"
       @close="hideWindow"
       @showChat="showWindowChat"
+      @autoShowChat="autoShowWindowChat"
       :windowType="windowType"
       :dataWindow="entryData.onlineConsultant[0]"
       :positionX="windowPosition"
@@ -118,19 +119,23 @@ computed(() => {
 });
 
 function showWindow(event, type) {
-  // if (!isWindowAlreadyVisible) {
     const el = event.target;
     console.log(windowPosition.value);
     windowPosition.value = el.getBoundingClientRect().left;
     windowType.value = type;
     isWindowVisible.value = true;
-    isWindowAlreadyVisible = true;
-  // }
 }
 
-function showWindowChat (e, el) {
-  // isWindowVisible.value = false;
+function autoShowWindowChat () {
+  setTimeout(() => {
+    windowType.value = 'Chat'
+    isWindowVisible.value = value;
+  }, 1500);
+}
+
+function showWindowChat (value) {
   windowType.value = 'Chat'
+  isWindowVisible.value = value;
 }
 
 function hideWindow() {
