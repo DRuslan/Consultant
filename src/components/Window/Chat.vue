@@ -30,7 +30,7 @@
         </div>
         <form action="#" @submit="send" class="chat__form">
           <div class="chat__row">
-            <FieldFile :title="false"  :style="{padding: '0 0 0 10px'}"/>
+            <FieldFile :title="false" :disabled="true" :style="{padding: '0 0 0 10px'}"/>
             <textarea name="message" id="" cols="30" rows="1"></textarea>
             <button type="submit">
               <Icon class="tg-icon" size="m" icon-name="tg_send"></Icon>

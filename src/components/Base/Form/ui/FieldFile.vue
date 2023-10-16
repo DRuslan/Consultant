@@ -1,7 +1,11 @@
 <template>
     <div class="input-file">
-      <div class="input-file__button">
-        <label :style="{ color: $widjet().global.dopPrimary }" :class="{ background: 'red'}">
+      <div 
+      class="input-file__button" 
+      :class="[
+          `${disabled ? 'input-file_disabled' : '' }`
+        ]">
+        <label :style="{ color: $widjet().global.dopPrimary }">
           <input type="file" accept="image/*,application/pdf" @change="onFileSelected">
           <Icon size="s" iconName="pin"/>
             <p v-if="title">Прикрепить файл</p>
@@ -42,6 +46,10 @@
     },
     methods: {
       onFileSelected(event) {
+        if (this.disabled) {
+          event.preventDefault();
+        }
+
         const file = event.target.files[0];
         if (file) {
           const fileType = file.type;
@@ -76,6 +84,7 @@
 <style scoped lang="scss">
   .input-file{
     position: relative;
+    &_disabled {cursor: not-allowed;}
     &__button{
       overflow: hidden;
       border-radius: 4px;
