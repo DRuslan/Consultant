@@ -45,8 +45,6 @@ const props = defineProps({
   figurePos: String,
   positionX: Number
 });
-
-console.log('POSITION ' + props.positionX);
 </script>
 
 <style lang="scss" scoped>

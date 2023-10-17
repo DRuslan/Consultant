@@ -25,7 +25,7 @@
         <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"  />
       </PanelCol> -->
 
-      <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_1')">
+      <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_1')" @dataParams="dataParams($event, 'Manager_1')">
         <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"/>
       </PanelCol>
 
@@ -88,7 +88,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps , ref } from "vue";
+import { defineProps , ref } from "vue";
 
 import PanelCol from "./PanelCol.vue";
 import WidjetLink from "./WidjetLink.vue";
@@ -112,11 +112,6 @@ const props = defineProps({
 const isWindowVisible = ref(false);
 const windowType = ref(""); // Переменная для определения типа окна
 let windowPosition = ref(null);
-let isWindowAlreadyVisible = false;
-
-computed(() => {
-  return console.log($getGlobalColor);
-});
 
 function showWindow(event, type) {
     const el = event.target;
@@ -126,12 +121,21 @@ function showWindow(event, type) {
     isWindowVisible.value = true;
 }
 
-function autoShowWindowChat () {
-  setTimeout(() => {
-    windowType.value = 'Chat'
-    isWindowVisible.value = value;
-  }, 1500);
+function dataParams (event, type) {
+  const el = event.target;
+  const position = el.getBoundingClientRect().left;
+  console.log(position);
 }
+
+dataParams();
+
+function autoShowWindowChat () {
+  setTimeout(function () {
+    windowType.value = 'Chat'
+    isWindowVisible.value = true;
+  }, 1000);
+}
+autoShowWindowChat();
 
 function showWindowChat (value) {
   windowType.value = 'Chat'
@@ -140,6 +144,7 @@ function showWindowChat (value) {
 
 function hideWindow() {
   console.log("close");
+  windowType.value = "";
   isWindowVisible.value = false;
 }
 </script>

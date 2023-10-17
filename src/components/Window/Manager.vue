@@ -14,7 +14,7 @@
         <p class="manager__description">{{ dataWindow.window.body.description }}</p>
         <div class="manager__btns">
             <button class="manager__btn" @click="$emit('close')"> {{ dataWindow.window.body.CloseText }} </button>
-            <button class="manager__btn" @click="showChat" > 
+            <button class="manager__btn" @click="showChat"> 
               {{ dataWindow.window.body.WriteText }} 
             </button>
         </div>
@@ -51,8 +51,8 @@ const props = defineProps({
 
   const emit = defineEmits(["showChat", "autoShowChat"]);
 
-  const autoShowChat = () => {
-    emit("autoShowChat");
+  const autoShowChat = (event) => {
+    emit("autoShowChat", event.target);
   };
 
   const showChat = (event) => {
