@@ -62,7 +62,7 @@
       :positionX="windowPosition"
       figurePos="center"
     />
-
+ 
     <!-- <WindowManager 
       :isVisible="isWindowVisible"
       @close="hideWindow"
