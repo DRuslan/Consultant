@@ -24,10 +24,11 @@
       <!-- <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_0')">
         <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"  />
       </PanelCol> -->
-
-      <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_1')" @dataParams="dataParams($event, 'Manager_1')">
-        <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"/>
-      </PanelCol>
+      <div ref="mangerElement">
+        <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_1')" @dataParams="dataParams($event, 'Manager_1')" ref="mangerElement">
+          <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"/>
+        </PanelCol>
+      </div>
 
       <PanelCol size="s" hr="left">
         <WidjetLink />
@@ -83,12 +84,23 @@
       figurePos="center"
     />
 
+    <WindowChat
+      :isVisible="isWindowVisible"
+      @close="hideWindow"
+      @showChat="showWindowChat"
+      @autoShowChat="autoShowWindowChat"
+      :windowType="windowType"
+      :dataWindow="entryData.onlineConsultant[0]"
+      :positionX="windowPosition"
+      figurePos="center"
+    />
+
     <ModalsContainer />
   </div>
 </template>
 
 <script setup>
-import { defineProps , ref } from "vue";
+import { defineProps , onMounted, ref } from "vue";
 
 import PanelCol from "./PanelCol.vue";
 import WidjetLink from "./WidjetLink.vue";
@@ -98,6 +110,7 @@ import WindowContact from "./Window/Contact.vue";
 import WindowFast from "./Window/Fast.vue";
 import WindowCatalog from "./Window/Catalog.vue";
 import WindowManager from "./Window/Manager.vue";
+import WindowChat from "./Window/Chat.vue";
 import Feedback from "./Base/Form/Feedback.vue";
 import ModalsContainer from "./Base/Modals/ModalContainer.vue";
 import {openModal} from "../store/modals";
@@ -111,6 +124,7 @@ const props = defineProps({
 
 const isWindowVisible = ref(false);
 const windowType = ref(""); // Переменная для определения типа окна
+const audio = new Audio('./src/audio/whatsapp_web.ogg');
 let windowPosition = ref(null);
 
 function showWindow(event, type) {
@@ -120,22 +134,26 @@ function showWindow(event, type) {
     windowType.value = type;
     isWindowVisible.value = true;
 }
+// передаем координаты и показываем чат
+const mangerElement = ref(null);
 
-function dataParams (event, type) {
-  const el = event.target;
-  const position = el.getBoundingClientRect().left;
-  console.log(position);
-}
+onMounted (() => {
+  autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
+})
 
-dataParams();
-
-function autoShowWindowChat () {
+function autoShowWindowChat (pos) {
   setTimeout(function () {
     windowType.value = 'Chat'
     isWindowVisible.value = true;
-  }, 1000);
+    windowPosition.value = pos;
+    audio.play().then(() => {
+      console.log('Мелодия воспроизведена успешно!');
+    }).catch(error => {
+      console.error('Произошла ошибка при воспроизведении мелодии:', error);
+    });
+  }, 5000);
 }
-autoShowWindowChat();
+
 
 function showWindowChat (value) {
   windowType.value = 'Chat'
