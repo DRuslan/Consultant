@@ -77,7 +77,6 @@
       :isVisible="isWindowVisible"
       @close="hideWindow"
       @showChat="showWindowChat"
-      @autoShowChat="autoShowWindowChat"
       :windowType="windowType"
       :dataWindow="entryData.onlineConsultant[0]"
       :positionX="windowPosition"
@@ -90,17 +89,19 @@
       @showChat="showWindowChat"
       @autoShowChat="autoShowWindowChat"
       :windowType="windowType"
-      :dataWindow="entryData.onlineConsultant[0]"
+      :dataWindow="entryData.chat[0]"
       :positionX="windowPosition"
+      :script="outputScript"
       figurePos="center"
     />
 
     <ModalsContainer />
   </div>
+  
 </template>
 
 <script setup>
-import { defineProps , onMounted, ref } from "vue";
+import { defineProps , onMounted, ref, computed } from "vue";
 
 import PanelCol from "./PanelCol.vue";
 import WidjetLink from "./WidjetLink.vue";
@@ -113,6 +114,7 @@ import WindowManager from "./Window/Manager.vue";
 import WindowChat from "./Window/Chat.vue";
 import Feedback from "./Base/Form/Feedback.vue";
 import ModalsContainer from "./Base/Modals/ModalContainer.vue";
+import audioNotification from "../audio/whatsapp_web.mp3";
 import {openModal} from "../store/modals";
 
 const props = defineProps({
@@ -124,28 +126,48 @@ const props = defineProps({
 
 const isWindowVisible = ref(false);
 const windowType = ref(""); // Переменная для определения типа окна
-const audio = new Audio('./src/audio/whatsapp_web.ogg');
+const audio = new Audio(audioNotification);
 let windowPosition = ref(null);
 
 function showWindow(event, type) {
     const el = event.target;
-    console.log(windowPosition.value);
     windowPosition.value = el.getBoundingClientRect().left;
     windowType.value = type;
     isWindowVisible.value = true;
 }
-// передаем координаты и показываем чат
+// передаем координаты и показываем чат автоматом 
 const mangerElement = ref(null);
+// session storage autoMode 
+let autoMode = localStorage.getItem('chatAutoMode');
+
+if (autoMode === null || autoMode === undefined) {
+  localStorage.setItem('chatAutoMode', true);
+}
 
 onMounted (() => {
-  autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
+  if (autoMode === 'true') {
+    autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
+  }
 })
+// вычисляем сценарий переписки
+const outputScript = computed(() => {
+  console.log(autoMode);
+  if (autoMode) {
+    return props.entryData.autoMessage[1].script; // Логика для autoShowWindowChat
+  } else {
+    return props.entryData.autoMessage[0].script; // Логика для showWindowChat
+  }
+});
+
+console.log(outputScript);
 
 function autoShowWindowChat (pos) {
   setTimeout(function () {
+    localStorage.setItem('chatAutoMode', false);
     windowType.value = 'Chat'
     isWindowVisible.value = true;
     windowPosition.value = pos;
+    
     audio.play().then(() => {
       console.log('Мелодия воспроизведена успешно!');
     }).catch(error => {
@@ -156,12 +178,12 @@ function autoShowWindowChat (pos) {
 
 
 function showWindowChat (value) {
-  windowType.value = 'Chat'
+  windowType.value = 'Chat';
   isWindowVisible.value = value;
+  localStorage.setItem('chatAutoMode', false);
 }
 
 function hideWindow() {
-  console.log("close");
   windowType.value = "";
   isWindowVisible.value = false;
 }

@@ -11,27 +11,29 @@
       :style="{ backgroundColor: $widjet().global.color }"
     >
       <div class="chat">
-        <div class="chat__inner" :style="{ color: $widjet().global.textPrimary }">
-          <div class="chat__message bot">
-            <div class="bot__img">
-              <img src="../../images/content/manager.png" alt="" />
-            </div>
-            <div class="bot__message">
-              <p>
-                Здравствуйте! Чем могу помочь?
-              </p>
-            </div>
-          </div>
-          <div class="chat__message client">
-            <div class="client__message" >
-                <p>Хочу купить коммутаторы и 20 штук 24 портовый шлюзов</p>
-            </div>
-          </div>
+        <div
+          class="chat__inner"
+          :style="{ color: $widjet().global.textPrimary }"
+        >
+        <transition-group name="fade">
+          <Message class="chat__message" v-for="item in allMessages" :key="item.id" :msg="item.message" :role="item.role" />
+        </transition-group>
+        <p v-if="waitResponceBot"> Артем вводит сообщение ... </p>
         </div>
-        <form action="#" @submit="send" class="chat__form">
+        <form action="#" @submit="send" @keyup.enter="send" class="chat__form">
           <div class="chat__row">
-            <FieldFile :title="false" :disabled="true" :style="{padding: '0 0 0 10px'}"/>
-            <textarea name="message" id="" cols="30" rows="1"></textarea>
+            <FieldFile
+              :title="false"
+              :disabled="true"
+              :style="{ padding: '0 0 0 10px' }"
+            />
+            <textarea
+              name="message"
+              id=""
+              cols="30"
+              rows="1"
+              v-model="newMessage"
+            ></textarea>
             <button type="submit">
               <Icon class="tg-icon" size="m" icon-name="tg_send"></Icon>
             </button>
@@ -50,7 +52,8 @@
 import Icon from "../Base/Icon.vue";
 import FieldFile from "../../components/Base/Form/ui/FieldFile.vue";
 import Wrapper from "./WindowWrapper.vue";
-import { defineProps } from "vue";
+import Message from "../Base/Chat/Message.vue";
+import { ref, defineProps, computed, onMounted } from "vue";
 
 const props = defineProps({
   isVisible: Boolean,
@@ -58,10 +61,67 @@ const props = defineProps({
   dataWindow: Object,
   figurePos: String,
   positionX: Number,
+  script: Object,
+});
+
+const newMessage = ref(""); // Реактивная переменная для текстового поля
+const allMessages = ref([]); // Реактивная переменная для всех сообщений
+const isMessageSend = ref(false); // Реактивная переменная для отслеживания ответа пользователя
+const countBotMessages = ref(0); // Количество ответов бота
+
+if (props.script !== null && props.script !== undefined) {
+  allMessages.value.push(props.script[countBotMessages.value]);
+}
+
+function generateUniqueId() {
+  // пробую генерацию id для анимаций групповых сообщений
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+const send = (e) => {
+  e.preventDefault();
+  // Отправляем сообщение и очищаем текстовое поле
+  if (newMessage.value.trim() !== "") {
+    allMessages.value.push({
+      message: newMessage.value,
+      role: "client",
+      id: generateUniqueId(),
+    });
+    newMessage.value = "";
+    if (props.script[countBotMessages.value] != null && props.script[countBotMessages.value]!== undefined) {
+      isMessageSend.value = true; // Отслеживаем ответ пользователя
+    } else {
+      isMessageSend.value = false; // отключаем отслеживания так как длина маассива ответов от бота ограничена и если будут обращения то данных не будет
+    }
+    console.log("Сообщение отправлено пользователем");
+    console.log(props.script);
+    console.log(countBotMessages.value);
+  }
+};
+
+
+
+
+const waitResponceBot = computed(() => {
+  // Проверка на ответ пользователя и количетсво сообщений бота чтобы остановить логику отправки сообщений (так как длина массива ответов от бота огранина)
+  if (isMessageSend.value && countBotMessages.value < props.script.length - 1) {
+    console.log('Пользователь ждет ответ на сообщение');
+    countBotMessages.value++;
+    const delayTimeMessage = props.script[countBotMessages.value].time * 1000; // умножаем на 1000 для получения миллисекунд
+    setTimeout(() => {
+      // отправляем сообщение от (бота) 
+      allMessages.value.push(props.script[countBotMessages.value]);  
+      isMessageSend.value = false;
+      console.log('Пользователь получил ответ на сообщение');
+    }, delayTimeMessage);
+  } else {
+    isMessageSend.value = false;
+  }
+  return isMessageSend.value
 });
 </script>
     
-    <style lang="scss" scoped>
+<style lang="scss" scoped>
 .window {
   border-radius: 8px;
   width: 300px;
@@ -153,59 +213,26 @@ const props = defineProps({
   }
 }
 
-.bot {
-  display: flex;
-  justify-content: space-between;
-  align-self: flex-start;
-  width: 100%;
-  &__img {
-    img {
-      width: 41px;
-      height: 41px;
-      border-radius: 50%;
-    }
-  }
-
-  &__message {
-    background-color: #fff;
-    position: relative;
-    border-radius: 0 8px 8px 8px;
-    padding: 12px;
-    max-width: 218px;
-
-    &:after {
-      content: "";
-      position: absolute; /* Абсолютное позиционирование */
-      left: -10px;
-      top: -10px; /* Положение треугольника */
-      border: 10px solid transparent; /* Прозрачные границы */
-      border-top: 10px solid #fff; /* Добавляем треугольник */
-      transform: rotate(225deg);
-    }
-  }
+.fade-enter-from {
+  opacity: 0;
+  transform: scale(0.6);
 }
 
-.client { 
-  align-self: flex-end;
-  position: relative;
-  padding-right: 10px;
-  &:after {
-    content: "";
-    position: absolute; /* Абсолютное позиционирование */
-    right: 0px;
-    bottom: 5px; /* Положение треугольника */
-    border: 10px solid transparent; /* Прозрачные границы */
-    border-top: 10px solid #D8E1EA; /* Добавляем треугольник */
-    transform: rotate(135deg);
-  }
-  &__message {
-    width: 100%;
-    background-color: #D8E1EA;
-    padding: 12px;
-    border-radius: 12px;
-    border-bottom-right-radius: 0;
-    max-width: 218px;
-    padding-right: 10px;
-  }
+.fade-enter-to {
+  opacity: 1;
+  transform: scale(1);
 }
+
+.fade-enter-active {
+  transtion: all .4s ease;
+}
+
+
+// .fade-enter-active, .fade-leave-active {
+//   transition: opacity 0.5s ease-in-out;
+// }
+
+// .fade-enter, .fade-leave-to {
+//   opacity: 0;
+// }
 </style>

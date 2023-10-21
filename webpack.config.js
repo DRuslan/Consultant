@@ -8,10 +8,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const {
+  CleanWebpackPlugin
+} = require('clean-webpack-plugin');
 
 const environment = require('./configuration/environment');
-const { VueLoaderPlugin } = require('vue-loader')
+const {
+  VueLoaderPlugin
+} = require('vue-loader')
 
 const templateFiles = fs.readdirSync(environment.paths.source)
   .filter((file) => ['.html', '.ejs'].includes(path.extname(file).toLowerCase())).map((filename) => ({
@@ -41,8 +45,7 @@ module.exports = {
     }
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.vue$/,
         loader: 'vue-loader',
       },
@@ -92,6 +95,23 @@ module.exports = {
           filename: 'icons/[name].[hash:6][ext]', // Путь для сохранения файлов
         },
       },
+      // {
+      //   test: /\.(mp3|wav)$/,
+      //   type: 'asset/source',
+      //   generator: {
+      //     filename: 'audio/[name].[ext]', // Путь для сохранения файлов
+      //   },
+      // },
+      {
+        test: /\.(mp3|wav)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'audio/', // Путь, куда будут сохранены звуковые файлы
+          },
+        },
+      },
     ],
   },
   optimization: {
@@ -104,19 +124,23 @@ module.exports = {
             // Lossless optimization with custom option
             // Feel free to experiment with options for better result for you
             plugins: [
-              ['gifsicle', { interlaced: true }],
-              ['jpegtran', { progressive: true }],
-              ['optipng', { optimizationLevel: 5 }],
+              ['gifsicle', {
+                interlaced: true
+              }],
+              ['jpegtran', {
+                progressive: true
+              }],
+              ['optipng', {
+                optimizationLevel: 5
+              }],
               // Svgo configuration here https://github.com/svg/svgo#configuration
               [
                 'svgo',
                 {
-                  plugins: [
-                    {
-                      name: 'removeViewBox',
-                      active: false,
-                    },
-                  ],
+                  plugins: [{
+                    name: 'removeViewBox',
+                    active: false,
+                  }, ],
                 },
               ],
             ],
@@ -135,8 +159,7 @@ module.exports = {
       cleanOnceBeforeBuildPatterns: ['**/*', '!stats.json'],
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        {
+      patterns: [{
           from: path.resolve(environment.paths.source, 'images', 'content'),
           to: path.resolve(environment.paths.output, 'images', 'content'),
           toType: 'dir',
