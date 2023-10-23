@@ -1,6 +1,7 @@
 <template>
   <div
     class="col col__hr"
+    v-if="visibleDevice"
     :class="[
       { col__hr_right: hr === 'right' },
       { col__hr_left: hr === 'left' },
@@ -22,7 +23,7 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { ref, computed, defineProps, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
   hr: {
@@ -33,8 +34,44 @@ const props = defineProps({
     type: String,
     default: 'm',
     validator: (value) => ["s", "m", "l"].includes(value),
+  },
+  visibility: {
+    type: Object
   }
 });
+
+const widthDevice = ref(window.innerWidth);
+const visibleDevice = computed(() => {
+  let isVisible = false; // Флаг, который показывает, виден ли блок в одном из брейкпоинтов
+  for (let breakpoint in props.visibility) {
+    if (props.visibility[breakpoint] === true && widthDevice.value >= breakpoint) {
+      console.log('widthDevice.value '+widthDevice.value);
+      console.log('breakpoint '+breakpoint);
+      isVisible = true;
+      break;
+    } else {
+      isVisible = false;
+    }
+  }
+
+  return isVisible; // Возвращаем флаг видимости блока
+});
+
+// Добавляем слушатель события resize при монтировании компонента
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+// Удаляем слушатель события resize перед уничтожением компонента
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+// Функция, которая будет вызываться при изменении размера окна
+function handleResize() {
+  widthDevice.value = window.innerWidth; // Обновляем значение widthDevice при изменении размера окна
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -72,6 +109,7 @@ const props = defineProps({
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    padding: 0 30px;
     &_s {
       padding-left: 0px;
       padding-right: 0px;
@@ -80,10 +118,15 @@ const props = defineProps({
     &_m {
       padding-left: 40px;
       padding-right: 40px;
+      @media screen and (max-width: 576px) {
+        padding: 10px;
+      }
     }
 
     &_l {
-      width: 300px;
+      @media screen and (min-width: 1024px) {
+        width: 300px; 
+      }
     }
   }
 }

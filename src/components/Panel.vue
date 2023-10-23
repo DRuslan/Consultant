@@ -1,19 +1,19 @@
 <template>
   <div class="widjet" :style="{ backgroundColor: $widjet().global.color }">
     <div class="widjet__col">
-      <PanelCol hr="right" @click="showWindow($event, 'Contact')">
+      <PanelCol hr="right" @click="showWindow($event, 'Contact')" :visibility="entryData.contact.visibility">
         <WidjetDefault v-bind="entryData.contact.button" class="widjet__content" />
       </PanelCol>
 
-      <PanelCol hr="right">
-        <WidjetSocial :social="entryData.social" class="widjet__content"  />
+      <PanelCol hr="right" :mobile="true" :visibility="entryData.social.visibility">
+        <WidjetSocial :social="entryData.social.listSocial" class="widjet__content"  />
       </PanelCol>
 
-      <PanelCol hr="right" size="l" @click="showWindow($event, 'Catalog')">
+      <PanelCol hr="right" size="l" @click="showWindow($event, 'Catalog')" :visibility="entryData.catalog.visibility">
         <WidjetDefault v-bind="entryData.catalog.button" class="widjet__content"  />
       </PanelCol>
 
-      <PanelCol hr="right" size="l" @click="showWindow($event, 'Fast')">
+      <PanelCol hr="right" size="l" @click="showWindow($event, 'Fast')" :visibility="entryData.fastmail.visibility">
         <WidjetDefault v-bind="entryData.fastmail.button" @click.stop class="widjet__content"  />
       </PanelCol>
     </div>
@@ -25,14 +25,21 @@
         <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"  />
       </PanelCol> -->
       <div ref="mangerElement">
-        <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_1')" @dataParams="dataParams($event, 'Manager_1')" ref="mangerElement">
+        <PanelCol 
+          hr="left" 
+          size="l" 
+          @click="showWindow($event, 'Manager_1')" 
+          @dataParams="dataParams($event, 'Manager_1')" 
+          ref="mangerElement"
+          :visibility="entryData.onlineConsultant[1].visibility"
+        >
           <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"/>
         </PanelCol>
       </div>
 
-      <PanelCol size="s" hr="left">
+      <!-- <PanelCol size="s" hr="left">
         <WidjetLink />
-      </PanelCol>
+      </PanelCol> -->
     </div>
 
     <WindowContact
@@ -151,7 +158,7 @@ onMounted (() => {
 })
 // вычисляем сценарий переписки
 const outputScript = computed(() => {
-  console.log(autoMode);
+  // console.log(autoMode);
   if (autoMode) {
     return props.entryData.autoMessage[1].script; // Логика для autoShowWindowChat
   } else {
@@ -159,7 +166,7 @@ const outputScript = computed(() => {
   }
 });
 
-console.log(outputScript);
+// console.log(outputScript);
 
 function autoShowWindowChat (pos) {
   setTimeout(function () {

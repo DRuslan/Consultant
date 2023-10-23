@@ -63,18 +63,30 @@
                             },
                         ],
                     },
-                }
+                },
+                visibility: {
+                    320: false,
+                    768: false,
+                    1024: true,
+                },
             },
-            social: [
-                {
-                    link: "link",
-                    iconName: "whatsapp"
+            social: {
+                listSocial: [
+                    {
+                        link: "link",
+                        iconName: "whatsapp"
+                    },
+                    {
+                        link: "link",
+                        iconName: "tg"
+                    },
+                ],
+                visibility: {
+                    320: true,
+                    768: true,
+                    1024: true,
                 },
-                {
-                    link: "link",
-                    iconName: "tg"
-                },
-            ],
+            },        
             catalog: {
                 button: {
                     text: "Каталог ELTEX 2023",
@@ -116,7 +128,12 @@
                             field: {}
                         }
                     },
-                }
+                },
+                visibility: {
+                    320: false,
+                    768: false,
+                    1024: true,
+                },
             },
             fastmail: {
                 button: {
@@ -133,7 +150,12 @@
                             field: {}
                         }
                     },
-                }
+                },
+                visibility: {
+                    320: false,
+                    768: false,
+                    1024: true,
+                },
             },
             onlineConsultant: [
                 {
@@ -154,7 +176,14 @@
                             WriteText: 'Ответить',
                         }
                     },
-                }
+                },
+                {
+                    visibility: {
+                        320: true,
+                        768: true,
+                        1024: false,
+                    },
+                },
             ],
             chat: [
                 {
@@ -174,6 +203,13 @@
                             CloseText: 'Закрыть',
                             WriteText: 'Ответить',
                         }
+                    },
+                },
+                {
+                    visibility: {
+                        320: false,
+                        768: false,
+                        1024: true,
                     },
                 },
             ],
@@ -222,7 +258,14 @@
                             message: 'Простите за задержку! Не могли бы вы оставить свой контактный номер телефона? Я вам смогу перезвонить позже и проконсультирую по всем вопросам'
                         },
                     ]
-                }
+                },
+                {
+                    visibility: {
+                        320: false,
+                        768: false,
+                        1024: true,
+                    },
+                },
             ],
             modals: {
                 callBack: {

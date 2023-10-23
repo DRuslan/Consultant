@@ -18,7 +18,7 @@
         <transition-group name="fade">
           <Message class="chat__message" v-for="item in allMessages" :key="item.id" :msg="item.message" :role="item.role" />
         </transition-group>
-        <p v-if="waitResponceBot"> Артем вводит сообщение ... </p>
+        <p v-if="waitResponceBot"></p>
         </div>
         <form action="#" @submit="send" @keyup.enter="send" class="chat__form">
           <div class="chat__row">
