@@ -1,45 +1,75 @@
 <template>
   <div class="widjet" :style="{ backgroundColor: $widjet().global.color }">
     <div class="widjet__col">
-      <PanelCol hr="right" @click="showWindow($event, 'Contact')" :visibility="entryData.contact.visibility">
-        <WidjetDefault v-bind="entryData.contact.button" class="widjet__content" />
+      <PanelCol
+        hr="right"
+        @click="showWindow($event, 'Contact')"
+        :visibility="entryData.contact.visibility"
+        :windowWidth="widthDevice"
+      >
+        <WidjetDefault
+          v-bind="entryData.contact.button"
+          class="widjet__content"
+        />
       </PanelCol>
 
-      <PanelCol hr="right" :mobile="true" :visibility="entryData.social.visibility">
-        <WidjetSocial :social="entryData.social.listSocial" class="widjet__content"  />
+      <PanelCol
+        hr="right"
+        :mobile="true"
+        :visibility="entryData.social.visibility"
+        :windowWidth="widthDevice"
+      >
+        <WidjetSocial
+          :social="entryData.social.listSocial"
+          class="widjet__content"
+        />
       </PanelCol>
 
-      <PanelCol hr="right" size="l" @click="showWindow($event, 'Catalog')" :visibility="entryData.catalog.visibility">
-        <WidjetDefault v-bind="entryData.catalog.button" class="widjet__content"  />
+      <PanelCol
+        hr="right"
+        size="l"
+        @click="showWindow($event, 'Catalog')"
+        :visibility="entryData.catalog.visibility"
+        :windowWidth="widthDevice"
+      >
+        <WidjetDefault
+          v-bind="entryData.catalog.button"
+          class="widjet__content"
+        />
       </PanelCol>
 
-      <PanelCol hr="right" size="l" @click="showWindow($event, 'Fast')" :visibility="entryData.fastmail.visibility">
-        <WidjetDefault v-bind="entryData.fastmail.button" @click.stop class="widjet__content"  />
+      <PanelCol
+        hr="right"
+        size="l"
+        @click="showWindow($event, 'Fast')"
+        :visibility="entryData.fastmail.visibility"
+        :windowWidth="widthDevice"
+      >
+        <WidjetDefault
+          v-bind="entryData.fastmail.button"
+          @click.stop
+          class="widjet__content"
+        />
       </PanelCol>
     </div>
 
-    <button @click="openModal('callBack')"></button>
-
-    <div class="widjet__col">
-      <!-- <PanelCol hr="left" size="l" @click="showWindow($event, 'Manager_0')">
-        <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"  />
-      </PanelCol> -->
-      <div ref="mangerElement">
-        <PanelCol 
-          hr="left" 
-          size="l" 
-          @click="showWindow($event, 'Manager_1')" 
-          @dataParams="dataParams($event, 'Manager_1')" 
-          ref="mangerElement"
-          :visibility="entryData.onlineConsultant[1].visibility"
-        >
-          <WidjetDefault v-bind="entryData.onlineConsultant[0].button" class="widjet__content"/>
-        </PanelCol>
-      </div>
-
-      <!-- <PanelCol size="s" hr="left">
-        <WidjetLink />
-      </PanelCol> -->
+    <div class="widjet__col" ref="mangerElement">
+      <!-- <div ref="mangerElement"> -->
+      <PanelCol
+        hr="left"
+        size="l"
+        @click="showWindow($event, 'Manager_1')"
+        @dataParams="dataParams($event, 'Manager_1')"
+        :visibility="entryData.onlineConsultant[1].visibility"
+        :class="`${notificationMessage ? 'widjet-notification' : ''}`"
+        :windowWidth="widthDevice"
+      >
+        <WidjetDefault
+          v-bind="entryData.onlineConsultant[0].button"
+          class="widjet__content"
+        />
+      </PanelCol>
+      <!-- </div> -->
     </div>
 
     <WindowContact
@@ -59,7 +89,7 @@
       :positionX="windowPosition"
       figurePos="center"
     >
-        <Feedback />
+      <Feedback />
     </WindowFast>
 
     <WindowCatalog
@@ -70,7 +100,7 @@
       :positionX="windowPosition"
       figurePos="center"
     />
- 
+
     <!-- <WindowManager 
       :isVisible="isWindowVisible"
       @close="hideWindow"
@@ -80,7 +110,7 @@
       figurePos="center"
     /> -->
 
-    <WindowManager 
+    <WindowManager
       :isVisible="isWindowVisible"
       @close="hideWindow"
       @showChat="showWindowChat"
@@ -104,11 +134,10 @@
 
     <ModalsContainer />
   </div>
-  
 </template>
 
 <script setup>
-import { defineProps , onMounted, ref, computed } from "vue";
+import { defineProps, onMounted, ref, computed, onBeforeMount } from "vue";
 
 import PanelCol from "./PanelCol.vue";
 import WidjetLink from "./WidjetLink.vue";
@@ -122,7 +151,7 @@ import WindowChat from "./Window/Chat.vue";
 import Feedback from "./Base/Form/Feedback.vue";
 import ModalsContainer from "./Base/Modals/ModalContainer.vue";
 import audioNotification from "../audio/whatsapp_web.mp3";
-import {openModal} from "../store/modals";
+import { openModal } from "../store/modals";
 
 const props = defineProps({
   entryData: {
@@ -131,31 +160,47 @@ const props = defineProps({
   },
 });
 
+const widthDevice = ref(window.innerWidth);
 const isWindowVisible = ref(false);
 const windowType = ref(""); // Переменная для определения типа окна
 const audio = new Audio(audioNotification);
+const notificationMessage = ref(false);
 let windowPosition = ref(null);
 
 function showWindow(event, type) {
-    const el = event.target;
-    windowPosition.value = el.getBoundingClientRect().left;
-    windowType.value = type;
-    isWindowVisible.value = true;
+  const el = event.target;
+  windowPosition.value = el.getBoundingClientRect().left;
+  windowType.value = type;
+  isWindowVisible.value = true;
 }
-// передаем координаты и показываем чат автоматом 
+// передаем координаты и показываем чат автоматом
 const mangerElement = ref(null);
-// session storage autoMode 
-let autoMode = localStorage.getItem('chatAutoMode');
+// local storage autoMode
+let autoMode = localStorage.getItem("chatAutoMode");
+// Session storage comeback
+let isComeback = sessionStorage.getItem("comeback");
 
 if (autoMode === null || autoMode === undefined) {
-  localStorage.setItem('chatAutoMode', true);
+  localStorage.setItem("chatAutoMode", true);
 }
 
-onMounted (() => {
-  if (autoMode === 'true') {
+onMounted(() => {
+  if (autoMode === "true" || autoMode == undefined) {
     autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
   }
-})
+
+  if (isComeback === null || isComeback !== 'false') {
+    document.addEventListener('mouseleave', comeback);
+  }
+
+  window.addEventListener('resize', handleResize);
+});
+
+onBeforeMount (() => {
+  window.removeEventListener('mouseleave', comeback);
+  window.removeEventListener('resize', handleResize);
+});
+
 // вычисляем сценарий переписки
 const outputScript = computed(() => {
   // console.log(autoMode);
@@ -166,33 +211,50 @@ const outputScript = computed(() => {
   }
 });
 
-// console.log(outputScript);
-
-function autoShowWindowChat (pos) {
+function autoShowWindowChat(pos) {
   setTimeout(function () {
-    localStorage.setItem('chatAutoMode', false);
-    windowType.value = 'Chat'
+    localStorage.setItem("chatAutoMode", false);
+    windowType.value = "Manager_1";
+    notificationMessage.value = true;
     isWindowVisible.value = true;
     windowPosition.value = pos;
-    
-    audio.play().then(() => {
-      console.log('Мелодия воспроизведена успешно!');
-    }).catch(error => {
-      console.error('Произошла ошибка при воспроизведении мелодии:', error);
-    });
+    console.log("setTimeout");
+    audio
+      .play()
+      .then(() => {
+        console.log("Мелодия воспроизведена успешно!");
+      })
+      .catch((error) => {
+        console.error("Произошла ошибка при воспроизведении мелодии:", error);
+      });
   }, 5000);
 }
 
-
-function showWindowChat (value) {
-  windowType.value = 'Chat';
+function showWindowChat(value) {
+  windowType.value = "Chat";
   isWindowVisible.value = value;
-  localStorage.setItem('chatAutoMode', false);
+  notificationMessage.value = false;
+  localStorage.setItem("chatAutoMode", false);
 }
 
 function hideWindow() {
   windowType.value = "";
   isWindowVisible.value = false;
+}
+
+// comeback
+function comeback() {
+  if (isComeback !== 'false') {
+    sessionStorage.setItem('comeback', 'false');
+    isComeback = sessionStorage.getItem('comeback');
+    console.log(isComeback);
+    openModal('callBack');
+  }
+}
+
+// Функция, которая будет вызываться при изменении размера окна
+function handleResize() {
+  widthDevice.value = window.innerWidth; // Обновляем значение widthDevice при изменении размера окна
 }
 </script>
 
@@ -206,13 +268,37 @@ function hideWindow() {
   // z-index: -1;
   display: flex;
   justify-content: space-between;
+  .widjet-notification {
+    animation: blink 1.5s linear infinite;
+  }
   &__col {
     display: flex;
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
   }
   &__content {
     position: relative;
     z-index: -1;
     width: auto;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.2;
+  }
+  25% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  75% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.2;
   }
 }
 </style>

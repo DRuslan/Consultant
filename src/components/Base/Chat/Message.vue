@@ -37,7 +37,7 @@ const props = defineProps({
 .msg {
   &__bot {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-self: flex-start;
     width: 100%;
     &_message {
@@ -45,6 +45,7 @@ const props = defineProps({
       position: relative;
       border-radius: 0 8px 8px 8px;
       padding: 12px;
+      margin-left: 12px;
       max-width: 218px;
 
       &:after {

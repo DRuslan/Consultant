@@ -37,16 +37,15 @@ const props = defineProps({
   },
   visibility: {
     type: Object
-  }
+  },
+  windowWidth: Number
 });
 
-const widthDevice = ref(window.innerWidth);
+// const widthDevice = ref(window.innerWidth);
 const visibleDevice = computed(() => {
   let isVisible = false; // Флаг, который показывает, виден ли блок в одном из брейкпоинтов
   for (let breakpoint in props.visibility) {
-    if (props.visibility[breakpoint] === true && widthDevice.value >= breakpoint) {
-      console.log('widthDevice.value '+widthDevice.value);
-      console.log('breakpoint '+breakpoint);
+    if (props.visibility[breakpoint] === true && props.windowWidth >= breakpoint) {
       isVisible = true;
       break;
     } else {
@@ -57,20 +56,20 @@ const visibleDevice = computed(() => {
   return isVisible; // Возвращаем флаг видимости блока
 });
 
-// Добавляем слушатель события resize при монтировании компонента
-onMounted(() => {
-  window.addEventListener('resize', handleResize);
-});
+// // Добавляем слушатель события resize при монтировании компонента
+// onMounted(() => {
+//   window.addEventListener('resize', handleResize);
+// });
 
-// Удаляем слушатель события resize перед уничтожением компонента
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize);
-});
+// // Удаляем слушатель события resize перед уничтожением компонента
+// onBeforeUnmount(() => {
+//   window.removeEventListener('resize', handleResize);
+// });
 
-// Функция, которая будет вызываться при изменении размера окна
-function handleResize() {
-  widthDevice.value = window.innerWidth; // Обновляем значение widthDevice при изменении размера окна
-}
+// // Функция, которая будет вызываться при изменении размера окна
+// function handleResize() {
+//   widthDevice.value = window.innerWidth; // Обновляем значение widthDevice при изменении размера окна
+// }
 
 </script>
 
@@ -79,6 +78,7 @@ function handleResize() {
   height: 100%;
   position: relative;
   box-sizing: border-box;
+  width: 100%;
   &_left {margin-left: auto}
   &_right {margin-right: initial;}
   &__hr {
@@ -104,6 +104,7 @@ function handleResize() {
   }
 
   &__container {
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -118,7 +119,7 @@ function handleResize() {
     &_m {
       padding-left: 40px;
       padding-right: 40px;
-      @media screen and (max-width: 576px) {
+      @media screen and (max-width: 480px) {
         padding: 10px;
       }
     }

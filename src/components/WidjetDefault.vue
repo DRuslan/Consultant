@@ -32,5 +32,8 @@ const props = defineProps({
       margin-left: 8px;
     }
   }
+  p {
+    white-space: nowrap;
+  }
 }
 </style>
