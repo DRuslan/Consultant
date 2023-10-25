@@ -185,56 +185,60 @@ if (autoMode === null || autoMode === undefined) {
 }
 
 onMounted(() => {
-  if (autoMode === "true" || autoMode == undefined) {
+  if (autoMode !== "false") {
     autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
   }
 
-  if (isComeback === null || isComeback !== 'false') {
-    document.addEventListener('mouseleave', comeback);
+  if (isComeback === null || isComeback !== "false") {
+    document.addEventListener("mouseleave", comeback);
   }
 
-  window.addEventListener('resize', handleResize);
+  window.addEventListener("resize", handleResize);
 });
 
-onBeforeMount (() => {
-  window.removeEventListener('mouseleave', comeback);
-  window.removeEventListener('resize', handleResize);
+onBeforeMount(() => {
+  window.removeEventListener("mouseleave", comeback);
+  window.removeEventListener("resize", handleResize);
 });
 
 // вычисляем сценарий переписки
 const outputScript = computed(() => {
-  // console.log(autoMode);
-  if (autoMode) {
+  if (autoMode || autoMode === null) {
     return props.entryData.autoMessage[1].script; // Логика для autoShowWindowChat
   } else {
     return props.entryData.autoMessage[0].script; // Логика для showWindowChat
   }
 });
 
-function autoShowWindowChat(pos) {
-  setTimeout(function () {
-    localStorage.setItem("chatAutoMode", false);
-    windowType.value = "Manager_1";
-    notificationMessage.value = true;
-    isWindowVisible.value = true;
-    windowPosition.value = pos;
-    console.log("setTimeout");
-    audio
-      .play()
-      .then(() => {
-        console.log("Мелодия воспроизведена успешно!");
-      })
-      .catch((error) => {
-        console.error("Произошла ошибка при воспроизведении мелодии:", error);
-      });
-  }, 5000);
-}
+let showWindowChatExecuted = ref(false);
 
 function showWindowChat(value) {
+  showWindowChatExecuted.value = true;
   windowType.value = "Chat";
   isWindowVisible.value = value;
   notificationMessage.value = false;
   localStorage.setItem("chatAutoMode", false);
+}
+
+function autoShowWindowChat(pos) {
+  console.log(autoMode);
+  if (autoMode !== "false") {
+    setTimeout(function () {
+      if (!showWindowChatExecuted.value) {
+        localStorage.setItem("chatAutoMode", false);
+        windowType.value = "Manager_1";
+        notificationMessage.value = true;
+        isWindowVisible.value = true;
+        windowPosition.value = pos;
+        console.log("setTimeout");
+        audio.play().then(() => {
+            console.log("Мелодия воспроизведена успешно!");
+          }).catch((error) => {
+            console.error("Произошла ошибка при воспроизведении мелодии:", error);
+          });
+      }
+    }, 5000);
+  }
 }
 
 function hideWindow() {
@@ -244,11 +248,11 @@ function hideWindow() {
 
 // comeback
 function comeback() {
-  if (isComeback !== 'false') {
-    sessionStorage.setItem('comeback', 'false');
-    isComeback = sessionStorage.getItem('comeback');
+  if (isComeback !== "false") {
+    sessionStorage.setItem("comeback", "false");
+    isComeback = sessionStorage.getItem("comeback");
     console.log(isComeback);
-    openModal('callBack');
+    openModal("callBack");
   }
 }
 

@@ -15,10 +15,16 @@
           class="chat__inner"
           :style="{ color: $widjet().global.textPrimary }"
         >
-        <transition-group name="fade">
-          <Message class="chat__message" v-for="item in allMessages" :key="item.id" :msg="item.message" :role="item.role" />
-        </transition-group>
-        <p v-if="waitResponceBot"></p>
+          <transition-group name="fade">
+            <Message
+              class="chat__message"
+              v-for="item in allMessages"
+              :key="item.id"
+              :msg="item.message"
+              :role="item.role"
+            />
+          </transition-group>
+          <p v-if="waitResponceBot">...</p>
         </div>
         <form action="#" @submit="send" @keyup.enter="send" class="chat__form">
           <div class="chat__row">
@@ -73,11 +79,6 @@ if (props.script !== null && props.script !== undefined) {
   allMessages.value.push(props.script[countBotMessages.value]);
 }
 
-function generateUniqueId() {
-  // пробую генерацию id для анимаций групповых сообщений
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
-
 const send = (e) => {
   e.preventDefault();
   // Отправляем сообщение и очищаем текстовое поле
@@ -88,37 +89,78 @@ const send = (e) => {
       id: generateUniqueId(),
     });
     newMessage.value = "";
-    if (props.script[countBotMessages.value] != null && props.script[countBotMessages.value]!== undefined) {
+    if (
+      props.script[countBotMessages.value] != null &&
+      props.script[countBotMessages.value] !== undefined
+    ) {
       isMessageSend.value = true; // Отслеживаем ответ пользователя
     } else {
       isMessageSend.value = false; // отключаем отслеживания так как длина маассива ответов от бота ограничена и если будут обращения то данных не будет
     }
     console.log("Сообщение отправлено пользователем");
     console.log(props.script);
-    console.log(countBotMessages.value);
+    console.log(props.script[countBotMessages.value]);
+    console.log(props.script[countBotMessages.value].ignore);
   }
 };
-
-
-
 
 const waitResponceBot = computed(() => {
   // Проверка на ответ пользователя и количетсво сообщений бота чтобы остановить логику отправки сообщений (так как длина массива ответов от бота огранина)
   if (isMessageSend.value && countBotMessages.value < props.script.length - 1) {
-    console.log('Пользователь ждет ответ на сообщение');
+    console.log("Пользователь ждет ответ на сообщение");
     countBotMessages.value++;
-    const delayTimeMessage = props.script[countBotMessages.value].time * 1000; // умножаем на 1000 для получения миллисекунд
-    setTimeout(() => {
-      // отправляем сообщение от (бота) 
-      allMessages.value.push(props.script[countBotMessages.value]);  
-      isMessageSend.value = false;
-      console.log('Пользователь получил ответ на сообщение');
-    }, delayTimeMessage);
+    sendBot();
   } else {
     isMessageSend.value = false;
   }
-  return isMessageSend.value
+  return isMessageSend.value;
 });
+
+async function sendBot() {
+  const delayTimeMessage = props.script[countBotMessages.value].time * 1000; // умножаем на 1000 для получения миллисекунд
+  await delaysSendBot(delayTimeMessage);
+
+  // Игнорирование ответов клиента
+  if (
+    props.script[countBotMessages.value].ignore !== undefined &&
+    props.script[countBotMessages.value].ignore
+  ) {
+    console.log("Игнорирование ответов клиента");
+    console.log(props.script[countBotMessages.value]);
+
+    await delaysSendBot(delayTimeMessage);
+    allMessages.value.push(props.script[countBotMessages.value]);
+    countBotMessages.value++;
+    // isMessageSend.value = false;
+    if (countBotMessages.value < props.script.length) {
+      console.log("Отображаем следующее сообщение бота после игнорирования клиента");
+      // Вызываем delaysSendBot для следующего сообщения
+      await delaysSendBot(delayTimeMessage);
+      console.log(props.script[countBotMessages.value]);
+      allMessages.value.push(props.script[countBotMessages.value]);
+      isMessageSend.value = false;
+    } else {
+      console.log("Больше сообщений бота нет.");
+    }
+  } else {
+    // отправляем сообщение от (бота)
+    console.log("Пользователь получил ответ на сообщение");
+    console.log(props.script[countBotMessages.value]);
+    allMessages.value.push(props.script[countBotMessages.value]);
+    isMessageSend.value = false;
+  }
+
+  return countBotMessages.value;
+}
+
+function delaysSendBot (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function generateUniqueId() {
+  // пробую генерацию id для анимаций групповых сообщений
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
 </script>
     
 <style lang="scss" scoped>
@@ -224,9 +266,8 @@ const waitResponceBot = computed(() => {
 }
 
 .fade-enter-active {
-  transtion: all .4s ease;
+  transtion: all 0.4s ease;
 }
-
 
 // .fade-enter-active, .fade-leave-active {
 //   transition: opacity 0.5s ease-in-out;
