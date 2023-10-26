@@ -54,7 +54,6 @@
     </div>
 
     <div class="widjet__col" ref="mangerElement">
-      <!-- <div ref="mangerElement"> -->
       <PanelCol
         hr="left"
         size="l"
@@ -69,8 +68,12 @@
           class="widjet__content"
         />
       </PanelCol>
-      <!-- </div> -->
+
+      <PanelCol size="s" hr="left" :visibility="entryData.onlineConsultant[1].visibility" :windowWidth="widthDevice">
+        <WidjetLink />
+      </PanelCol>
     </div>
+    
 
     <WindowContact
       :isVisible="isWindowVisible"
@@ -191,6 +194,12 @@ onMounted(() => {
 
   if (isComeback === null || isComeback !== "false") {
     document.addEventListener("mouseleave", comeback);
+  }
+
+  if (isComeback === null || isComeback !== "false") {
+    setTimeout(() => {
+    openModal("callBack");
+    }, 120000)
   }
 
   window.addEventListener("resize", handleResize);

@@ -12,6 +12,7 @@
         :rules="field.rules"
         :name="field.name"
         type="text"
+        class="field-row__field"
     />
       <button
         type="submit"
@@ -56,6 +57,9 @@
 .field-row {
   display: flex;
   align-items: center;
+  &__field {
+    min-width: 273px;
+  }
   button {
     height: 40px;
     border: none;

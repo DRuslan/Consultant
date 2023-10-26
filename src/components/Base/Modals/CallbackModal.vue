@@ -5,38 +5,20 @@
     @close="close"
   >
     <div class="image-modal__container">
-      <div class="image-modal__body">
-        <div class="image-modal__inner" :style="{ color: $widjet().global.textPrimary }">
+      <div class="image-modal__body" :style="{ color: $widjet().global.textPrimary }">
+        <div class="image-modal__inner">
           <p class="image-modal__headline">
-            {{
-              modalData.title !== ""
-                ? modalData.title
-                : "Рассчитать стоимость проекта"
-            }}
+            {{ modalData.title !== "" ? modalData.title : "Рассчитать стоимость проекта"}}
           </p>
           <CallbackForm class="image-modal__form" :btnText="modalData.button.text"/>
           <p class="image-modal__subtitle">
-            {{
-              modalData.subTitle !== ""
-                ? modalData.subTitle
-                : "и получите консультацию от наших специалистов"
-            }}
+            {{ modalData.subTitle !== "" ? modalData.subTitle : "и получите консультацию от наших специалистов"}}
           </p>
-          <a 
-            href="#" class="image-modal__political" 
-            :style="{ color: $widjet().global.dopPrimary }"
-            @click.prevent="openPoliticalModal"
-          >
-            Пользовательское соглашение
-          </a>
+          <a href="#" class="image-modal__political" :style="{ color: $widjet().global.dopPrimary }" @click.prevent="openPoliticalModal">Пользовательское соглашение</a>
         </div>
         <div class="image-modal__image">
-          <img
-            :src="
-              modalData.image !== '' ? modalData.image : '/images/modals/1.jpg'
-            "
-            alt=""
-          />
+          <p class="image-modal__headline mobile">{{modalData.title !== "" ? modalData.title : "Рассчитать стоимость проекта"}}</p>
+          <img :src="modalData.image !== '' ? modalData.image : '/images/modals/1.jpg'" alt=""/>
         </div>
       </div>
     </div>
@@ -86,6 +68,9 @@ export default {
     align-items: center;
     justify-content: space-between;
     border-radius: 12px;
+    @media screen and (max-width: 768px) {
+        flex-direction: column-reverse;
+    }
   }
 
   &__inner {
@@ -95,6 +80,15 @@ export default {
   &__headline {
     font-weight: bold;
     font-size: 24px;
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+    &.mobile {
+      display: block;
+      @media screen and (min-width: 768px) {
+        display: none;
+      } 
+    }
   }
 
   &__subtitle {
@@ -121,16 +115,16 @@ export default {
   }
 
   &__image {
-    width: 180px;
-    border-radius: 50%;
-    @media screen and (min-width: 768px) {
-      width: 190px;
-      height: 190px;
-    }
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     img {
       width: 100%;
       height: 100%;
+      max-width: 180px;
+      max-height: 180px;
+      border-radius: 50%;
       border-radius: inherit;
       object-fit: cover;
       object-position: center left;

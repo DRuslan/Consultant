@@ -1,7 +1,7 @@
 <template>
   <div class="widjet__link">
-    <a class="" href="#">
-      <p>Krible</p>
+    <a class="" href="https://kreeble.ru">
+      <p>Kreeble</p>
     </a>
   </div>
 </template>
@@ -23,7 +23,7 @@
       p {
         transform: rotate(-90deg);
         color: #fff;
-        font-size: 14px;
+        font-size: 12px !important;
       }
     }
   }
