@@ -1,6 +1,6 @@
 <template>
   <div class="widjet__link">
-    <a class="" href="https://kreeble.ru">
+    <a class="" href="https://kreeble.ru" target="_blank">
       <p>Kreeble</p>
     </a>
   </div>
@@ -24,6 +24,9 @@
         transform: rotate(-90deg);
         color: #fff;
         font-size: 12px !important;
+        @media screen and (max-width: 576px) {
+          font-size: 10px !important;
+        }
       }
     }
   }

@@ -75,11 +75,15 @@ const visibleDevice = computed(() => {
 
 <style lang="scss" scoped>
 .col {
+  width: auto;
   height: 100%;
   position: relative;
   box-sizing: border-box;
-  width: 100%;
-  &_left {margin-left: auto}
+  &_left {
+    // margin-left: auto
+    display: flex;
+    justify-content: flex-end;
+  }
   &_right {margin-right: initial;}
   &__hr {
     &::before {
@@ -104,7 +108,7 @@ const visibleDevice = computed(() => {
   }
 
   &__container {
-    width: 100%;
+    // width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -114,19 +118,20 @@ const visibleDevice = computed(() => {
     &_s {
       padding-left: 0px;
       padding-right: 0px;
+      max-width: 70px;
     }
 
     &_m {
       padding-left: 40px;
       padding-right: 40px;
       @media screen and (max-width: 480px) {
-        padding: 10px;
+        padding: 0 20px;
       }
     }
 
     &_l {
       @media screen and (min-width: 1024px) {
-        width: 300px; 
+        min-width: 300px; 
       }
     }
   }

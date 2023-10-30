@@ -172,6 +172,9 @@ function generateUniqueId() {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }
+  @media screen and (max-width: 576px) {
+    width: auto;
+  }
   .figure {
     background-color: #e7e8ed;
     border-radius: inherit;

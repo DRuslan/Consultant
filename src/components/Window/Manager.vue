@@ -66,12 +66,18 @@ const props = defineProps({
   border-radius: 8px;
   width: 300px;
   position: relative;
+  @media screen and (max-width: 576px) {
+    width: auto;
+  }
   .manager {
     padding: 24px 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 14px;
+    @media screen and (max-width: 576px) {
+      padding: 24px 24px;
+    }
     &__img {
         width: 60px;
         height: 60px;
@@ -83,6 +89,13 @@ const props = defineProps({
     }
     &__description {
         margin-bottom: 24px;
+        @media screen and (max-width: 576px) {
+          text-align: center;
+          margin: 6px 0 12px;
+        }
+    }
+    &__btns {
+      display: flex;
     }
     &__btn {
         padding: 12px 22px;

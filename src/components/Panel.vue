@@ -53,7 +53,7 @@
       </PanelCol>
     </div>
 
-    <div class="widjet__col" ref="mangerElement">
+    <div class="widjet__col widjet__col_r" ref="mangerElement">
       <PanelCol
         hr="left"
         size="l"
@@ -140,7 +140,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, ref, computed, onBeforeMount } from "vue";
+import { defineProps, onMounted, ref, computed, onBeforeMount, inject } from "vue";
 
 import PanelCol from "./PanelCol.vue";
 import WidjetLink from "./WidjetLink.vue";
@@ -186,20 +186,23 @@ let isComeback = sessionStorage.getItem("comeback");
 if (autoMode === null || autoMode === undefined) {
   localStorage.setItem("chatAutoMode", true);
 }
-
+const soundPlugin = inject('sound'); // 'sound' - это имя, с которым вы зарегистрировали плагин
+console.log($sound(''));
 onMounted(() => {
+  // console.log($sound);
   if (autoMode !== "false") {
     autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
+    // $sound(audio);
   }
 
   if (isComeback === null || isComeback !== "false") {
     document.addEventListener("mouseleave", comeback);
   }
 
-  if (isComeback === null || isComeback !== "false") {
+  if (isComeback === null && widthDevice.value >= 768 || isComeback !== "false" && widthDevice.value >= 768) {
     setTimeout(() => {
-    openModal("callBack");
-    }, 120000)
+      comeback();
+    }, 1000)
   }
 
   window.addEventListener("resize", handleResize);
@@ -240,11 +243,14 @@ function autoShowWindowChat(pos) {
         isWindowVisible.value = true;
         windowPosition.value = pos;
         console.log("setTimeout");
-        audio.play().then(() => {
-            console.log("Мелодия воспроизведена успешно!");
-          }).catch((error) => {
-            console.error("Произошла ошибка при воспроизведении мелодии:", error);
-          });
+        // audio.play().then(() => {
+        //     console.log("Мелодия воспроизведена успешно!");
+        //   }).catch((error) => {
+        //     console.error("Произошла ошибка при воспроизведении мелодии:", error);
+        //     audio.resume().then(() => {
+        //       console.log('Playback resumed successfully');
+        //     });
+        //   });
       }
     }, 5000);
   }
@@ -257,7 +263,7 @@ function hideWindow() {
 
 // comeback
 function comeback() {
-  if (isComeback !== "false") {
+  if (isComeback !== "false" && widthDevice.value > 768) {
     sessionStorage.setItem("comeback", "false");
     isComeback = sessionStorage.getItem("comeback");
     console.log(isComeback);
@@ -281,13 +287,23 @@ function handleResize() {
   // z-index: -1;
   display: flex;
   justify-content: space-between;
+  @media screen and (max-width: 576px) {
+    height: 40px;  
+  }
   .widjet-notification {
     animation: blink 1.5s linear infinite;
   }
   &__col {
     display: flex;
-    @media screen and (max-width: 768px) {
-      width: 100%;
+    // @media screen and (max-width: 768px) {
+    //   width: 100%;
+    // }
+    &_r {
+      @media screen and (max-width: 576px) {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+      }
     }
   }
   &__content {
