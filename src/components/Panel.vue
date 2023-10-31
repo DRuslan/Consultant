@@ -187,7 +187,6 @@ if (autoMode === null || autoMode === undefined) {
   localStorage.setItem("chatAutoMode", true);
 }
 const soundPlugin = inject('sound'); // 'sound' - это имя, с которым вы зарегистрировали плагин
-console.log($sound(''));
 onMounted(() => {
   // console.log($sound);
   if (autoMode !== "false") {

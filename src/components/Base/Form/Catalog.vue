@@ -1,6 +1,19 @@
 <template>
-  <Container>
-    <Field class="field" placeholder="Введите ваше имя*"></Field>
+  <Container :form="form">
+    <Field
+      class="field"
+      v-for="field in $getTextFields(form)"
+      :key="field"
+      :placeholder="field.placeholder"
+      v-model="field.value"
+      :value="field.value"
+      @input="field.errorMessage = ''"
+      :errorMessage="field.errorMessage"
+      :rules="field.rules"
+      :name="field.name"
+      :rows="field.rows"
+      type="text"
+    />
     <div class="field-row">
       <button type="submit" :disabled="!checkPolit">Отправить Сюда</button>
     </div>
@@ -21,16 +34,14 @@ import Field from "./ui/Field.vue";
 import Political from "./ui/Political.vue";
 import { ref } from "vue";
 
-let form = ref({
-  FIO: {
+const form = ref({
+  Phone: {
+    type: "text",
+    name: "Телефон",
+    placeholder: "Введите ваш телефон",
     value: "",
-    rules: ["required"],
-    error: "",
-  },
-  phone: {
-    value: "",
-    rules: ["required"],
-    error: "",
+    rules: ["required", "phone"],
+    errorMessage: "",
   },
 });
 

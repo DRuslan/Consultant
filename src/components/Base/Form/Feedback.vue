@@ -10,6 +10,7 @@
       :errorMessage="field.errorMessage"
       :rules="field.rules"
       :name="field.name"
+      :rows="field.rows"
       type="text"
     />
     <div class="field-row">
@@ -41,6 +42,7 @@ const form = ref({
     value: "",
     rules: ["required"],
     errorMessage: "",
+    rows: 7
   },
 });
 </script>
