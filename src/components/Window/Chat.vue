@@ -24,7 +24,14 @@
               :role="item.role"
             />
           </transition-group>
-          <p v-if="waitResponceBot">...</p>
+          <transition name="fade">
+            <p class="waiting" v-show="waitResponceBot || ignoreWaiting">
+              <span :style="{ color: $widjet().global.dopPrimary }">Артём набирает сообщение </span>
+              <span class="waiting__dot" :style="{ backgroundColor: $widjet().global.dopPrimary }"></span>
+              <span class="waiting__dot" :style="{ backgroundColor: $widjet().global.dopPrimary }"></span>
+              <span class="waiting__dot" :style="{ backgroundColor: $widjet().global.dopPrimary }"></span>
+            </p>
+          </transition>
         </div>
         <form action="#" @submit="send" @keyup.enter="send" class="chat__form">
           <div class="chat__row">
@@ -89,11 +96,12 @@ const send = (e) => {
       id: generateUniqueId(),
     });
     newMessage.value = "";
-    if (
-      props.script[countBotMessages.value] != null &&
-      props.script[countBotMessages.value] !== undefined
-    ) {
-      isMessageSend.value = true; // Отслеживаем ответ пользователя
+    if (props.script[countBotMessages.value] != null && props.script[countBotMessages.value] !== undefined) {
+      setTimeout(function (){
+        console.log('isMessageSend.value = true; // Отслеживаем ответ пользователя');
+        isMessageSend.value = true; // Отслеживаем ответ пользователя
+      }, 1500)
+      
     } else {
       isMessageSend.value = false; // отключаем отслеживания так как длина маассива ответов от бота ограничена и если будут обращения то данных не будет
     }
@@ -104,18 +112,19 @@ const send = (e) => {
   }
 };
 
-const waitResponceBot = computed(() => {
-  // Проверка на ответ пользователя и количетсво сообщений бота чтобы остановить логику отправки сообщений (так как длина массива ответов от бота огранина)
-  if (isMessageSend.value && countBotMessages.value < props.script.length - 1) {
-    console.log("Пользователь ждет ответ на сообщение");
-    countBotMessages.value++;
-    sendBot();
-  } else {
-    isMessageSend.value = false;
-  }
-  return isMessageSend.value;
+const waitResponceBot = computed(() => {  
+    // Проверка на ответ пользователя и количетсво сообщений бота чтобы остановить логику отправки сообщений (так как длина массива ответов от бота огранина)
+    if (isMessageSend.value && countBotMessages.value < props.script.length - 1) {
+        console.log("Пользователь ждет ответ на сообщение");
+        countBotMessages.value++;
+        sendBot();
+    } else {
+      isMessageSend.value = false;
+    }
+    return isMessageSend.value;
 });
 
+let ignoreWaiting = ref(false)
 async function sendBot() {
   const delayTimeMessage = props.script[countBotMessages.value].time * 1000; // умножаем на 1000 для получения миллисекунд
   await delaysSendBot(delayTimeMessage);
@@ -126,12 +135,12 @@ async function sendBot() {
     props.script[countBotMessages.value].ignore
   ) {
     console.log("Игнорирование ответов клиента");
+    ignoreWaiting.value = true; // если игнор то точки тоже должны работать 
     console.log(props.script[countBotMessages.value]);
 
     await delaysSendBot(delayTimeMessage);
     allMessages.value.push(props.script[countBotMessages.value]);
     countBotMessages.value++;
-    // isMessageSend.value = false;
     if (countBotMessages.value < props.script.length) {
       console.log("Отображаем следующее сообщение бота после игнорирования клиента");
       // Вызываем delaysSendBot для следующего сообщения
@@ -139,6 +148,7 @@ async function sendBot() {
       console.log(props.script[countBotMessages.value]);
       allMessages.value.push(props.script[countBotMessages.value]);
       isMessageSend.value = false;
+      ignoreWaiting.value = false;
     } else {
       console.log("Больше сообщений бота нет.");
     }
@@ -258,25 +268,54 @@ function generateUniqueId() {
   }
 }
 
-.fade-enter-from {
-  opacity: 0;
-  transform: scale(0.6);
+.waiting {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  padding-left: 12px;
+  span {
+    &:first-child {
+      margin-right: 4px;
+      font-size: 12px;
+    }
+  }
+  &__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: bounce 1.2s infinite ease-in-out;  
+  
+    &:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.8s;
+    }
+  }
+
+  
 }
 
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.fade-enter-from {
+  opacity: 0;
+}
 .fade-enter-to {
   opacity: 1;
-  transform: scale(1);
 }
 
 .fade-enter-active {
-  transtion: all 0.4s ease;
+  transition: opacity 0.4s ease;
 }
-
-// .fade-enter-active, .fade-leave-active {
-//   transition: opacity 0.5s ease-in-out;
-// }
-
-// .fade-enter, .fade-leave-to {
-//   opacity: 0;
-// }
 </style>

@@ -58,7 +58,6 @@
         hr="left"
         size="l"
         @click="showWindow($event, 'Manager_1')"
-        @dataParams="dataParams($event, 'Manager_1')"
         :visibility="entryData.onlineConsultant[1].visibility"
         :class="`${notificationMessage ? 'widjet-notification' : ''}`"
         :windowWidth="widthDevice"
@@ -140,7 +139,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, ref, computed, onBeforeMount, inject } from "vue";
+import { defineProps, onMounted, ref, computed, onBeforeUnmount, inject } from "vue";
 
 import PanelCol from "./PanelCol.vue";
 import WidjetLink from "./WidjetLink.vue";
@@ -179,19 +178,18 @@ function showWindow(event, type) {
 // передаем координаты и показываем чат автоматом
 const mangerElement = ref(null);
 // local storage autoMode
-let autoMode = localStorage.getItem("chatAutoMode");
+const autoShowChat = ref(true); 
 // Session storage comeback
 let isComeback = sessionStorage.getItem("comeback");
 
-if (autoMode === null || autoMode === undefined) {
-  localStorage.setItem("chatAutoMode", true);
+if (localStorage.getItem("chatAutoMode")) {
+  autoShowChat.value = false;
 }
-const soundPlugin = inject('sound'); // 'sound' - это имя, с которым вы зарегистрировали плагин
+
+// const soundPlugin = inject('sound'); // 'sound' - это имя, с которым вы зарегистрировали плагин
 onMounted(() => {
-  // console.log($sound);
-  if (autoMode !== "false") {
+  if (autoShowChat.value) {
     autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
-    // $sound(audio);
   }
 
   if (isComeback === null || isComeback !== "false") {
@@ -207,41 +205,41 @@ onMounted(() => {
   window.addEventListener("resize", handleResize);
 });
 
-onBeforeMount(() => {
+onBeforeUnmount(() => {
   window.removeEventListener("mouseleave", comeback);
   window.removeEventListener("resize", handleResize);
 });
 
 // вычисляем сценарий переписки
-const outputScript = computed(() => {
-  if (autoMode || autoMode === null) {
-    return props.entryData.autoMessage[1].script; // Логика для autoShowWindowChat
-  } else {
-    return props.entryData.autoMessage[0].script; // Логика для showWindowChat
-  }
-});
+const outputScript = computed(() => autoShowChat.value ? props.entryData.autoMessage[1].script : props.entryData.autoMessage[0].script);
 
 let showWindowChatExecuted = ref(false);
 
-function showWindowChat(value) {
-  showWindowChatExecuted.value = true;
+function showWindowChat() {
+  if (!showWindowChatExecuted.value) {
+    autoShowChat.value = false;
+    isWindowVisible.value = true;
+    localStorage.setItem("chatAutoMode", autoShowChat.value);
+  }
+  if (autoShowChat.value === true) {
+    localStorage.setItem("chatAutoMode", autoShowChat.value);
+  }
   windowType.value = "Chat";
-  isWindowVisible.value = value;
   notificationMessage.value = false;
-  localStorage.setItem("chatAutoMode", false);
 }
 
 function autoShowWindowChat(pos) {
-  console.log(autoMode);
-  if (autoMode !== "false") {
+  console.log('autoShowChat.value');
+  console.log(autoShowChat.value);
     setTimeout(function () {
-      if (!showWindowChatExecuted.value) {
-        localStorage.setItem("chatAutoMode", false);
-        windowType.value = "Manager_1";
-        notificationMessage.value = true;
-        isWindowVisible.value = true;
-        windowPosition.value = pos;
-        console.log("setTimeout");
+        if (autoShowChat.value) {
+          windowType.value = "Manager_1";
+          notificationMessage.value = true;
+          isWindowVisible.value = true;
+          windowPosition.value = pos;
+          showWindowChatExecuted.value = true;
+        }
+      }, 5000);
         // audio.play().then(() => {
         //     console.log("Мелодия воспроизведена успешно!");
         //   }).catch((error) => {
@@ -250,9 +248,7 @@ function autoShowWindowChat(pos) {
         //       console.log('Playback resumed successfully');
         //     });
         //   });
-      }
-    }, 5000);
-  }
+      // }
 }
 
 function hideWindow() {
