@@ -62,6 +62,7 @@ const props = defineProps({
     width: 100%;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
+    border: 1px solid #CCCCCC;
     padding: 24px;
     &_title {
       text-align: center;
