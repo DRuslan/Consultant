@@ -8,10 +8,10 @@ import { createApp } from 'vue';
 import App from '../App.vue';
 import '../scss/app.scss'
 const app = createApp(App);
-const fieldType = 'text'; // для инпутов в плагине где идет перебор все полей
+// const fieldType = 'text'; // для инпутов в плагине где идет перебор все полей
 app.use(WidjetConnect);
-// app.use(formsHelper);
-app.use(formsHelper, { fieldType });
+app.use(formsHelper);
+// app.use(formsHelper, { fieldType });
 app.use(validate);
 app.use(soundHelper);
 app.mount('#v-consultant');

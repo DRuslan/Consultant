@@ -279,7 +279,7 @@ function handleResize() {
     height: 40px;  
   }
   .widjet-notification {
-    box-shadow: inset 0px 0px 8px 3px #ffffff;
+    box-shadow: inset 0px 0px 35px 3px #739ad8;
     animation: blink 1.5s linear infinite;
   }
   &__col {

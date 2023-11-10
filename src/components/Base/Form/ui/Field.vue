@@ -1,20 +1,5 @@
 <template>
   <div class="field">
-  <input
-    v-if="name === 'Телефон' || name === 'Имя'"
-    :type="type"
-    :placeholder="placeholder"
-    :value="value"
-    @input="onInput"
-    class="v-input"
-    :class="[
-      `v-input__size_${size}`,
-      `${isError ? 'v-input__error' : ''}`,
-      `${disabled ? 'v-input__disabled' : ''}`,
-    ]"
-    :disabled="disabled"
-  />
-
   <textarea
     v-if="name === 'Сообщение'"
     :type="type"
@@ -30,6 +15,27 @@
       `${disabled ? 'v-textaria__disabled' : ''}`,
     ]"
   ></textarea>
+  <input
+    v-else-if="name === 'Name' || name === 'Site' || name === 'Country'"
+    type="hidden"
+    :placeholder="placeholder"
+    :value="value"
+    @input="onInput"
+  />
+  <input
+    v-else
+    :type="type"
+    :placeholder="placeholder"
+    :value="value"
+    @input="onInput"
+    class="v-input"
+    :class="[
+      `v-input__size_${size}`,
+      `${isError ? 'v-input__error' : ''}`,
+      `${disabled ? 'v-input__disabled' : ''}`,
+    ]"
+    :disabled="disabled"
+  />
 </div>
 </template>
 
@@ -82,9 +88,12 @@ const onInput = (event) => {
   border-radius: 4px;
   color: #000;
   border: 1px solid #8e959b;
+  transition: all .3s ease-in-out;
+  font-family: "Arial", sans-serif;
 
   &::placeholder {
     color: gray;
+    font-size: 14px;
   }
 
   &__error {
@@ -124,6 +133,15 @@ const onInput = (event) => {
   resize: none;
   padding: 11px 24px;
   border-radius: 4px;
+  transition: all .3s ease-in-out;
+  font-family: "Arial", sans-serif;
+  &:focus {
+    box-shadow: 0px 0px 5px rgba(56, 169, 240, 0.75);
+  }
+  &::placeholder {
+    color: gray;
+    font-size: 14px;
+  }
   &__error {
     border-color: red;
   }

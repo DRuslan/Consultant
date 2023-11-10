@@ -1,7 +1,7 @@
 <template>
   <Container :form="form">
     <Field
-      v-for="field in $getTextFields(form)"
+      v-for="field in getTextFields(form)"
       :key="field"
       :placeholder="field.placeholder"
       v-model="field.value"
@@ -15,24 +15,26 @@
     />
     <div class="field-row">
       <FieldFile />
-      <button type="submit">Отправить</button>
+      <Button :active="getBtnActive">Отправить</Button>
     </div>
   </Container>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, inject, computed } from "vue";
 import Container from "./ui/Container.vue";
+import Button from "../Button.vue";
 import Field from "./ui/Field.vue";
 import FieldFile from "./ui/FieldFile.vue";
 
+const getTextFields = inject('getTextFields'); // подключаю плагин
 const form = ref({
-  Phone: {
+  email: {
     type: "text",
-    name: "Телефон",
-    placeholder: "Введите ваш телефон",
+    name: "Почта",
+    placeholder: "Ваш e-mail*",
     value: "",
-    rules: ["required", "phone"],
+    rules: ["required", "email"],
     errorMessage: "",
   },
   message: {
@@ -45,6 +47,19 @@ const form = ref({
     rows: 7
   },
 });
+
+const textFields = ref(getTextFields(form.value)); // делаю реактивным поля из плагина
+
+const getBtnActive = computed(() => {
+  for (const field of textFields.value) {
+    if (field.value.length > 0) {
+      return true;
+    }
+  }
+  return false;
+});
+
+
 </script>
 
 <style lang="scss" scoped>

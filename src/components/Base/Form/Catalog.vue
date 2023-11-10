@@ -16,7 +16,8 @@
     />
     
     <div class="field-row">
-      <button type="submit" :disabled="!checkPolit" :class="getBtnActive">Отправить Сюда</button>
+      <Button :active="getBtnActive">Отправить</Button>
+      <!-- <button type="submit" :disabled="!checkPolit" :class="getBtnActive"></button> -->
     </div>
     <p class="back" @click="$emit('backStep')">← Выбрать другой мессенджер</p>
     <Political
@@ -33,12 +34,18 @@
 import Container from "./ui/Container.vue";
 import Field from "./ui/Field.vue";
 import Political from "./ui/Political.vue";
+import Button from "../Button.vue";
 import { computed, ref, inject } from "vue";
 
 const getTextFields = inject('getTextFields'); // подключаю плагин
 const form = ref({
-  Phone: {
+  Name: {
     type: "text",
+    name: "Name",
+    value: "krible-catalog",
+  },
+  Phone: {
+    type: "tel",
     name: "Телефон",
     placeholder: "Введите ваш телефон",
     value: "",
@@ -51,11 +58,12 @@ const textFields = ref(getTextFields(form.value)); // делаю реактив�
 
 const getBtnActive = computed(() => {
   for (const field of textFields.value) {
+    console.log(field);
     if (field.value.length > 0) {
-      return 'submit_active';
+      return true;
     }
   }
-  return '';
+  return false;
 });
 
 let checkPolit = ref(true);
@@ -98,11 +106,5 @@ function isChecked(value) {
   text-align: left;
   margin-bottom: 26px;
   color: #3b6ec7;
-}
-
-.submit {
-  &_active {
-    background: #3b6ec7 !important;
-  }
 }
 </style>

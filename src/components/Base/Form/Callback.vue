@@ -2,7 +2,7 @@
   <Container :form="form">
     <div class="field-row">
       <Field
-        v-for="field in $getTextFields(form)"
+        v-for="field in getTextFields(form)"
         :key="field"
         :placeholder="field.placeholder"
         v-model="field.value"
@@ -28,7 +28,7 @@
 </template>
   
   <script setup>
-    import { ref } from "vue";
+    import { ref, inject } from "vue";
     import Container from "./ui/Container.vue";
     import Field from "./ui/Field.vue";
     const props = defineProps({
@@ -37,6 +37,8 @@
         required: true,
       },
     });
+
+    const getTextFields = inject('getTextFields'); // подключаю плагин
     const form = ref({
       Phone: {
         type: "text",

@@ -22,14 +22,35 @@ export default {
 
   setup (props, context) {
     const validate = inject('validate'); // подключаю плагин validate.js
-    const formValidate = ref(props.form);
+    // const formValidate = ref(props.form);
     const success = ref(false);
-    console.log(context.root);
     const send = async () => {
-      if (!validate(formValidate.value)) {
-        await axios.post("https://network-technologies.ru/api/send-lead/bpm", props.form)
+
+      if (!validate(props.form)) {
+        const formData = new FormData(); // Constructor JS (Form building)
+        formData.append("Site", location.href);
+        formData.append("Political", true);
+        // перебираем поля в форме с актальный value
+        for(const key in props.form) {
+          const value = props.form[key].value;
+          if (value != null && value !== ''){
+            formData.append(key, value);
+          }
+        }
+
+        await axios.post(
+          "https://network-technologies.ru/api/send-lead/bpm",
+          formData, 
+          {
+            headers: {
+              // Включите куки в заголовки запроса
+              Cookie: "visit_id=7145169",
+            },
+          }
+        )
         .then(response => {
           success = true;
+          console.log(response);
           if (success) {
             openModal('thank');
           }
@@ -43,99 +64,13 @@ export default {
     };
 
     return {
-      formValidate,
       success,
       send
     };
 
   },
+
   methods: {
-    // send() {
-    //   if (!this.$validate(formValidate.value)) {
-    //     // return false;
-    //     openModal('thank');
-    //     axios.post("https://network-technologies.ru/api/send-lead/bpm", this.form)
-    //     .then(response => {
-    //       this.success = true;
-    //       openModal('thank');
-    //       this.resetForm();
-    //     })
-    //     .catch(e => {
-    //       console.log(e);
-    //       console.log('error');
-    //     })
-    //   }
-
-    //   if (!this.validate()) {
-    //     this.notifyError('Заполните обязательные поля');
-    //     return true;
-    //   }
-
-    //   const self = this;
-
-    //   const formData = new FormData();
-
-    //   formData.append("Name", this.formName);
-    //   formData.append("Site", location.href);
-    //   if (this.testLead){
-    //     formData.append("test_lead", true);
-    //   }
-
-    //   for(const key in this.form) {
-    //     const value = this.form[key].value;
-    //     if (value != null && value !== ''){
-    //       formData.append(key, value);
-    //     }
-    //   }
-
-    //   post("/api/send-lead", formData)
-    //       .then(() => {
-    //         this.success = true;
-
-    //         this.notifySuccess('Заявка успешно отправлена');
-
-    //         setTimeout(() => {
-    //           this.resetForm();
-    //         }, 3000);
-    //       })
-    //       .catch(function (error) {
-    //         self.notifyError('Ошибка при отправке заявки');
-    //         let errorResponse = error.response.data;
-
-    //         if (errorResponse.errors && Object.keys(errorResponse.errors).length > 0) {
-    //           for (const key in errorResponse.errors) {
-    //             if (errorResponse.errors.hasOwnProperty(key) && self.form.hasOwnProperty(key)) {
-    //               self.form[key].error = errorResponse.errors[key][0];
-    //             }
-    //           }
-    //         }
-    //       })
-
-    // fetch('ваш_серверный_эндпоинт', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json', // Замените на нужный Content-Type
-    //     },
-    //     body: JSON.stringify(this.formData), // Зависит от Content-Type, может потребоваться преобразовать данные
-    //   })
-    //   .then(response => {
-    //     if (!response.ok) {
-    //       throw new Error('Произошла ошибка при отправке формы');
-    //     }
-    //     return response.json(); // Может потребоваться другое преобразование, в зависимости от ожидаемого ответа
-    //   })
-    //   .then(data => {
-    //     // Обработка успешного ответа от сервера
-    //     console.log(data);
-    //   })
-    //   .catch(error => {
-    //     // Обработка ошибки
-    //     console.error(error.message);
-    //   });
-    // },
-
-    // },
-
      resetForm() {
       this.success = false;
 

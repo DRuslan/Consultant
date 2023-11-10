@@ -217,15 +217,16 @@ function generateUniqueId() {
   align-items: center;
   font-size: 14px;
   background: #e7e8ed;
-  min-height: 200px;
-  justify-content: flex-end;
+  min-height: 400px;
+  justify-content: space-between;
   &__inner {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 250px;
-    max-height: 365px;
+    // min-height: 250px;
+    // max-height: 365px;
     padding: 16px 6px 16px;
     overflow: scroll;
   }
