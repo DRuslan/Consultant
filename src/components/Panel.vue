@@ -186,7 +186,6 @@ if (localStorage.getItem("chatAutoMode")) {
   autoShowChat.value = false;
 }
 
-// const soundPlugin = inject('sound'); // 'sound' - это имя, с которым вы зарегистрировали плагин
 onMounted(() => {
   if (autoShowChat.value) {
     autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
@@ -199,7 +198,7 @@ onMounted(() => {
   if (isComeback === null && widthDevice.value >= 768 || isComeback !== "false" && widthDevice.value >= 768) {
     setTimeout(() => {
       comeback();
-    }, 1000)
+    }, 120000)
   }
 
   window.addEventListener("resize", handleResize);
@@ -240,15 +239,9 @@ function autoShowWindowChat(pos) {
           showWindowChatExecuted.value = true;
         }
       }, 5000);
-        // audio.play().then(() => {
-        //     console.log("Мелодия воспроизведена успешно!");
-        //   }).catch((error) => {
-        //     console.error("Произошла ошибка при воспроизведении мелодии:", error);
-        //     audio.resume().then(() => {
-        //       console.log('Playback resumed successfully');
-        //     });
-        //   });
-      // }
+
+      const soundPlugin = inject('sound'); // 'sound' плагин с обработкой когда воспроиводить мелодию
+      soundPlugin(audio);
 }
 
 function hideWindow() {
@@ -286,6 +279,7 @@ function handleResize() {
     height: 40px;  
   }
   .widjet-notification {
+    box-shadow: inset 0px 0px 8px 3px #ffffff;
     animation: blink 1.5s linear infinite;
   }
   &__col {

@@ -6,10 +6,10 @@ const modals = reactive({ ...entryDataModals });
 export const openModal = (key, newData = null) => {
     if (modals.hasOwnProperty(key)) {
         if (newData) {
-            console.log(entryDataModals);
+            // console.log(entryDataModals);
             modals[key] = { ...entryDataModals[key], ...newData };
         } else {
-            console.log(entryDataModals);
+            // console.log(entryDataModals);
             modals[key] = { ...entryDataModals[key] };
         }
         modals[key].isActive = true;

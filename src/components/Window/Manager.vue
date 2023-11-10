@@ -85,6 +85,8 @@ const props = defineProps({
         margin-bottom: 12px;
         img {
             border-radius: inherit;
+            width: 100%;
+            height: auto;
         }
     }
     &__description {

@@ -39,6 +39,7 @@
   
     &__main {
         height: 100%;
+        max-height: 500px;
         overflow: scroll;
         font-size: 14px;
     }

@@ -8,6 +8,9 @@
 
 <script>
 import axios from 'axios';
+import { ref, inject } from "vue";
+import { openModal } from "../../../../store/modals";
+
 export default {
   name: "FormContainer",
   props: {
@@ -16,22 +19,52 @@ export default {
       required: true
     },
   },
-  data() {
-    return {
-      success: false
-    }
-  },
-  methods: {
-    send() {
-      if (!this.$validate(this.form)) {
-        axios.get('https://my-json-server.typicode.com/DRuslan/json-server-data/users')
+
+  setup (props, context) {
+    const validate = inject('validate'); // подключаю плагин validate.js
+    const formValidate = ref(props.form);
+    const success = ref(false);
+    console.log(context.root);
+    const send = async () => {
+      if (!validate(formValidate.value)) {
+        await axios.post("https://network-technologies.ru/api/send-lead/bpm", props.form)
         .then(response => {
-          // console.log(response.data);
+          success = true;
+          if (success) {
+            openModal('thank');
+          }
+          // this.resetForm();
         })
         .catch(e => {
-          console.log(e);
+          alert(e);
+          console.log('error');
         })
       }
+    };
+
+    return {
+      formValidate,
+      success,
+      send
+    };
+
+  },
+  methods: {
+    // send() {
+    //   if (!this.$validate(formValidate.value)) {
+    //     // return false;
+    //     openModal('thank');
+    //     axios.post("https://network-technologies.ru/api/send-lead/bpm", this.form)
+    //     .then(response => {
+    //       this.success = true;
+    //       openModal('thank');
+    //       this.resetForm();
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //       console.log('error');
+    //     })
+    //   }
 
     //   if (!this.validate()) {
     //     this.notifyError('Заполните обязательные поля');
@@ -101,9 +134,9 @@ export default {
     //   });
     // },
 
-    },
+    // },
 
-    resetForm() {
+     resetForm() {
       this.success = false;
 
       for (const key in this.form) {

@@ -101,6 +101,10 @@ const onInput = (event) => {
     }
   }
 
+  &:focus {
+    box-shadow: 0px 0px 5px rgba(56, 169, 240, 0.75);
+  }
+
   &__size_s {
     padding: 7px 16px;
   }

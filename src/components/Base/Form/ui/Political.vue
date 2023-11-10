@@ -12,7 +12,7 @@
   
   <script>
   import Check from "./Check.vue";
-//   import {openModal} from "@/store/modals";
+  import { openModal } from "../../../../store/modals";
   export default {
     components: {Check},
     setup() {
@@ -48,9 +48,9 @@
           this.politValue = val;
           this.$emit('isPolitical', this.politValue);
       },
-    //   openPoliticalModal () {
-    //     openModal('politic');
-    //   }
+      openPoliticalModal () {
+        openModal('politic');
+      }
     },
   };
   </script>

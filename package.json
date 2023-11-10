@@ -79,6 +79,7 @@
     "axios": "^1.5.1",
     "express": "^4.18.2",
     "mongodb": "^5.1.0",
+    "optipng-bin": "^9.0.0",
     "vue": "^3.2.36",
     "vue-loader": "^17.0.1"
   }

@@ -2,7 +2,7 @@
   <Container :form="form">
     <Field
       class="field"
-      v-for="field in $getTextFields(form)"
+      v-for="field in getTextFields(form)"
       :key="field"
       :placeholder="field.placeholder"
       v-model="field.value"
@@ -14,8 +14,9 @@
       :rows="field.rows"
       type="text"
     />
+    
     <div class="field-row">
-      <button type="submit" :disabled="!checkPolit">Отправить Сюда</button>
+      <button type="submit" :disabled="!checkPolit" :class="getBtnActive">Отправить Сюда</button>
     </div>
     <p class="back" @click="$emit('backStep')">← Выбрать другой мессенджер</p>
     <Political
@@ -32,8 +33,9 @@
 import Container from "./ui/Container.vue";
 import Field from "./ui/Field.vue";
 import Political from "./ui/Political.vue";
-import { ref } from "vue";
+import { computed, ref, inject } from "vue";
 
+const getTextFields = inject('getTextFields'); // подключаю плагин
 const form = ref({
   Phone: {
     type: "text",
@@ -43,6 +45,17 @@ const form = ref({
     rules: ["required", "phone"],
     errorMessage: "",
   },
+});
+
+const textFields = ref(getTextFields(form.value)); // делаю реактивным поля из плагина
+
+const getBtnActive = computed(() => {
+  for (const field of textFields.value) {
+    if (field.value.length > 0) {
+      return 'submit_active';
+    }
+  }
+  return '';
 });
 
 let checkPolit = ref(true);
@@ -79,12 +92,17 @@ function isChecked(value) {
     }
   }
 }
-
 .back {
   cursor: pointer;
   font-size: 10px;
   text-align: left;
   margin-bottom: 26px;
   color: #3b6ec7;
+}
+
+.submit {
+  &_active {
+    background: #3b6ec7 !important;
+  }
 }
 </style>
