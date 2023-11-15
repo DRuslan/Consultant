@@ -13,9 +13,7 @@ const {
 } = require('clean-webpack-plugin');
 
 const environment = require('./configuration/environment');
-const {
-  VueLoaderPlugin
-} = require('vue-loader')
+const { VueLoaderPlugin } = require('vue-loader')
 
 const templateFiles = fs.readdirSync(environment.paths.source)
   .filter((file) => ['.html', '.ejs'].includes(path.extname(file).toLowerCase())).map((filename) => ({
@@ -51,7 +49,8 @@ module.exports = {
       },
       {
         test: /\.((c|sa|sc)ss)$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+        // use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
         // use: [
         //   process.env.NODE_ENV !== 'production'
         //     ? 'vue-style-loader'
@@ -151,9 +150,9 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].css',
-    }),
+    // new MiniCssExtractPlugin({
+    //   filename: 'css/[name].css',
+    // }),
     new CleanWebpackPlugin({
       verbose: true,
       cleanOnceBeforeBuildPatterns: ['**/*', '!stats.json'],

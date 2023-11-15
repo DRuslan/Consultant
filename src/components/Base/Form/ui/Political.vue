@@ -3,7 +3,7 @@
       <check :class="[`${chcolor}`]" @isChecked="isCheckedPolit"></check>
       <small>
         Я принимаю политику обработки
-        <a class="link" :class="[`link__${lcolor}`]" @click.prevent="openPoliticalModal">
+        <a class="link" :class="[`link__${lcolor}`]" @click.prevent="openPoliticalModal()">
           персональных данных
         </a>
       </small>
@@ -49,6 +49,7 @@
           this.$emit('isPolitical', this.politValue);
       },
       openPoliticalModal () {
+        console.log("openModal('politic')");
         openModal('politic');
       }
     },

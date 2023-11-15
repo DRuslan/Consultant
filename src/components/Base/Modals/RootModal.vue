@@ -1,9 +1,9 @@
 <template>
     <transition name="modal-animation">
-      <div v-show="modalActive" class="modal" @keydown.esc="close" @click.self="close" tabindex="0">
-        <transition name="modal-animation-inner" :class="[`modal__radius_${size}`]">
-          <div v-show="modalActive" class="modal__inner" :class="[`modal__size_${size}`]">
-            <div class="modal__close" @click="close">
+      <div v-show="modalActive" class="cons-modal" @keydown.esc="close" @click.self="close" tabindex="0">
+        <transition name="modal-animation-inner" :class="[`cons-modal__radius_${size}`]">
+          <div v-show="modalActive" class="cons-modal__inner" :class="[`cons-modal__size_${size}`]">
+            <div class="cons-modal__close" @click="close">
               <Icon size="m" icon-name="close" />
             </div>
             <slot />
@@ -67,7 +67,7 @@
   </script>
   
   <style lang="scss" scoped>
-  .modal {
+  .cons-modal {
     display: flex;
     justify-content: center;
     align-items: center;

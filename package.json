@@ -81,6 +81,7 @@
     "mongodb": "^5.1.0",
     "optipng-bin": "^9.0.0",
     "vue": "^3.2.36",
-    "vue-loader": "^17.0.1"
+    "vue-loader": "^17.0.1",
+    "vue-style-loader": "^4.1.3"
   }
 }

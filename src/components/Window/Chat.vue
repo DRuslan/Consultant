@@ -14,14 +14,16 @@
         <div
           class="chat__inner"
           :style="{ color: $widjet().global.textPrimary }"
+          ref="chatContainerRef"
         >
           <transition-group name="fade">
             <Message
               class="chat__message"
-              v-for="item in allMessages"
+              v-for="item in Chat"
               :key="item.id"
               :msg="item.message"
               :role="item.role"
+              :created-at="item.createdAt"
             />
           </transition-group>
           <transition name="fade">
@@ -42,7 +44,6 @@
             />
             <textarea
               name="message"
-              id=""
               cols="30"
               rows="1"
               v-model="newMessage"
@@ -66,7 +67,8 @@ import Icon from "../Base/Icon.vue";
 import FieldFile from "../../components/Base/Form/ui/FieldFile.vue";
 import Wrapper from "./WindowWrapper.vue";
 import Message from "../Base/Chat/Message.vue";
-import { ref, defineProps, computed, onMounted } from "vue";
+import { ref, defineProps, computed, watchEffect, nextTick } from "vue";
+import axios from "axios";
 
 const props = defineProps({
   isVisible: Boolean,
@@ -78,23 +80,51 @@ const props = defineProps({
 });
 
 const newMessage = ref(""); // Реактивная переменная для текстового поля
-const allMessages = ref([]); // Реактивная переменная для всех сообщений
+const Chat = ref([]); // Реактивная переменная для всех сообщений
 const isMessageSend = ref(false); // Реактивная переменная для отслеживания ответа пользователя
 const countBotMessages = ref(0); // Количество ответов бота
+const chatContainerRef = ref(null); // Для отслеживания высоты чата и его скролла
+const createdAtMessageRef = ref(new Date()); // Реактивная переменная для отслеживания когда создано сообщение
 
 if (props.script !== null && props.script !== undefined) {
-  allMessages.value.push(props.script[countBotMessages.value]);
+  const messageBotScript = props.script[countBotMessages.value]; // Сообщение от бота в скрипте
+  Chat.value.push({
+    ...messageBotScript, 
+    createdAt: createdAtMessageRef
+  });
+  console.log(Chat.value);
 }
 
 const send = (e) => {
   e.preventDefault();
+  // формируем данные для отправки
+  const formData = new FormData(); // Constructor JS (Form building)
+  formData.append("Site", location.href);
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "") {
-    allMessages.value.push({
+    Chat.value.push({
+      id: generateUniqueId(),
+      createdAt: createdAtMessageRef,
       message: newMessage.value,
       role: "client",
-      id: generateUniqueId(),
     });
+
+    formData.append("Chat", JSON.stringify(Chat.value)); // подмешиваем данные с всего чата
+    console.log(formData);
+    axios.post('/api/send-chat', formData,
+    { 
+      withCredentials: true, 
+      headers : {
+        Cookie: "visit_id=1111",
+      }
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+
     newMessage.value = "";
     if (props.script[countBotMessages.value] != null && props.script[countBotMessages.value] !== undefined) {
       setTimeout(function (){
@@ -105,17 +135,15 @@ const send = (e) => {
     } else {
       isMessageSend.value = false; // отключаем отслеживания так как длина маассива ответов от бота ограничена и если будут обращения то данных не будет
     }
+    scrollLastMessage();
     console.log("Сообщение отправлено пользователем");
-    console.log(props.script);
-    console.log(props.script[countBotMessages.value]);
-    console.log(props.script[countBotMessages.value].ignore);
   }
 };
 
 const waitResponceBot = computed(() => {  
     // Проверка на ответ пользователя и количетсво сообщений бота чтобы остановить логику отправки сообщений (так как длина массива ответов от бота огранина)
     if (isMessageSend.value && countBotMessages.value < props.script.length - 1) {
-        console.log("Пользователь ждет ответ на сообщение");
+        // console.log("Пользователь ждет ответ на сообщение");
         countBotMessages.value++;
         sendBot();
     } else {
@@ -126,38 +154,43 @@ const waitResponceBot = computed(() => {
 
 let ignoreWaiting = ref(false)
 async function sendBot() {
-  const delayTimeMessage = props.script[countBotMessages.value].time * 1000; // умножаем на 1000 для получения миллисекунд
+  const delayTimeMessage = props.script[countBotMessages.value].delay * 1000; // умножаем на 1000 для получения миллисекунд
   await delaysSendBot(delayTimeMessage);
-
   // Игнорирование ответов клиента
-  if (
-    props.script[countBotMessages.value].ignore !== undefined &&
-    props.script[countBotMessages.value].ignore
-  ) {
+  if (props.script[countBotMessages.value].ignore !== undefined && props.script[countBotMessages.value].ignore) {
     console.log("Игнорирование ответов клиента");
     ignoreWaiting.value = true; // если игнор то точки тоже должны работать 
-    console.log(props.script[countBotMessages.value]);
-
+    
     await delaysSendBot(delayTimeMessage);
-    allMessages.value.push(props.script[countBotMessages.value]);
+    Chat.value.push({
+      ...props.script[countBotMessages.value],
+      createdAt: createdAtMessageRef
+    });
     countBotMessages.value++;
     if (countBotMessages.value < props.script.length) {
       console.log("Отображаем следующее сообщение бота после игнорирования клиента");
       // Вызываем delaysSendBot для следующего сообщения
       await delaysSendBot(delayTimeMessage);
-      console.log(props.script[countBotMessages.value]);
-      allMessages.value.push(props.script[countBotMessages.value]);
+
+      Chat.value.push({
+        ...props.script[countBotMessages.value],
+        createdAt: createdAtMessageRef
+      });
       isMessageSend.value = false;
       ignoreWaiting.value = false;
+      scrollLastMessage();
     } else {
       console.log("Больше сообщений бота нет.");
     }
   } else {
     // отправляем сообщение от (бота)
     console.log("Пользователь получил ответ на сообщение");
-    console.log(props.script[countBotMessages.value]);
-    allMessages.value.push(props.script[countBotMessages.value]);
+    Chat.value.push({
+      ...props.script[countBotMessages.value],
+      createdAt: createdAtMessageRef
+    });
     isMessageSend.value = false;
+    scrollLastMessage();
   }
 
   return countBotMessages.value;
@@ -167,10 +200,31 @@ function delaysSendBot (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function scrollLastMessage () {
+  // Следим за изменениями во всех сообщениях и прокручиваем вниз 
+  watchEffect(() => {
+    nextTick(() => {
+      scrollToBottom();
+    });
+  });
+}
+
+// Функция прокрутки вниз
+function scrollToBottom() {
+  const chatContainer = chatContainerRef.value;
+  if (chatContainer) {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+}
+
 function generateUniqueId() {
   // пробую генерацию id для анимаций групповых сообщений
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
+
+// setInterval(function (){
+//   createdAtMessageRef.value = new Date(); // обновляем время создания сообщения
+// }, 60000);
 </script>
     
 <style lang="scss" scoped>
@@ -217,7 +271,7 @@ function generateUniqueId() {
   align-items: center;
   font-size: 14px;
   background: #e7e8ed;
-  min-height: 400px;
+  height: 400px;
   justify-content: space-between;
   &__inner {
     width: 100%;
@@ -227,12 +281,13 @@ function generateUniqueId() {
     align-items: center;
     // min-height: 250px;
     // max-height: 365px;
-    padding: 16px 6px 16px;
-    overflow: scroll;
+    padding: 24px 6px 16px;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   &__message {
     max-width: 270px;
-    margin-bottom: 12px;
+    margin-bottom: 30px;
     &:last-child {
       margin-bottom: 0;
     }

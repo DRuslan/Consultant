@@ -6,14 +6,17 @@
     <div v-if="role === 'bot'" class="msg__img">
       <img src="../../../images/content/manager.png" alt="" />
     </div>
-    <div :class="[{ msg__bot_message: role === 'bot' }, { msg__client_message: role === 'client' }]">
-      <p>{{ msg }}</p>
+    <div class="msg__inner">
+      <div class="msg__created"><span>{{ formattedTimeAgo }}</span></div>
+      <div :class="[{ msg__bot_message: role === 'bot' }, { msg__client_message: role === 'client' }]">
+        <p>{{ msg }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 
 const props = defineProps({
   msg: {
@@ -30,11 +33,67 @@ const props = defineProps({
     default: "bot",
     validator: (value) => ["bot", "client"].includes(value),
   },
+  createdAt: {
+    type: Object,
+  },
 });
+
+const formattedTimeAgo = ref(calculateTimeAgo()); // Инициализируем значение
+
+setInterval(function (){
+  formattedTimeAgo.value = calculateTimeAgo(); // обновляем время создания сообщения
+}, 60000);
+
+function calculateTimeAgo() {
+  const currentTime = new Date();
+  const messageTime = new Date(props.createdAt);
+  const timeDifference = Math.floor((currentTime - messageTime) / 1000);
+
+  if (timeDifference < 60) {
+    return 'Только что';
+  } else if (timeDifference < 1800) {
+    const minutesAgo = Math.floor(timeDifference / 60);
+    return `${minutesAgo} минут${getMinutesSuffix(minutesAgo)} назад`;
+  } else {
+    return 'Давно';
+  }
+}
+
+// склонения времени
+function getMinutesSuffix(minutes) {
+  if (minutes >= 11 && minutes <= 19) {
+    return 'т';
+  } else {
+    const lastDigit = minutes % 10;
+    switch (lastDigit) {
+      case 1:
+        return 'у';
+      case 2:
+      case 3:
+      case 4:
+        return 'ы';
+      default:
+        return 'т';
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .msg {
+  position: relative;
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  &__created {
+    font-size: 12px;
+    margin-bottom: 5px;
+    position: absolute;
+    top: -18px;
+    right: 0;
+  }
   &__bot {
     display: flex;
     // justify-content: space-between;

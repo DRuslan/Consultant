@@ -1,7 +1,9 @@
 <template>
-    <CallbackModal :modal-data="getModalData('callBack').value" entryData="" @close="closeModal('callBack')" />
+    <CallbackModal :modal-data="getModalData('callBack').value" @close="closeModal('callBack')" />
     <PolitModal :modal-data="getModalData('politic').value" @close="closeModal('politic')" />
-    <ThankModal :modal-data="getModalData('thank').value" :entryData="$widjet().modals.thank" @close="closeModal('thank')"/>
+    <ThankModal :modal-data="getModalData('thank').value" @close="closeModal('thank')"/>
+    <ThankModal :modal-data="getModalData('thankCatalog').value" @close="closeModal('thankCatalog')"/>
+    <ThankModal :modal-data="getModalData('thankMail').value" @close="closeModal('thankMail')"/>
   </template>
   
   <script>

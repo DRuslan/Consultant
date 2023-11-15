@@ -29,7 +29,12 @@ import FieldFile from "./ui/FieldFile.vue";
 
 const getTextFields = inject('getTextFields'); // подключаю плагин
 const form = ref({
-  email: {
+  Name: {
+    type: "text",
+    name: "Name",
+    value: "krible-fast-mail",
+  },
+  Email: {
     type: "text",
     name: "Почта",
     placeholder: "Ваш e-mail*",
@@ -37,7 +42,7 @@ const form = ref({
     rules: ["required", "email"],
     errorMessage: "",
   },
-  message: {
+  Comment: {
     type: "text",
     name: "Сообщение",
     placeholder: "Ваше сообщение",

@@ -1,5 +1,5 @@
 <template>
-  <Container :form="form">
+  <Container :form="form" thank="thankCatalog">
     <Field
       class="field"
       v-for="field in getTextFields(form)"

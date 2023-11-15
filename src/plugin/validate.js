@@ -52,8 +52,11 @@ export default {
               const formattedErrorMsg = errorMsg.replace(/\{(\d+)\}/g, (match, index) => {
                 return ruleParams[index] || match;
               }).replace("{name}", fieldCurrent.name);
+
               fieldCurrent.errorMessage = formattedErrorMsg;
-              // console.log('fieldCurrent', fieldCurrent);
+              
+              console.log('fieldCurrent', fieldCurrent);
+              console.log('Форма не прошла проверку');
               // console.log("Ошибка валидации формы: "+formattedErrorMsg);
             } else {
               fieldCurrent.error = '';
@@ -61,6 +64,13 @@ export default {
           });
         }
       })
+      // обработка если данные валидные (НАВЕРНОЕ!!!?)
+      return Object.values(form).every((item) => {
+          if (Object.hasOwn(item, 'error')) {
+              return !item.error.length;
+          }
+          return true;
+      });
     });
   },
 };

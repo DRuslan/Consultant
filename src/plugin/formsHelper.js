@@ -11,5 +11,27 @@ export default {
             }
             return textFields;
         });
+        // метод очистки форм
+        app.provide('resetForm', (form) => {      
+            for (const key in form) {
+              if (this.form.hasOwnProperty(key)) {
+                const field = this.form[key];
+                if (typeof field === "object") {
+                  if ("value" in field) {
+                    if (typeof field.value === "object") {
+                      field.value = null;
+                    } else if (typeof field.value === "boolean") {
+                      field.value = true; // шобы политика не сбрасывалась
+                    } else {
+                      field.value = "";
+                    }
+                  }
+                  if ("error" in field) {
+                    field.error = "";
+                  }
+                }
+              }
+            }
+          });
     }
 };
