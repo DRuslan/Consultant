@@ -90,7 +90,7 @@ if (props.script !== null && props.script !== undefined) {
   const messageBotScript = props.script[countBotMessages.value]; // Сообщение от бота в скрипте
   Chat.value.push({
     ...messageBotScript, 
-    createdAt: createdAtMessageRef
+    createdAt: new Date()
   });
   console.log(Chat.value);
 }
@@ -104,13 +104,12 @@ const send = (e) => {
   if (newMessage.value.trim() !== "") {
     Chat.value.push({
       id: generateUniqueId(),
-      createdAt: createdAtMessageRef,
+      createdAt: new Date(),
       message: newMessage.value,
       role: "client",
     });
 
     formData.append("Chat", JSON.stringify(Chat.value)); // подмешиваем данные с всего чата
-    console.log(formData);
     axios.post('/api/send-chat', formData,
     { 
       withCredentials: true, 
@@ -164,7 +163,7 @@ async function sendBot() {
     await delaysSendBot(delayTimeMessage);
     Chat.value.push({
       ...props.script[countBotMessages.value],
-      createdAt: createdAtMessageRef
+      createdAt: new Date()
     });
     countBotMessages.value++;
     if (countBotMessages.value < props.script.length) {
@@ -174,7 +173,7 @@ async function sendBot() {
 
       Chat.value.push({
         ...props.script[countBotMessages.value],
-        createdAt: createdAtMessageRef
+        createdAt: new Date()
       });
       isMessageSend.value = false;
       ignoreWaiting.value = false;
@@ -187,7 +186,7 @@ async function sendBot() {
     console.log("Пользователь получил ответ на сообщение");
     Chat.value.push({
       ...props.script[countBotMessages.value],
-      createdAt: createdAtMessageRef
+      createdAt: new Date()
     });
     isMessageSend.value = false;
     scrollLastMessage();

@@ -38,11 +38,18 @@ const props = defineProps({
   },
 });
 
-const formattedTimeAgo = ref(calculateTimeAgo()); // Инициализируем значение
+const formattedTimeAgo = ref(""); // Инициализируем значение
 
-setInterval(function (){
-  formattedTimeAgo.value = calculateTimeAgo(); // обновляем время создания сообщения
-}, 60000);
+// Функция, которая будет вызываться каждую минуту
+const updateFormattedTimeAgo = () => {
+  formattedTimeAgo.value = calculateTimeAgo();
+};
+
+// Вызываем функцию каждую минуту
+setInterval(updateFormattedTimeAgo, 60000);
+
+// Вызываем функцию при создании компонента
+updateFormattedTimeAgo();
 
 function calculateTimeAgo() {
   const currentTime = new Date();
@@ -93,6 +100,7 @@ function getMinutesSuffix(minutes) {
     position: absolute;
     top: -18px;
     right: 0;
+    white-space: nowrap;
   }
   &__bot {
     display: flex;
