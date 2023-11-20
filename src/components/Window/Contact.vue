@@ -63,7 +63,7 @@ const props = defineProps({
       position: absolute; /* Абсолютное позиционирование */
       border: 7px solid transparent; 
       border-top: 7px solid #fff;
-      top: 1px;
+      top: 0;
       left: calc(50% - 7px);
     }
     &_left {

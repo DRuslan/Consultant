@@ -101,9 +101,10 @@ function getMinutesSuffix(minutes) {
     font-size: 12px;
     margin-bottom: 5px;
     position: absolute;
-    top: -18px;
+    bottom: -25px;
     right: 0;
     white-space: nowrap;
+    opacity: .5;
   }
   &__bot {
     display: flex;

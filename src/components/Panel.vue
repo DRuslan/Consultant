@@ -56,7 +56,7 @@
     <div class="widjet__col widjet__col_r" ref="mangerElement">
       <PanelCol
         hr="left"
-        size="l"
+        size="m"
         @click="showWindow($event, 'Manager_1')"
         :visibility="entryData.onlineConsultant[1].visibility"
         :windowWidth="widthDevice"
@@ -121,7 +121,7 @@
       :windowType="windowType"
       :dataWindow="entryData.onlineConsultant[0]"
       :dataChat="outputScript"
-      :positionX="windowPosition - 50"
+      :positionX="windowPosition"
       figurePos="center"
     />
 
@@ -173,11 +173,12 @@ const notificationMessage = ref(false);
 let windowPosition = ref(null);
 
 function showWindow(event, type) {
-  const el = event.target;
-  windowPosition.value = el.getBoundingClientRect().left;
+  const el = event.target; // панель по которой кликнули
+  let elTargetLeft = el.getBoundingClientRect().left;
+  windowPosition.value = elTargetLeft;
+  elOutViewport(windowPosition.value);
   windowType.value = type;
   isWindowVisible.value = true;
-  elOutViewport(el);
 }
 // передаем координаты и показываем чат автоматом
 const mangerElement = ref(null);
@@ -268,23 +269,21 @@ function handleResize() {
   widthDevice.value = window.innerWidth; // Обновляем значение widthDevice при изменении размера окна
 }
 
-// Функция, которая считает вылет елементов из потока ширины браузера
-function elOutViewport (el) {
-  const elRect = el.getBoundingClientRect();
-  const elOuter = (
-    elRect.right < 0 || 
-    elRect.left > widthDevice
-  )
-
-  console.log('Элемент за пределами экрана:', elOuter);
-} 
-
-// function showWindow(event, type) {
-//   const el = event.target;
-//   windowPosition.value = el.getBoundingClientRect().left;
-//   windowType.value = type;
-//   isWindowVisible.value = true;
-// }
+// Функция, которая считает выход элементов из потока ширины браузера
+function elOutViewport(windowBounceLeft) {
+  if (windowPosition.value + 300 < widthDevice.value) {
+    windowPosition.value = windowBounceLeft;
+    console.log('windowPosition.value < widthDevice.value');
+  } 
+  else if (windowPosition.value + 300 > widthDevice.value) {
+    console.log('windowPosition.value + 300 > widthDevice.value');
+    windowPosition.value = widthDevice.value - 310;
+  }
+  else {
+    windowPosition.value = windowBounceLeft;
+  }
+  console.log(widthDevice.value + " " + (windowPosition.value + 300));
+}
 </script>
 
 <style lang="scss" scoped>
@@ -316,7 +315,7 @@ function elOutViewport (el) {
   }
   &__content {
     position: relative;
-    z-index: 2;
+    // z-index: 2;
     width: auto;
   }
 

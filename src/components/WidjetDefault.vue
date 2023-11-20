@@ -26,6 +26,8 @@ const props = defineProps({
   align-items: center;
   width: 100%;
   height: 100%;
+  position: relative;
+  z-index: -1;
   &__icon {
     margin-right: 8px;
     &_dop {
