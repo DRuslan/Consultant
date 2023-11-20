@@ -4,7 +4,7 @@
     :class="[{ msg__bot: role === 'bot' }, { msg__client: role === 'client' }]"
   >
     <div v-if="role === 'bot'" class="msg__img">
-      <img src="../../../images/content/manager.png" alt="" />
+      <img :src="managerImage" alt="" />
     </div>
     <div class="msg__inner">
       <div class="msg__created"><span>{{ formattedTimeAgo }}</span></div>
@@ -35,6 +35,9 @@ const props = defineProps({
   },
   createdAt: {
     type: Object,
+  },
+  managerImage: {
+    type: String,
   },
 });
 

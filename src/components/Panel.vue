@@ -59,13 +59,15 @@
         size="l"
         @click="showWindow($event, 'Manager_1')"
         :visibility="entryData.onlineConsultant[1].visibility"
-        :class="`${notificationMessage ? 'widjet-notification' : ''}`"
         :windowWidth="widthDevice"
-      >
+      > 
+      <div class="widjet__content">
         <WidjetDefault
           v-bind="entryData.onlineConsultant[0].button"
-          class="widjet__content"
+          class="widjet__text-content"
         />
+      </div>
+      <div class="widjet__mask" v-show="notificationMessage" :class="`${notificationMessage ? 'widjet-notification' : ''}`"></div>
       </PanelCol>
 
       <PanelCol size="s" hr="left" :visibility="entryData.onlineConsultant[1].visibility" :windowWidth="widthDevice">
@@ -118,11 +120,12 @@
       @showChat="showWindowChat"
       :windowType="windowType"
       :dataWindow="entryData.onlineConsultant[0]"
-      :positionX="windowPosition"
+      :dataChat="outputScript"
+      :positionX="windowPosition - 50"
       figurePos="center"
     />
 
-    <WindowChat
+    <!-- <WindowChat
       :isVisible="isWindowVisible"
       @close="hideWindow"
       @showChat="showWindowChat"
@@ -132,7 +135,7 @@
       :positionX="windowPosition"
       :script="outputScript"
       figurePos="center"
-    />
+    /> -->
 
     <ModalsContainer />
   </div>
@@ -174,6 +177,7 @@ function showWindow(event, type) {
   windowPosition.value = el.getBoundingClientRect().left;
   windowType.value = type;
   isWindowVisible.value = true;
+  elOutViewport(el);
 }
 // передаем координаты и показываем чат автоматом
 const mangerElement = ref(null);
@@ -263,12 +267,30 @@ function comeback() {
 function handleResize() {
   widthDevice.value = window.innerWidth; // Обновляем значение widthDevice при изменении размера окна
 }
+
+// Функция, которая считает вылет елементов из потока ширины браузера
+function elOutViewport (el) {
+  const elRect = el.getBoundingClientRect();
+  const elOuter = (
+    elRect.right < 0 || 
+    elRect.left > widthDevice
+  )
+
+  console.log('Элемент за пределами экрана:', elOuter);
+} 
+
+// function showWindow(event, type) {
+//   const el = event.target;
+//   windowPosition.value = el.getBoundingClientRect().left;
+//   windowType.value = type;
+//   isWindowVisible.value = true;
+// }
 </script>
 
 <style lang="scss" scoped>
 .widjet {
   width: 100%;
-  height: 50px;
+  height: 45px;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -278,10 +300,7 @@ function handleResize() {
   @media screen and (max-width: 576px) {
     height: 40px;  
   }
-  .widjet-notification {
-    box-shadow: inset 0px 0px 35px 3px #739ad8;
-    animation: blink 1.5s linear infinite;
-  }
+
   &__col {
     display: flex;
     // @media screen and (max-width: 768px) {
@@ -297,8 +316,21 @@ function handleResize() {
   }
   &__content {
     position: relative;
-    z-index: -1;
+    z-index: 2;
     width: auto;
+  }
+
+  .widjet-notification {
+    box-shadow: inset 0px 0px 35px 3px #739ad8;
+    animation: blink 1.5s linear infinite;
+  }
+
+  &__mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
   }
 }
 

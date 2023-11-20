@@ -24,8 +24,9 @@ export default {
   .kreeble {
     background: rgba(183, 14, 14, 0.5);
     position: fixed;
-    height: 100vh;
-    width: 100vw;
+    // height: 100vh;
+    // width: 100vw;
     top: 0;
+    z-index: 100;
   }
 </style>

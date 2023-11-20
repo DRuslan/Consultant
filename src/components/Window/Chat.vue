@@ -24,6 +24,7 @@
               :msg="item.message"
               :role="item.role"
               :created-at="item.createdAt"
+              :manager-image="dataWindow.window.body.img"
             />
           </transition-group>
           <transition name="fade">
@@ -100,6 +101,7 @@ const send = (e) => {
   // формируем данные для отправки
   const formData = new FormData(); // Constructor JS (Form building)
   formData.append("Site", location.href);
+  formData.append("Name", "krible-chat");
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "") {
     Chat.value.push({
@@ -113,9 +115,9 @@ const send = (e) => {
     axios.post('/api/send-chat', formData,
     { 
       withCredentials: true, 
-      headers : {
-        Cookie: "visit_id=1111",
-      }
+      // headers : {
+      //   Cookie: "visit_id=1111",
+      // }
     })
     .then((res) => {
       console.log(res);

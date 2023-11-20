@@ -23,7 +23,7 @@
       p {
         transform: rotate(-90deg);
         color: #fff;
-        font-size: 12px !important;
+        font-size: 10px !important;
         @media screen and (max-width: 576px) {
           font-size: 10px !important;
         }

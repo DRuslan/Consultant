@@ -33,6 +33,7 @@
     :positionX="positionX"
     @close="$emit('close')"
     :dataWindow="$widjet().chat[0]"
+    :script="dataChat"
   /> 
 </template>
   
@@ -45,6 +46,7 @@ const props = defineProps({
   isVisible: Boolean,
   windowType: String,
   dataWindow: Object,
+  dataChat: Object,
   figurePos: String,
   positionX: Number,
 });

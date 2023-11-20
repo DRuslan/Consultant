@@ -93,6 +93,7 @@ const visibleDevice = computed(() => {
       height: 100%;
       background-color: #15469b;
       top: 0px;
+      opacity: .5;
     }
   }
 
@@ -114,7 +115,6 @@ const visibleDevice = computed(() => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    padding: 0 30px;
     &_s {
       padding-left: 0px;
       padding-right: 0px;
@@ -122,8 +122,8 @@ const visibleDevice = computed(() => {
     }
 
     &_m {
-      padding-left: 40px;
-      padding-right: 40px;
+      padding-left: 20px;
+      padding-right: 20px;
       @media screen and (max-width: 480px) {
         padding: 0 20px;
       }
@@ -131,8 +131,12 @@ const visibleDevice = computed(() => {
 
     &_l {
       @media screen and (min-width: 1024px) {
-        min-width: 300px; 
+        min-width: 230px; 
       }
+    }
+
+    &_auto {
+      min-width: auto;
     }
   }
 }
