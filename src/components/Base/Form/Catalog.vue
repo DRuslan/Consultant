@@ -16,7 +16,7 @@
     />
     
     <div class="field-row">
-      <Button :active="getBtnActiveClass">
+      <Button :active="getBtnActiveClass && checkPolit">
         <template v-slot:left><Icon size="s" iconName="check-circle" /></template> Отправить
       </Button>
       <!-- <button type="submit" :disabled="!checkPolit" :class="getBtnActive"></button> -->
