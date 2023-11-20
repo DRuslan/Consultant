@@ -1,6 +1,6 @@
 <template>
-  <button type="submit" class="v-submit" :class="active === true ? 'v-submit_active' : ''">
-    <span class="v-submit__text" v-if="!loading">
+  <button type="submit" class="v-submit" :class="active ? 'v-submit_active' : 'v-submit_disabled'">
+    <span class="v-submit__text">
       <span class="v-submit__slot mr-2"><slot name="left" /></span>
       <span class="v-submit__slot v-submit__only_icon">
         <slot name="only"></slot>
@@ -38,6 +38,11 @@ export default {
     transition: all .3s ease-in-out;
   &_active {
     background: #3b6ec7 !important;
+  }
+  &_disabled {
+    opacity: 0.4;
+    // cursor: not-allowed;
+    background: #5b5b5b;
   }
 
   &__text {
@@ -107,7 +112,7 @@ export default {
 }
 
 .mr-2 {
-  margin-right: 4px;
+  margin-right: 8px;
 }
 
 .ml-2 {

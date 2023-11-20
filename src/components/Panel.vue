@@ -124,19 +124,6 @@
       :positionX="windowPosition"
       figurePos="center"
     />
-
-    <!-- <WindowChat
-      :isVisible="isWindowVisible"
-      @close="hideWindow"
-      @showChat="showWindowChat"
-      @autoShowChat="autoShowWindowChat"
-      :windowType="windowType"
-      :dataWindow="entryData.chat[0]"
-      :positionX="windowPosition"
-      :script="outputScript"
-      figurePos="center"
-    /> -->
-
     <ModalsContainer />
   </div>
 </template>
@@ -193,6 +180,8 @@ if (localStorage.getItem("chatAutoMode")) {
 
 onMounted(() => {
   if (autoShowChat.value) {
+    console.log('mangerElement.value');
+    console.log(mangerElement.value.getBoundingClientRect().left);
     autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
   }
 
@@ -233,14 +222,15 @@ function showWindowChat() {
 }
 
 function autoShowWindowChat(pos) {
-  console.log('autoShowChat.value');
-  console.log(autoShowChat.value);
+  console.log('autoShowChat.value POS');
+  console.log(pos);
     setTimeout(function () {
         if (autoShowChat.value) {
           windowType.value = "Manager_1";
           notificationMessage.value = true;
           isWindowVisible.value = true;
           windowPosition.value = pos;
+          elOutViewport(windowPosition.value);
           showWindowChatExecuted.value = true;
         }
       }, 5000);

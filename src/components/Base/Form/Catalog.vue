@@ -16,7 +16,9 @@
     />
     
     <div class="field-row">
-      <Button :active="getBtnActive">Отправить</Button>
+      <Button :active="getBtnActiveClass">
+        <template v-slot:left><Icon size="s" iconName="check-circle" /></template> Отправить
+      </Button>
       <!-- <button type="submit" :disabled="!checkPolit" :class="getBtnActive"></button> -->
     </div>
     <p class="back" @click="$emit('backStep')">← Выбрать другой мессенджер</p>
@@ -35,9 +37,12 @@ import Container from "./ui/Container.vue";
 import Field from "./ui/Field.vue";
 import Political from "./ui/Political.vue";
 import Button from "../Button.vue";
+import Icon from "../Icon.vue";
 import { computed, ref, inject } from "vue";
 
-const getTextFields = inject('getTextFields'); // подключаю плагин
+const getTextFields = inject('getTextFields'); // подключаю плагины
+const getBtnActive = inject('getBtnActive');
+
 const form = ref({
   Name: {
     type: "text",
@@ -56,14 +61,8 @@ const form = ref({
 
 const textFields = ref(getTextFields(form.value)); // делаю реактивным поля из плагина
 
-const getBtnActive = computed(() => {
-  for (const field of textFields.value) {
-    console.log(field);
-    if (field.value.length > 0) {
-      return true;
-    }
-  }
-  return false;
+const getBtnActiveClass = computed(() => {
+  return getBtnActive(textFields.value);
 });
 
 let checkPolit = ref(true);

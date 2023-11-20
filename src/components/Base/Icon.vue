@@ -29,7 +29,7 @@ export default {
       const svgContents = require(`@/icons/${this.iconName}.svg?raw`);
       const modifiedSvgContents = svgContents.replace(
         /<svg/g,
-        `<svg class="icon_custom" fill="currentColor"`
+        `<svg class="icon_custom"`
       );
       return modifiedSvgContents
       // const convertedObgIcon = JSON.parse(this.name);
@@ -49,7 +49,7 @@ export default {
       height: 100%;
     }
     svg, path {
-      width: inherit;
+      width: 100%;
       height: 100%;
     }
   }
@@ -59,9 +59,8 @@ export default {
 .icon {
   flex: none;
   display: inline-block;
-  fill: currentColor;
   text-align: center;
-  // stroke: currentColor;
+  fill: currentColor;
   &__size {
     &_s {
       width: 16px;

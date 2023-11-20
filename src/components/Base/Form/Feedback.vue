@@ -15,7 +15,7 @@
     />
     <div class="field-row">
       <FieldFile />
-      <Button :active="getBtnActive">Отправить</Button>
+      <Button :active="getBtnActiveClass">Отправить</Button>
     </div>
   </Container>
 </template>
@@ -28,6 +28,8 @@ import Field from "./ui/Field.vue";
 import FieldFile from "./ui/FieldFile.vue";
 
 const getTextFields = inject('getTextFields'); // подключаю плагин
+const getBtnActive = inject('getBtnActive');
+
 const form = ref({
   Name: {
     type: "text",
@@ -55,13 +57,8 @@ const form = ref({
 
 const textFields = ref(getTextFields(form.value)); // делаю реактивным поля из плагина
 
-const getBtnActive = computed(() => {
-  for (const field of textFields.value) {
-    if (field.value.length > 0) {
-      return true;
-    }
-  }
-  return false;
+const getBtnActiveClass = computed(() => {
+  return getBtnActive(textFields.value);
 });
 
 
