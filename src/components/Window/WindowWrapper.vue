@@ -1,6 +1,7 @@
 <template>
-  <transition name="modal-animation">
-    <div v-show="isVisible" class="wrapper" :style="{left: `${position}px`}">
+  <!-- <transition name="fade"> -->
+  <transition :name="transitionName">
+    <div v-if="isVisible" class="wrapper" :style="{left: `${position}px`}">
       <div 
         v-if="headerIcon || headerTitle"
         :style="{ backgroundColor: $widjet().global.color }"
@@ -23,7 +24,7 @@
 </template>
   
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch } from "vue";
 import Icon from "../Base/Icon.vue";
 
 const props = defineProps({
@@ -32,6 +33,31 @@ const props = defineProps({
   headerIcon: String,
   position: Number
 });
+
+// const handleAfterEnter = () => {
+//   console.log('Анимация входа завершена');
+//   // Ваши дополнительные действия после окончания анимации входа
+// };
+
+// const handleAfterLeave = () => {
+//   console.log('Анимация выхода завершена');
+//   // Ваши дополнительные действия после окончания анимации выхода
+// };
+
+const transitionName = ref("modal-animation");
+let isAnimating = ref(false);
+
+watch(() => props.isVisible, (newValue) => {
+  if (!isAnimating) {
+    console.log(isAnimating);
+    transitionName.value = newValue ? "modal-animation" : "fade";
+  }
+});
+
+const afterEnter = () => {
+  isAnimating.value = false;
+};
+
 </script>
   
   <style lang="scss" scoped>
@@ -60,6 +86,16 @@ const props = defineProps({
       cursor: pointer;
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .modal-animation-enter-active,

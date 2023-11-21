@@ -57,7 +57,7 @@
       <PanelCol
         hr="left"
         size="m"
-        @click="showWindow($event, 'Manager_1')"
+        @click="showWindow($event, managerExecuted)"
         :visibility="entryData.onlineConsultant[1].visibility"
         :windowWidth="widthDevice"
       > 
@@ -114,6 +114,18 @@
       figurePos="center"
     /> -->
 
+
+    <WindowChat
+      :isVisible="isWindowVisible"
+      @close="hideWindow"
+      @autoShowChat="autoShowWindowChat"
+      :windowType="windowType"
+      :dataWindow="entryData.chat[0]"
+      :positionX="windowPosition"
+      :script="outputScript"
+      figurePos="center"
+    />
+
     <WindowManager
       :isVisible="isWindowVisible"
       @close="hideWindow"
@@ -161,11 +173,28 @@ let windowPosition = ref(null);
 
 function showWindow(event, type) {
   const el = event.target; // панель по которой кликнули
-  let elTargetLeft = el.getBoundingClientRect().left;
-  windowPosition.value = elTargetLeft;
-  elOutViewport(windowPosition.value);
-  windowType.value = type;
-  isWindowVisible.value = true;
+  const elTargetLeft = el.getBoundingClientRect().left;
+  // Если тип окна уже открыт, то закрываем его
+  if (windowType.value === type) {
+    windowType.value = '';
+    isWindowVisible.value = false;
+  } else {
+    windowPosition.value = elTargetLeft;
+    elOutViewport(windowPosition.value);
+    windowType.value = type;
+    isWindowVisible.value = true;
+  }
+  // const el = event.target; // панель по которой кликнули
+  // let elTargetLeft = el.getBoundingClientRect().left;
+  // windowPosition.value = elTargetLeft;
+  // elOutViewport(windowPosition.value);
+  // windowType.value = type;
+  // isWindowVisible.value = true;
+  // // если нажали по теущей панели закрыть окна
+  // if (windowType.value === type) {
+  //   windowType.value = '';
+  //   isWindowVisible.value = false;
+  // }
 }
 // передаем координаты и показываем чат автоматом
 const mangerElement = ref(null);
@@ -189,6 +218,10 @@ onMounted(() => {
     document.addEventListener("mouseleave", comeback);
   }
 
+  if (localStorage.getItem('managerDisabled') === 'true') {
+    managerExecuted.value = 'Chat'
+  } 
+
   if (isComeback === null && widthDevice.value >= 768 || isComeback !== "false" && widthDevice.value >= 768) {
     setTimeout(() => {
       comeback();
@@ -206,7 +239,8 @@ onBeforeUnmount(() => {
 // вычисляем сценарий переписки
 const outputScript = computed(() => autoShowChat.value ? props.entryData.autoMessage[1].script : props.entryData.autoMessage[0].script);
 
-let showWindowChatExecuted = ref(false);
+let showWindowChatExecuted = ref(false); // был ли открыт чат
+let managerExecuted = ref('Manager_1'); // был ли открыт манагер
 
 function showWindowChat() {
   if (!showWindowChatExecuted.value) {
@@ -217,13 +251,19 @@ function showWindowChat() {
   if (autoShowChat.value === true) {
     localStorage.setItem("chatAutoMode", autoShowChat.value);
   }
+
+  if (managerExecuted.value === 'Manager_1' && localStorage.getItem('managerExecuted') === 'false' || localStorage.getItem('managerExecuted') === null) {
+    localStorage.setItem("managerDisabled", true);  
+    managerExecuted.value = 'Chat'  
+  } else {
+    managerExecuted.value = 'Chat'
+  }
+
   windowType.value = "Chat";
   notificationMessage.value = false;
 }
 
 function autoShowWindowChat(pos) {
-  console.log('autoShowChat.value POS');
-  console.log(pos);
     setTimeout(function () {
         if (autoShowChat.value) {
           windowType.value = "Manager_1";
@@ -232,6 +272,8 @@ function autoShowWindowChat(pos) {
           windowPosition.value = pos;
           elOutViewport(windowPosition.value);
           showWindowChatExecuted.value = true;
+          managerExecuted.value = 'Chat';
+          localStorage.setItem("managerDisabled", true);  
         }
       }, 5000);
 

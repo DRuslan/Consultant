@@ -14,6 +14,7 @@ app.use(formsHelper);
 // app.use(formsHelper, { fieldType });
 app.use(validate);
 app.use(soundHelper);
+app.use(require('vue-cookies'))
 app.mount('#v-consultant');
 
 

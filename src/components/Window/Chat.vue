@@ -68,7 +68,7 @@ import Icon from "../Base/Icon.vue";
 import FieldFile from "../../components/Base/Form/ui/FieldFile.vue";
 import Wrapper from "./WindowWrapper.vue";
 import Message from "../Base/Chat/Message.vue";
-import { ref, defineProps, computed, watchEffect, nextTick } from "vue";
+import { ref, defineProps, computed, watchEffect, nextTick, inject } from "vue";
 import axios from "axios";
 
 const props = defineProps({
@@ -80,12 +80,16 @@ const props = defineProps({
   script: Object,
 });
 
+const $cookies = inject('$cookies');
 const newMessage = ref(""); // Реактивная переменная для текстового поля
-const Chat = ref([]); // Реактивная переменная для всех сообщений
+const Chat = ref($cookies.get('chat') || []); // Реактивная переменная для всех сообщений
 const isMessageSend = ref(false); // Реактивная переменная для отслеживания ответа пользователя
 const countBotMessages = ref(0); // Количество ответов бота
 const chatContainerRef = ref(null); // Для отслеживания высоты чата и его скролла
 const createdAtMessageRef = ref(new Date()); // Реактивная переменная для отслеживания когда создано сообщение
+
+
+
 
 if (props.script !== null && props.script !== undefined) {
   const messageBotScript = props.script[countBotMessages.value]; // Сообщение от бота в скрипте
@@ -102,6 +106,7 @@ const send = (e) => {
   const formData = new FormData(); // Constructor JS (Form building)
   formData.append("Site", location.href);
   formData.append("Name", "krible-chat");
+
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "") {
     Chat.value.push({
@@ -115,9 +120,6 @@ const send = (e) => {
     axios.post('/api/send-chat', formData,
     { 
       withCredentials: true, 
-      // headers : {
-      //   Cookie: "visit_id=1111",
-      // }
     })
     .then((res) => {
       console.log(res);
@@ -139,6 +141,8 @@ const send = (e) => {
     scrollLastMessage();
     console.log("Сообщение отправлено пользователем");
   }
+
+  $cookies.set('chat', Chat.value, '1d');
 };
 
 const waitResponceBot = computed(() => {  

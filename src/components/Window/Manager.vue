@@ -26,20 +26,10 @@
       ></div>
     </div>
   </Wrapper>
-  <Chat 
-    v-if="windowType === 'Chat'" 
-    windowType="Chat" 
-    :isVisible="isVisible" 
-    :positionX="positionX"
-    @close="$emit('close')"
-    :dataWindow="$widjet().chat[0]"
-    :script="dataChat"
-  /> 
 </template>
   
   <script setup>
 import Wrapper from "./WindowWrapper.vue";
-import Chat from "./Chat.vue";
 import { defineProps } from "vue";
 
 const props = defineProps({
@@ -51,11 +41,7 @@ const props = defineProps({
   positionX: Number,
 });
 
-  const emit = defineEmits(["showChat", "autoShowChat"]);
-
-  const autoShowChat = (event) => {
-    emit("autoShowChat", event.target);
-  };
+  const emit = defineEmits(["showChat"]);
 
   const showChat = (event) => {
     emit("showChat", event.target);
@@ -63,7 +49,7 @@ const props = defineProps({
 
 </script>
   
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 .window {
   border-radius: 8px;
   width: 300px;

@@ -28,10 +28,8 @@ export default function useForm(form, thank) {
           axios
             .post("/api/send-lead/bpm", formData, {withCredentials: true})
             .then(() => {
-              openModal(thank ? thank : "thank");
-              setTimeout(() => {
-                resetForm(formData);
-              }, 3000);
+                resetForm(form);
+                openModal(thank ? thank : "thank");
             })
             .catch((error) => {
               console.log(error);
