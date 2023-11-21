@@ -1,9 +1,9 @@
 <template>
-    <div class="polit" :class="[`polit__${tcolor}`]">
+    <div class="v-polit" :class="[`v-polit__${tcolor}`]">
       <check :class="[`${chcolor}`]" @isChecked="isCheckedPolit"></check>
       <small>
         Я принимаю политику обработки
-        <a class="link" :class="[`link__${lcolor}`]" @click.prevent="openPoliticalModal()">
+        <a class="v-link" :class="[`v-link__${lcolor}`]" @click.prevent="openPoliticalModal()">
           персональных данных
         </a>
       </small>
@@ -57,7 +57,7 @@
   </script>
   
   <style lang="scss" scoped>
-  .polit {
+  .v-polit {
     display: flex;
     align-items: flex-start;
     @media screen and (max-width: 480px) {
@@ -67,7 +67,6 @@
     small {
       cursor: pointer;
       font-size: 8px;
-    //   @include text_5;
     }
   
     &__white {
@@ -82,24 +81,20 @@
         color:#000;
       }
     }
-    &__green {
-      color: green;
-      small {
-        color: green;
-      }
-    }
   
-    .link {
+    .v-link {
       text-decoration: underline;
       font-size: 8px;
+      padding: 0px !important;
+      transition: all .3s ease-in-out;
+      &:hover {
+        opacity: .67;
+      }
       &__white {
         color: #fff;
       }
       &__black {
         color:#000;
-      }
-      &__green {
-        color: green;
       }
     }
   

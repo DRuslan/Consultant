@@ -267,7 +267,7 @@ function elOutViewport(windowBounceLeft) {
   } 
   else if (windowPosition.value + 300 > widthDevice.value) {
     console.log('windowPosition.value + 300 > widthDevice.value');
-    windowPosition.value = widthDevice.value - 310;
+    windowPosition.value = widthDevice.value - 324;
   }
   else {
     windowPosition.value = windowBounceLeft;

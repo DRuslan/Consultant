@@ -6,20 +6,9 @@
     <ThankModal :modal-data="getModalData('thankMail').value" @close="closeModal('thankMail')"/>
   </template>
   
-  <script>
+  <script setup>
   import { getModalData, closeModal } from "@/store/modals";
   import PolitModal from "./PolitModal.vue";
   import CallbackModal from "./CallbackModal.vue";
   import ThankModal from './ThankModal.vue';
-  
-  export default {
-    name: "ModalsContainer",
-    components: {CallbackModal, PolitModal, ThankModal},
-    setup() {
-      return {
-        getModalData,
-        closeModal
-      };
-    },
-  }
   </script>
