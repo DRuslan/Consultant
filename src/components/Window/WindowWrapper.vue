@@ -1,6 +1,6 @@
 <template>
-  <!-- <transition name="fade"> -->
-  <transition :name="transitionName">
+  <transition name="fade">
+  <!-- <transition :name="transitionName"> -->
     <div v-if="isVisible" class="wrapper" :style="{left: `${position}px`}">
       <div 
         v-if="headerIcon || headerTitle"
@@ -44,19 +44,7 @@ const props = defineProps({
 //   // Ваши дополнительные действия после окончания анимации выхода
 // };
 
-const transitionName = ref("modal-animation");
-let isAnimating = ref(false);
-
-watch(() => props.isVisible, (newValue) => {
-  if (!isAnimating) {
-    console.log(isAnimating);
-    transitionName.value = newValue ? "modal-animation" : "fade";
-  }
-});
-
-const afterEnter = () => {
-  isAnimating.value = false;
-};
+// const transitionName = ref("modal-animation");
 
 </script>
   

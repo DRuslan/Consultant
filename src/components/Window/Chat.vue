@@ -87,7 +87,7 @@ const isMessageSend = ref(false); // Реактивная переменная �
 const countBotMessages = ref(0); // Количество ответов бота
 const chatContainerRef = ref(null); // Для отслеживания высоты чата и его скролла
 const createdAtMessageRef = ref(new Date()); // Реактивная переменная для отслеживания когда создано сообщение
-
+let sendClientMessage = ref(0);
 
 
 
@@ -116,8 +116,12 @@ const send = (e) => {
       role: "client",
     });
 
-    formData.append("Chat", JSON.stringify(Chat.value)); // подмешиваем данные с всего чата
-    axios.post('/api/send-chat', formData,
+    // Количество отправленных сообщений от клиента нужно для метрики только после 1 сообщения отрабатывает цель
+    firstMessageClient(sendClientMessage.value);
+    checkText(newMessage.value.trim());
+
+      formData.append("Chat", JSON.stringify(Chat.value)); // подмешиваем данные с всего чата
+      axios.post('/api/send-chat', formData,
     { 
       withCredentials: true, 
     })
@@ -227,9 +231,44 @@ function generateUniqueId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
-// setInterval(function (){
-//   createdAtMessageRef.value = new Date(); // обновляем время создания сообщения
-// }, 60000);
+// проверка текста на наличее телеофна или почты
+function checkText(text) {
+    // Регулярное выражение для поиска номеров телефонов
+    // const phoneRegex = /(\+7|8)[\s\-]?\(?(\d{3})\)?[\s\-]?(\d{3})[\s\-]?(\d{2})[\s\-]?(\d{2})/g;
+    const phoneRegex = /(\+7|8)[\s\-]?\(?\d{3}\)?[\s\- ⁠ ]?\d{3}[\s\- ⁠ ]?\d{2}[\s\- ⁠ ]?\d{2}/g;
+  
+    // Регулярное выражение для поиска адресов электронной почты
+    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+
+    // Поиск номеров телефонов
+    let phoneMatches = text.match(phoneRegex);
+    if (phoneMatches) {
+        // Удаление лишних пробелов
+        phoneMatches = phoneMatches.map(phone => phone.replace(/\s/g, ''));
+        console.log("Номер(а) телефона найден(ы):", phoneMatches);
+        window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    } else {
+        console.log("Номер(а) телефона не найден(ы)");
+    }
+
+    // Поиск адресов электронной почты
+    let emailMatches = text.match(emailRegex);
+    if (emailMatches) {
+        console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
+        window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    } else {
+        console.log("Адрес(а) электронной почты не найден(ы)");
+    }
+}
+
+// Проверка отправки 1 сообщения для цели
+function firstMessageClient(sendCount) {
+    sendCount++;
+    if (sendCount === 1 && !$cookies.get('firstMessage')) {
+      alert(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
+      $cookies.set('firstMessage', sendCount, '1d');
+    }
+  }
 </script>
     
 <style lang="scss" scoped>

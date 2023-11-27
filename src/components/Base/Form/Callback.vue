@@ -40,6 +40,11 @@
 
     const getTextFields = inject('getTextFields'); // подключаю плагин
     const form = ref({
+      Name: {
+        type: "text",
+        name: "Name",
+        value: "krible-comeback",
+      },
       Phone: {
         type: "text",
         name: "Телефон",
