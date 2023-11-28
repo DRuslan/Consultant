@@ -1,7 +1,7 @@
 <template>
   <div class="widjet__link">
     <a class="" href="https://kreeble.ru" target="_blank">
-      <p>Kreeble</p>
+      <small>Kreeble</small>
     </a>
   </div>
 </template>
@@ -20,7 +20,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      p {
+      small {
         transform: rotate(-90deg);
         color: #fff;
         font-size: 10px !important;

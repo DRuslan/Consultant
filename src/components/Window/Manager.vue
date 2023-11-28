@@ -11,7 +11,7 @@
             <img :src="dataWindow.window.body.img" alt="">
         </div>
         <div class="manager__name">{{ dataWindow.window.body.name }}</div>
-        <p class="manager__description">{{ dataWindow.window.body.description }}</p>
+        <p class="manager__description" style="font-size: 14px">{{ dataWindow.window.body.description }}</p>
         <div class="manager__btns">
             <button class="manager__btn" @click="$emit('close')"> {{ dataWindow.window.body.CloseText }} </button>
             <button class="manager__btn" @click="showChat"> 
@@ -79,6 +79,7 @@ const props = defineProps({
     }
     &__description {
         margin-bottom: 24px;
+        font-size: 14px;
         @media screen and (max-width: 576px) {
           text-align: center;
           margin: 6px 0 12px;

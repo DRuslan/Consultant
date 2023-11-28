@@ -92,6 +92,9 @@ function getMinutesSuffix(minutes) {
 <style lang="scss" scoped>
 .msg {
   position: relative;
+  p {
+    font-size: 14px !important;
+  }
   &__inner {
     display: flex;
     flex-direction: column;

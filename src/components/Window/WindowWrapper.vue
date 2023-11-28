@@ -57,6 +57,9 @@ const props = defineProps({
   border-radius: 8px;
   &__header {
     display: flex;
+    // added prod
+    align-items: center;
+    // END added prod
     justify-content: space-between;
     padding: 15px 13px;
     width: 100%;
