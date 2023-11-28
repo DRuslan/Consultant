@@ -93,7 +93,7 @@
       :positionX="windowPosition"
       figurePos="center"
     >
-      <Feedback />
+      <Feedback :goal="entryData.fastmail.yandex.goal" />
     </WindowFast>
 
     <WindowCatalog

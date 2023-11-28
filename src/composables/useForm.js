@@ -45,6 +45,8 @@ export default function useForm(form, thank, goal) {
             console.log('goal ' + goal);
             console.log('ymGoal ' + ymGoal);
             window.ym(80162764, 'reachGoal', ymGoal);
+          } else {
+            console.log('цель не присвоена');
           }
         }
     

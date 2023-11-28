@@ -265,7 +265,8 @@ function checkText(text) {
 function firstMessageClient(sendCount) {
     sendCount++;
     if (sendCount === 1 && !$cookies.get('firstMessage')) {
-      alert(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
+      console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
+      window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
       $cookies.set('firstMessage', sendCount, '1d');
     }
   }
