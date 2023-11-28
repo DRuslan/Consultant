@@ -4,7 +4,7 @@
       class="input-file__button"
       :class="[`${disabled ? 'input-file_disabled' : ''}`]"
     >
-      <label :style="{ color: $widjet().global.dopPrimary }">
+      <label class="input-file__sendfile" :style="{ color: $widjet().global.dopPrimary }">
         <input
           type="file"
           accept="image/*,application/pdf"
@@ -126,6 +126,10 @@ export default {
 <style scoped lang="scss">
 .input-file {
   position: relative;
+  &__sendfile {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
   &__button {
     overflow: hidden;
     border-radius: 4px;

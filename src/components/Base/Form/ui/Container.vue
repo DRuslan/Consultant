@@ -16,9 +16,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  goal: String,
 });
 
-    const composableForm = useForm(props.form, props.thank);
+    const composableForm = useForm(props.form, props.thank, props.goal);
     // const resetForm = inject("resetForm"); // подключаю плагин formsHelper.js
     // const validate = inject("validate"); // подключаю плагин validate.js
     // const formValidate = ref(props.form);

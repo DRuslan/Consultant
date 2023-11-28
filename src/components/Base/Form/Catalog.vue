@@ -1,5 +1,5 @@
 <template>
-  <Container :form="form" thank="thankCatalog">
+  <Container :form="form" thank="thankCatalog" :goal="goal">
     <Field
       class="field"
       v-for="field in getTextFields(form)"
@@ -38,10 +38,14 @@ import Field from "./ui/Field.vue";
 import Political from "./ui/Political.vue";
 import Button from "../Button.vue";
 import Icon from "../Icon.vue";
-import { computed, ref, inject } from "vue";
+import { computed, ref, inject, defineProps } from "vue";
 
 const getTextFields = inject('getTextFields'); // подключаю плагины
 const getBtnActive = inject('getBtnActive');
+
+const props = defineProps({
+  goal: String
+});
 
 const form = ref({
   Name: {

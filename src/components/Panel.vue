@@ -27,7 +27,7 @@
 
       <PanelCol
         hr="right"
-        size="l"
+        size="m"
         @click="showWindow($event, 'Catalog')"
         :visibility="entryData.catalog.visibility"
         :windowWidth="widthDevice"
@@ -48,7 +48,7 @@
         <WidjetDefault
           v-bind="entryData.fastmail.button"
           @click.stop
-          class="widjet__content"
+          class="widjet__content fast-mail-panel"
         />
       </PanelCol>
     </div>

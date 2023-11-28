@@ -29,7 +29,7 @@
             <p class="window__title">
                 Укажите данные <Icon size="s" :icon-name="activeMessenger.icon" /> {{ activeMessenger.name }} для отправки каталога
             </p>
-            <CatalogForm @backStep="backMessenger"></CatalogForm>
+            <CatalogForm @backStep="backMessenger" :goal="dataWindow.yandex.goal"></CatalogForm>
         </div>
       </div>
       <div

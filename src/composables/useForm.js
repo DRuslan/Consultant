@@ -24,15 +24,10 @@ export default function useForm(form, thank, goal) {
             if (value != null && value !== "") {
               formData.append(key, value);
             }
-
-            if (form[key].value === 'krible-fast-mail') {
-              alert('krible-fast-mail');
-            } 
-
-            if (form[key].value === 'krible-catalog') {
-              alert('krible-catalog');
-            }
           }
+
+          // ловим цели
+          getYandexGoal(goal);
     
           axios
             .post("/api/send-lead/bpm", formData, {withCredentials: true})
@@ -44,6 +39,14 @@ export default function useForm(form, thank, goal) {
               console.log(error);
             });
         };
+
+        function getYandexGoal (ymGoal) {
+          if (ymGoal) {
+            console.log('goal ' + goal);
+            console.log('ymGoal ' + ymGoal);
+            window.ym(80162764, 'reachGoal', ymGoal);
+          }
+        }
     
 
     return { send }

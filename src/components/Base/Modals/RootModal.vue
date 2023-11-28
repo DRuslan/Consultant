@@ -89,6 +89,7 @@
       cursor: pointer;
       transition: all .3s linear;
       color: #8E959B;
+      z-index: 11;
       // color: $gray;
   
       svg {

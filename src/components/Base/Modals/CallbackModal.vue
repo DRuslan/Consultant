@@ -10,7 +10,7 @@
           <p class="image-modal__headline">
             {{ modalData.title !== "" ? modalData.title : "Рассчитать стоимость проекта"}}
           </p>
-          <CallbackForm class="image-modal__form" :btnText="modalData.button.text"/>
+          <CallbackForm class="image-modal__form" :btnText="modalData.button.text" :goal="modalData.yandex.goal"/>
           <p class="image-modal__subtitle">
             {{ modalData.subTitle !== "" ? modalData.subTitle : "и получите консультацию от наших специалистов"}}
           </p>
@@ -44,7 +44,7 @@ export default {
     },
     openPoliticalModal () {
       openModal('politic');
-    }
+    },
   },
 };
 </script>

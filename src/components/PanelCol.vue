@@ -7,6 +7,9 @@
       { col__hr_left: hr === 'left' },
       { col_left: hr === 'left' },
       { col_right: hr === 'right' },
+      { col_size_s: size === 's' },
+      { col_size_m: size === 'm' },
+      { col_size_l: size === 'l' },
     ]"
   >
     <div
@@ -75,14 +78,41 @@ const visibleDevice = computed(() => {
 
 <style lang="scss" scoped>
 .col {
-  width: auto;
+  width: 100%;
   height: 100%;
   position: relative;
   box-sizing: border-box;
+  &_size {
+    &_s {
+      padding-left: 0px;
+      padding-right: 0px;
+      max-width: 25px;
+    }
+
+    &_m {
+      padding-left: 20px;
+      padding-right: 20px;
+      @media screen and (max-width: 480px) {
+        padding: 0 20px;
+      }
+    }
+
+    &_l {
+      width: 100%;
+      @media screen and (min-width: 1024px) {
+        min-width: 230px; 
+      }
+    }
+  }
+    
+    &_auto {
+      min-width: auto;
+    }
+
+
   &_left {
-    // margin-left: auto
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
   }
   &_right {margin-right: initial;}
   &__hr {
@@ -115,29 +145,30 @@ const visibleDevice = computed(() => {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    &_s {
-      padding-left: 0px;
-      padding-right: 0px;
-      max-width: 70px;
-    }
+    // &_s {
+    //   padding-left: 0px;
+    //   padding-right: 0px;
+    //   max-width: 70px;
+    // }
 
-    &_m {
-      padding-left: 20px;
-      padding-right: 20px;
-      @media screen and (max-width: 480px) {
-        padding: 0 20px;
-      }
-    }
+    // &_m {
+    //   padding-left: 20px;
+    //   padding-right: 20px;
+    //   @media screen and (max-width: 480px) {
+    //     padding: 0 20px;
+    //   }
+    // }
 
-    &_l {
-      @media screen and (min-width: 1024px) {
-        min-width: 230px; 
-      }
-    }
+    // &_l {
+    //   width: 100%;
+    //   @media screen and (min-width: 1024px) {
+    //     min-width: 230px; 
+    //   }
+    // }
 
-    &_auto {
-      min-width: auto;
-    }
+    // &_auto {
+    //   min-width: auto;
+    // }
   }
 }
 </style>

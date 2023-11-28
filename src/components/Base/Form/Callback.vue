@@ -1,5 +1,5 @@
 <template>
-  <Container :form="form" thank="thankMail">
+  <Container :form="form" thank="thank" :goal="goal">
     <div class="field-row">
       <Field
         v-for="field in getTextFields(form)"
@@ -28,7 +28,7 @@
 </template>
   
   <script setup>
-    import { ref, inject } from "vue";
+    import { ref, inject, defineProps,  } from "vue";
     import Container from "./ui/Container.vue";
     import Field from "./ui/Field.vue";
     const props = defineProps({
@@ -36,6 +36,7 @@
         type: String,
         required: true,
       },
+      goal: String
     });
 
     const getTextFields = inject('getTextFields'); // подключаю плагин
@@ -64,9 +65,9 @@
 .field-row {
   display: flex;
   align-items: center;
-  &__field {
-    min-width: 273px;
-  }
+  // &__field {
+  //   min-width: 273px;
+  // }
   button {
     height: 40px;
     border: none;

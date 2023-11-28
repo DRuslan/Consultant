@@ -72,7 +72,7 @@ function calculateTimeAgo() {
 // склонения времени
 function getMinutesSuffix(minutes) {
   if (minutes >= 11 && minutes <= 19) {
-    return 'т';
+    return '';
   } else {
     const lastDigit = minutes % 10;
     switch (lastDigit) {
@@ -83,7 +83,7 @@ function getMinutesSuffix(minutes) {
       case 4:
         return 'ы';
       default:
-        return 'т';
+        return '';
     }
   }
 }
