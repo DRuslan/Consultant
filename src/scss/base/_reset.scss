@@ -1,5 +1,6 @@
 // ### Reset ###
-  html,
+.v-consultant {
+  box-sizing: border-box;
   body,
   div,
   span,
@@ -85,11 +86,7 @@
     padding: 0;
     vertical-align: baseline;
   }
-  
-  html {
-    box-sizing: border-box;
-  }
-  
+
   *,
   *:before,
   *:after {
@@ -110,9 +107,6 @@
   nav,
   section,
   summary,
-  main {
-    display: block;
-  }
   
   // Corrects inline-block display not defined in IE6/7/8/9 & FF3
   audio,
@@ -189,3 +183,4 @@
   button {
     cursor: pointer;
   }
+}
