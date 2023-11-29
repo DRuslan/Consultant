@@ -7,7 +7,7 @@
       <img :src="managerImage" alt="" />
     </div>
     <div class="msg__inner">
-      <div class="msg__created"><span>{{ formattedTimeAgo }}</span></div>
+      <div class="msg__created"><small>{{ formattedTimeAgo }}</small></div>
       <div :class="[{ msg__bot_message: role === 'bot' }, { msg__client_message: role === 'client' }]">
         <p>{{ msg }}</p>
       </div>
@@ -93,7 +93,8 @@ function getMinutesSuffix(minutes) {
 .msg {
   position: relative;
   p {
-    font-size: 14px !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
   }
   &__inner {
     display: flex;
@@ -101,13 +102,15 @@ function getMinutesSuffix(minutes) {
     position: relative;
   }
   &__created {
-    font-size: 12px;
     margin-bottom: 5px;
     position: absolute;
-    bottom: -25px;
+    bottom: -20px;
     right: 0;
     white-space: nowrap;
     opacity: .5;
+    small {
+      font-size: 11px !important;
+    }
   }
   &__bot {
     display: flex;

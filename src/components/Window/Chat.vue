@@ -29,10 +29,21 @@
           </transition-group>
           <transition name="fade">
             <p class="waiting" v-show="waitResponceBot || ignoreWaiting">
-              <span :style="{ color: $widjet().global.dopPrimary }">Артём набирает сообщение </span>
-              <span class="waiting__dot" :style="{ backgroundColor: $widjet().global.dopPrimary }"></span>
-              <span class="waiting__dot" :style="{ backgroundColor: $widjet().global.dopPrimary }"></span>
-              <span class="waiting__dot" :style="{ backgroundColor: $widjet().global.dopPrimary }"></span>
+              <span :style="{ color: $widjet().global.dopPrimary }"
+                >Артём набирает сообщение
+              </span>
+              <span
+                class="waiting__dot"
+                :style="{ backgroundColor: $widjet().global.dopPrimary }"
+              ></span>
+              <span
+                class="waiting__dot"
+                :style="{ backgroundColor: $widjet().global.dopPrimary }"
+              ></span>
+              <span
+                class="waiting__dot"
+                :style="{ backgroundColor: $widjet().global.dopPrimary }"
+              ></span>
             </p>
           </transition>
         </div>
@@ -47,6 +58,7 @@
               name="message"
               cols="30"
               rows="1"
+              class="chat__area"
               v-model="newMessage"
             ></textarea>
             <button type="submit">
@@ -80,25 +92,31 @@ const props = defineProps({
   script: Object,
 });
 
-const $cookies = inject('$cookies');
+const $cookies = inject("$cookies");
 const newMessage = ref(""); // Реактивная переменная для текстового поля
-const Chat = ref($cookies.get('chat') || []); // Реактивная переменная для всех сообщений
+const Chat = ref($cookies.get("chat") || []); // Реактивная переменная для всех сообщений
 const isMessageSend = ref(false); // Реактивная переменная для отслеживания ответа пользователя
 const countBotMessages = ref(0); // Количество ответов бота
 const chatContainerRef = ref(null); // Для отслеживания высоты чата и его скролла
-const createdAtMessageRef = ref(new Date()); // Реактивная переменная для отслеживания когда создано сообщение
 let sendClientMessage = ref(0);
 
-
-
-if (props.script !== null && props.script !== undefined) {
+// Проверка и присвоение первого сообщения
+if (props.script && !$cookies.get("firstMessage")) {
   const messageBotScript = props.script[countBotMessages.value]; // Сообщение от бота в скрипте
   Chat.value.push({
-    ...messageBotScript, 
-    createdAt: new Date()
+    ...messageBotScript,
+    createdAt: new Date(),
   });
   console.log(Chat.value);
 }
+
+watchEffect(() => {
+  if (props.isVisible) {
+    nextTick(() => {
+      scrollToBottom();
+    });
+  }
+});
 
 const send = (e) => {
   e.preventDefault();
@@ -120,25 +138,29 @@ const send = (e) => {
     firstMessageClient(sendClientMessage.value);
     checkText(newMessage.value.trim());
 
-      formData.append("Chat", JSON.stringify(Chat.value)); // подмешиваем данные с всего чата
-      axios.post('/api/send-chat', formData,
-    { 
-      withCredentials: true, 
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+    formData.append("Chat", JSON.stringify(Chat.value)); // подмешиваем данные с всего чата
+    axios
+      .post("/api/send-chat", formData, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     newMessage.value = "";
-    if (props.script[countBotMessages.value] != null && props.script[countBotMessages.value] !== undefined) {
-      setTimeout(function (){
-        console.log('isMessageSend.value = true; // Отслеживаем ответ пользователя');
+    if (
+      props.script[countBotMessages.value] != null &&
+      props.script[countBotMessages.value] !== undefined
+    ) {
+      setTimeout(function () {
+        console.log(
+          "isMessageSend.value = true; // Отслеживаем ответ пользователя"
+        );
         isMessageSend.value = true; // Отслеживаем ответ пользователя
-      }, 1500)
-      
+      }, 1500);
     } else {
       isMessageSend.value = false; // отключаем отслеживания так как длина маассива ответов от бота ограничена и если будут обращения то данных не будет
     }
@@ -146,44 +168,49 @@ const send = (e) => {
     console.log("Сообщение отправлено пользователем");
   }
 
-  $cookies.set('chat', Chat.value, '1d');
+  $cookies.set("chat", Chat.value, "1d");
 };
 
-const waitResponceBot = computed(() => {  
-    // Проверка на ответ пользователя и количетсво сообщений бота чтобы остановить логику отправки сообщений (так как длина массива ответов от бота огранина)
-    if (isMessageSend.value && countBotMessages.value < props.script.length - 1) {
-        // console.log("Пользователь ждет ответ на сообщение");
-        countBotMessages.value++;
-        sendBot();
-    } else {
-      isMessageSend.value = false;
-    }
-    return isMessageSend.value;
+const waitResponceBot = computed(() => {
+  // Проверка на ответ пользователя и количетсво сообщений бота чтобы остановить логику отправки сообщений (так как длина массива ответов от бота огранина)
+  if (isMessageSend.value && countBotMessages.value < props.script.length - 1) {
+    // console.log("Пользователь ждет ответ на сообщение");
+    countBotMessages.value++;
+    sendBot();
+  } else {
+    isMessageSend.value = false;
+  }
+  return isMessageSend.value;
 });
 
-let ignoreWaiting = ref(false)
+let ignoreWaiting = ref(false);
 async function sendBot() {
   const delayTimeMessage = props.script[countBotMessages.value].delay * 1000; // умножаем на 1000 для получения миллисекунд
   await delaysSendBot(delayTimeMessage);
   // Игнорирование ответов клиента
-  if (props.script[countBotMessages.value].ignore !== undefined && props.script[countBotMessages.value].ignore) {
+  if (
+    props.script[countBotMessages.value].ignore !== undefined &&
+    props.script[countBotMessages.value].ignore
+  ) {
     console.log("Игнорирование ответов клиента");
-    ignoreWaiting.value = true; // если игнор то точки тоже должны работать 
-    
+    ignoreWaiting.value = true; // если игнор то точки тоже должны работать
+
     await delaysSendBot(delayTimeMessage);
     Chat.value.push({
       ...props.script[countBotMessages.value],
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     countBotMessages.value++;
     if (countBotMessages.value < props.script.length) {
-      console.log("Отображаем следующее сообщение бота после игнорирования клиента");
+      console.log(
+        "Отображаем следующее сообщение бота после игнорирования клиента"
+      );
       // Вызываем delaysSendBot для следующего сообщения
       await delaysSendBot(delayTimeMessage);
 
       Chat.value.push({
         ...props.script[countBotMessages.value],
-        createdAt: new Date()
+        createdAt: new Date(),
       });
       isMessageSend.value = false;
       ignoreWaiting.value = false;
@@ -196,23 +223,26 @@ async function sendBot() {
     console.log("Пользователь получил ответ на сообщение");
     Chat.value.push({
       ...props.script[countBotMessages.value],
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     isMessageSend.value = false;
     scrollLastMessage();
   }
-
+  $cookies.set("chat", Chat.value, "1d");
   return countBotMessages.value;
 }
 
-function delaysSendBot (ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+function delaysSendBot(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function scrollLastMessage () {
-  // Следим за изменениями во всех сообщениях и прокручиваем вниз 
+function scrollLastMessage() {
+  // Следим за изменениями во всех сообщениях и прокручиваем вниз
   watchEffect(() => {
     nextTick(() => {
+      if (props.isVisible) {
+        scrollToBottom();
+      }
       scrollToBottom();
     });
   });
@@ -233,43 +263,40 @@ function generateUniqueId() {
 
 // проверка текста на наличее телеофна или почты
 function checkText(text) {
-    // Регулярное выражение для поиска номеров телефонов
-    // const phoneRegex = /(\+7|8)[\s\-]?\(?(\d{3})\)?[\s\-]?(\d{3})[\s\-]?(\d{2})[\s\-]?(\d{2})/g;
-    const phoneRegex = /(\+7|8)[\s\-]?\(?\d{3}\)?[\s\- ⁠ ]?\d{3}[\s\- ⁠ ]?\d{2}[\s\- ⁠ ]?\d{2}/g;
-  
-    // Регулярное выражение для поиска адресов электронной почты
-    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+  const phoneRegex =
+    /(\+7|8)[\s\-]?\(?\d{3}\)?[\s\- ⁠ ]?\d{3}[\s\- ⁠ ]?\d{2}[\s\- ⁠ ]?\d{2}/g;
+  const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
 
-    // Поиск номеров телефонов
-    let phoneMatches = text.match(phoneRegex);
-    if (phoneMatches) {
-        // Удаление лишних пробелов
-        phoneMatches = phoneMatches.map(phone => phone.replace(/\s/g, ''));
-        console.log("Номер(а) телефона найден(ы):", phoneMatches);
-        window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
-    } else {
-        console.log("Номер(а) телефона не найден(ы)");
-    }
+  // Поиск номеров телефонов
+  let phoneMatches = text.match(phoneRegex);
+  if (phoneMatches) {
+    // Удаление лишних пробелов
+    phoneMatches = phoneMatches.map((phone) => phone.replace(/\s/g, ""));
+    console.log("Номер(а) телефона найден(ы):", phoneMatches);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+  } else {
+    console.log("Номер(а) телефона не найден(ы)");
+  }
 
-    // Поиск адресов электронной почты
-    let emailMatches = text.match(emailRegex);
-    if (emailMatches) {
-        console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
-        window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
-    } else {
-        console.log("Адрес(а) электронной почты не найден(ы)");
-    }
+  // Поиск адресов электронной почты
+  let emailMatches = text.match(emailRegex);
+  if (emailMatches) {
+    console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+  } else {
+    console.log("Адрес(а) электронной почты не найден(ы)");
+  }
 }
 
 // Проверка отправки 1 сообщения для цели
 function firstMessageClient(sendCount) {
-    sendCount++;
-    if (sendCount === 1 && !$cookies.get('firstMessage')) {
-      console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
-      window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
-      $cookies.set('firstMessage', sendCount, '1d');
-    }
+  sendCount++;
+  if (sendCount === 1 && !$cookies.get("firstMessage")) {
+    console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
+    $cookies.set("firstMessage", sendCount, "1d");
   }
+}
 </script>
     
 <style lang="scss" scoped>
@@ -367,6 +394,11 @@ function firstMessageClient(sendCount) {
       // padding: 12px;
     }
   }
+  &__area {
+    &:focus {
+      box-shadow: 0px 0px 5px rgba(56, 169, 240, 0.75);
+    }
+  }
 }
 
 .waiting {
@@ -386,8 +418,8 @@ function firstMessageClient(sendCount) {
     height: 5px;
     border-radius: 50%;
     margin: 0 2px;
-    animation: bounce 1.2s infinite ease-in-out;  
-  
+    animation: bounce 1.2s infinite ease-in-out;
+
     &:nth-child(2) {
       animation-delay: 0.4s;
     }
@@ -396,12 +428,12 @@ function firstMessageClient(sendCount) {
       animation-delay: 0.8s;
     }
   }
-
-  
 }
 
 @keyframes bounce {
-  0%, 80%, 100% {
+  0%,
+  80%,
+  100% {
     transform: scale(0);
   }
   40% {

@@ -1,5 +1,5 @@
 <template>
-  <div class="field">
+  <div class="field" v-if="!hidden">
   <textarea
     v-if="name === 'Сообщение'"
     :type="type"
@@ -67,6 +67,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  hidden: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -93,7 +97,7 @@ const onInput = (event) => {
 
   &::placeholder {
     color: gray;
-    font-size: 14px;
+    font-size: 12px !important;
   }
 
   &__error {
@@ -124,6 +128,10 @@ const onInput = (event) => {
 
   &__size_l {
     padding: 17px 32px;
+  }
+  &__size_full {
+    padding: 17px 32px;
+    width: 100%;
   }
 }
 

@@ -11,6 +11,7 @@
         :errorMessage="field.errorMessage"
         :rules="field.rules"
         :name="field.name"
+        :hidden="field.hidden"
         type="text"
         class="field-row__field"
     />
@@ -45,6 +46,7 @@
         type: "text",
         name: "Name",
         value: "krible-comeback",
+        hidden: true
       },
       Phone: {
         type: "text",
@@ -61,6 +63,7 @@
 .field {
   margin-right: 12px;
   max-width: 273px;
+  width: 100%;
 }
 .field-row {
   display: flex;
