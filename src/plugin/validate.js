@@ -59,15 +59,15 @@ export default {
               console.log('Форма не прошла проверку');
               // console.log("Ошибка валидации формы: "+formattedErrorMsg);
             } else {
-              fieldCurrent.error = '';
+              fieldCurrent.errorMessage = '';
             }
           });
         }
       })
       // обработка если данные валидные (НАВЕРНОЕ!!!?)
       return Object.values(form).every((item) => {
-          if (Object.hasOwn(item, 'error')) {
-              return !item.error.length;
+          if (Object.hasOwn(item, 'errorMessage')) {
+              return !item.errorMessage.length;
           }
           return true;
       });
