@@ -26,7 +26,7 @@ export default function useForm(form, thank, goal) {
           }
 
           // ловим цели
-          // getYandexGoal(goal);
+          getYandexGoal(goal);
     
           axios
             .post("/api/send-lead/bpm", formData, {withCredentials: true})
