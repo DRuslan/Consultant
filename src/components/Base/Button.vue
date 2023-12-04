@@ -43,6 +43,7 @@ export default {
     opacity: 0.4;
     // cursor: not-allowed;
     background: #5b5b5b;
+    pointer-events: none;
   }
 
   &__text {

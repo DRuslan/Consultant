@@ -1,5 +1,5 @@
 <template>
-  <div class="field" v-if="!hidden">
+  <div class="field" :style="hidden ? 'display: none': ''">
   <textarea
     v-if="name === 'Сообщение'"
     :type="type"
@@ -16,7 +16,7 @@
     ]"
   ></textarea>
   <input
-    v-else-if="name === 'Name' || name === 'Site' || name === 'Country'"
+    v-else-if="name === 'Name' || name === 'Site' || name === 'Country' || name === 'File'"
     type="hidden"
     :placeholder="placeholder"
     :value="value"
@@ -148,7 +148,7 @@ const onInput = (event) => {
   }
   &::placeholder {
     color: gray;
-    font-size: 14px;
+    font-size: 12px;
   }
   &__error {
     border-color: red;

@@ -9,7 +9,6 @@ export default function useForm(form, thank, goal) {
     const send = () => {
           // Валидация по праввилам в полях
           if (!validate(form)) {
-            console.log('if (validate(form))');
             return true;
           }
 
@@ -27,7 +26,7 @@ export default function useForm(form, thank, goal) {
           }
 
           // ловим цели
-          getYandexGoal(goal);
+          // getYandexGoal(goal);
     
           axios
             .post("/api/send-lead/bpm", formData, {withCredentials: true})
@@ -36,17 +35,15 @@ export default function useForm(form, thank, goal) {
                 openModal(thank ? thank : "thank");
             })
             .catch((error) => {
-              console.log(error);
+              console.error(error);
             });
         };
 
         function getYandexGoal (ymGoal) {
           if (ymGoal) {
-            console.log('goal ' + goal);
-            console.log('ymGoal ' + ymGoal);
             window.ym(80162764, 'reachGoal', ymGoal);
           } else {
-            console.log('цель не присвоена');
+            console.error('цель не присвоена');
           }
         }
     

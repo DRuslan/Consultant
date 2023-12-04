@@ -11,6 +11,7 @@
       :rules="field.rules"
       :name="field.name"
       :rows="field.rows"
+      :hidden="field.hidden"
       type="text"
     />
     <div class="field-row">
@@ -39,6 +40,7 @@ const form = ref({
     type: "text",
     name: "Name",
     value: "krible-fast-mail",
+    hidden: true
   },
   Email: {
     type: "text",
@@ -57,6 +59,14 @@ const form = ref({
     errorMessage: "",
     rows: 7
   },
+  File: {
+    type: "file",
+    name: "File",
+    placeholder: "",
+    value: "",
+    rules: [],
+    errorMessage: "",
+  }
 });
 
 const textFields = ref(getTextFields(form.value)); // делаю реактивным поля из плагина

@@ -99,13 +99,30 @@ const isMessageSend = ref(false); // Реактивная переменная �
 const countBotMessages = ref(0); // Количество ответов бота
 const chatContainerRef = ref(null); // Для отслеживания высоты чата и его скролла
 let sendClientMessage = ref(0);
+// Текущие дата и время
+const currentData = new Date();
+// Получить часовой пояс клиента
+const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+const formatter = new Intl.DateTimeFormat('ru', {
+  timeZone: userTimeZone,
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+});
+
+// Преобразовать время в строку с учетом часового пояса пользователя
+const formattedDate = formatter.format(currentData);
 
 // Проверка и присвоение первого сообщения
 if (props.script && !$cookies.get("firstMessage")) {
   const messageBotScript = props.script[countBotMessages.value]; // Сообщение от бота в скрипте
   Chat.value.push({
     ...messageBotScript,
-    createdAt: new Date(),
+    createdAt: formattedDate,
   });
   console.log(Chat.value);
 }
@@ -129,7 +146,7 @@ const send = (e) => {
   if (newMessage.value.trim() !== "") {
     Chat.value.push({
       id: generateUniqueId(),
-      createdAt: new Date(),
+      createdAt: formattedDate,
       message: newMessage.value,
       role: "client",
     });
@@ -198,7 +215,7 @@ async function sendBot() {
     await delaysSendBot(delayTimeMessage);
     Chat.value.push({
       ...props.script[countBotMessages.value],
-      createdAt: new Date(),
+      createdAt: formattedDate,
     });
     countBotMessages.value++;
     if (countBotMessages.value < props.script.length) {
@@ -210,7 +227,7 @@ async function sendBot() {
 
       Chat.value.push({
         ...props.script[countBotMessages.value],
-        createdAt: new Date(),
+        createdAt: formattedDate,
       });
       isMessageSend.value = false;
       ignoreWaiting.value = false;
@@ -223,7 +240,7 @@ async function sendBot() {
     console.log("Пользователь получил ответ на сообщение");
     Chat.value.push({
       ...props.script[countBotMessages.value],
-      createdAt: new Date(),
+      createdAt: formattedDate,
     });
     isMessageSend.value = false;
     scrollLastMessage();

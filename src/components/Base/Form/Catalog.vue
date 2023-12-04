@@ -12,6 +12,7 @@
       :rules="field.rules"
       :name="field.name"
       :rows="field.rows"
+      :hidden="field.hidden"
       type="text"
     />
     
@@ -52,6 +53,7 @@ const form = ref({
     type: "text",
     name: "Name",
     value: "krible-catalog",
+    hidden: true
   },
   Phone: {
     type: "tel",

@@ -55,8 +55,8 @@ export default {
 
               fieldCurrent.errorMessage = formattedErrorMsg;
               
-              console.log('fieldCurrent', fieldCurrent);
-              console.log('Форма не прошла проверку');
+              // console.log('fieldCurrent', fieldCurrent);
+              // console.log('Форма не прошла проверку');
               // console.log("Ошибка валидации формы: "+formattedErrorMsg);
             } else {
               fieldCurrent.errorMessage = '';
