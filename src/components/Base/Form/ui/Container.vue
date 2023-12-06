@@ -8,7 +8,7 @@
 
 <script setup>
 import useForm from '../../../../composables/useForm'
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 
 const props = defineProps({
   thank: String,
@@ -17,8 +17,20 @@ const props = defineProps({
     required: true,
   },
   goal: String,
+  dopFields: {
+    type: Object,
+    default: null
+  }
 });
-const composableForm = useForm(props.form, props.thank, props.goal);
+
+const globalParamsForm = ref(props.dopFields);
+console.log(globalParamsForm);
+console.log(globalParamsForm);
+console.log(globalParamsForm);
+console.log(globalParamsForm);
+
+
+const composableForm = useForm(props.form, props.thank, props.goal, globalParamsForm.value);
 </script>
 
 <style>

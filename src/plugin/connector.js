@@ -9,7 +9,7 @@ export default {
     Vue.config.globalProperties.$widjet = function(params) {
       if (params && !isEmpty(params)) {
         initWidjet = params;
-      }
+      } 
       return initWidjet
     }
 

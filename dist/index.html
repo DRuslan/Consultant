@@ -14,6 +14,17 @@
                 backPrimary: "#3B6EC7",
                 backSecondary: "#FFFFFF",
                 backAccent: "#CCCCCC",
+                data: { 
+                    // allUTM: typeof allUTM !== 'undefined' ? allUTM : '',
+                    // City: typeof geoInfo !== 'undefined' ? geoInfo.city : 'Москва',
+                    // Region: typeof geoInfo !== 'undefined' ? geoInfo.region : 'Московская область',
+                    // Country: typeof geoInfo !== 'undefined' ? geoInfo.country : 'Россия',
+                    allUTM: allUTM,
+                    City: geoInfo.city,
+                    Region: geoInfo.region,
+                    Country: geoInfo.country,
+                    subId: localStorage.getItem('sub_id')
+                }
             },
             contact: {
                 button: {

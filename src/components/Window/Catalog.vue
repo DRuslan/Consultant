@@ -29,7 +29,7 @@
             <p class="window__title">
                 Укажите данные <Icon size="s" :icon-name="activeMessenger.icon" /> {{ activeMessenger.name }} для отправки каталога
             </p>
-            <CatalogForm @backStep="backMessenger" :goal="dataWindow.yandex.goal"></CatalogForm>
+            <CatalogForm @backStep="backMessenger" :goal="dataWindow.yandex.goal" />
         </div>
       </div>
       <div
@@ -45,6 +45,7 @@ import Wrapper from "./WindowWrapper.vue";
 import Icon from "../Base/Icon.vue";
 import CatalogForm from "../Base/Form/Catalog.vue";
 import { defineProps, ref } from "vue";
+
 
 const props = defineProps({
   isVisible: Boolean,

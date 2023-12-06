@@ -107,11 +107,6 @@ const onInput = (event) => {
   &__disabled {
     cursor: not-allowed;
     background: #8e959b;
-    &:hover,
-    &:focus {
-      border-color: orange;
-      background: orange;
-    }
   }
 
   &:focus {

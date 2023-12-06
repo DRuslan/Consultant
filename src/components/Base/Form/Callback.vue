@@ -1,5 +1,5 @@
 <template>
-  <Container :form="form" thank="thank" :goal="goal">
+  <Container :form="form" thank="thank" :goal="goal" :dopFields="$widjet() ? $widjet().global.data : null">
     <div class="field-row">
       <Field
         v-for="field in getTextFields(form)"
