@@ -40,6 +40,7 @@ export default {
               if (field.name === 'Name' || field.name === 'Site') {
                 continue;
               }
+              console.log(field.value.length);
               if (field.value.length > 0) {
                 return true;
               }

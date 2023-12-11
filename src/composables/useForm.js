@@ -16,22 +16,16 @@ export default function useForm(form, thank, goal, dataGlobals) {
           formData.append("Site", location.href);
           formData.append("Political", true);
           formData.append("allUTM", dataGlobals.allUTM);
-          formData.append("City", dataGlobals.city);
-          formData.append("Region", dataGlobals.subdivision);
-          formData.append("Country", dataGlobals.country);
+          formData.append("City", dataGlobals.geoInfo.city);
+          formData.append("Region", dataGlobals.geoInfo.subdivision);
+          formData.append("Country", dataGlobals.geoInfo.country);
     
           // перебираем поля в форме с актальный value
           for (const key in form) {
             const value = form[key].value;
-            if (value != null && value !== "" && key !== "File") {
+            if (value != null && value !== "") {
               formData.append(key, value);
-              console.log('file NOT');
             } 
-
-            if (key === "File" && value instanceof File) {
-              console.log('file YES');
-              formData.append("File", value, value.name);
-            }
           }
 
           // ловим цели
