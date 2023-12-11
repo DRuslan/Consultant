@@ -7,7 +7,7 @@
       <label class="input-file__sendfile" :style="{ color: $widjet().global.dopPrimary }">
         <input
           type="file"
-          accept="image/*,application/pdf"
+          accept="image/*,application/pdf, .doc, .docx, .xlsx"
           @change="onInput"
           :disabled="disabled"
         />

@@ -23,9 +23,14 @@ export default function useForm(form, thank, goal, dataGlobals) {
           // перебираем поля в форме с актальный value
           for (const key in form) {
             const value = form[key].value;
-            // console.log(form[key].value);
-            if (value != null && value !== "") {
+            if (value != null && value !== "" && key !== "File") {
               formData.append(key, value);
+              console.log('file NOT');
+            } 
+
+            if (key === "File" && value instanceof File) {
+              console.log('file YES');
+              formData.append("File", value, value.name);
             }
           }
 
