@@ -24,11 +24,6 @@ const props = defineProps({
 });
 
 const globalParamsForm = ref(props.dopFields);
-console.log(globalParamsForm);
-console.log(globalParamsForm);
-console.log(globalParamsForm);
-console.log(globalParamsForm);
-
 
 const composableForm = useForm(props.form, props.thank, props.goal, globalParamsForm.value);
 </script>

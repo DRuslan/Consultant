@@ -15,10 +15,10 @@ export default function useForm(form, thank, goal, dataGlobals) {
           const formData = new FormData(); // Constructor JS (Form building)
           formData.append("Site", location.href);
           formData.append("Political", true);
-          formData.append("allUTM", dataGlobals.allUtm);
-          formData.append("City", dataGlobals.City);
-          formData.append("Region", dataGlobals.Region);
-          formData.append("Country", dataGlobals.Country);
+          formData.append("allUTM", dataGlobals.allUTM);
+          formData.append("City", dataGlobals.city);
+          formData.append("Region", dataGlobals.subdivision);
+          formData.append("Country", dataGlobals.country);
     
           // перебираем поля в форме с актальный value
           for (const key in form) {

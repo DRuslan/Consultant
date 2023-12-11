@@ -8,7 +8,7 @@
         <input
           type="file"
           accept="image/*,application/pdf"
-          @input="onInput"
+          @change="onInput"
           :disabled="disabled"
         />
         <Icon size="s" iconName="pin" />
@@ -89,30 +89,30 @@ export default {
       }
       this.$emit("update:modelValue", this.selectedFile);
     },
-    // onFileSelected(event) {
-    //   const file = event.target.files[0];
-    //   if (file) {
-    //     const fileType = file.type;
-    //     if (
-    //       fileType === "image/jpeg" ||
-    //       fileType === "image/jpg" ||
-    //       fileType === "image/png" ||
-    //       fileType === "image/heic" ||
-    //       fileType === "application/pdf"
-    //     ) {
-    //       this.selectedFile = file;
-    //       alert("Файл успешно выбран");
-    //     } else {
-    //       alert(
-    //         "Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF"
-    //       );
-    //       this.selectedFile = null;
-    //     }
-    //   } else {
-    //     this.selectedFile = null;
-    //   }
-    //   this.$emit("update:modelValue", this.selectedFile);
-    // },
+    onFileSelected(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const fileType = file.type;
+        if (
+          fileType === "image/jpeg" ||
+          fileType === "image/jpg" ||
+          fileType === "image/png" ||
+          fileType === "image/heic" ||
+          fileType === "application/pdf"
+        ) {
+          this.selectedFile = file;
+          alert("Файл успешно выбран");
+        } else {
+          alert(
+            "Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF"
+          );
+          this.selectedFile = null;
+        }
+      } else {
+        this.selectedFile = null;
+      }
+      this.$emit("update:modelValue", this.selectedFile);
+    },
   },
   computed: {
     getFileName() {
@@ -127,8 +127,12 @@ export default {
 .input-file {
   position: relative;
   &__sendfile {
-    cursor: not-allowed;
-    pointer-events: none;
+    // cursor: not-allowed;
+    // pointer-events: none;
+    transition: all .3s ease-in-out;
+    &:hover {
+      opacity: .67;
+    }
   }
   &__button {
     overflow: hidden;

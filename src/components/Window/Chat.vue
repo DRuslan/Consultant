@@ -116,6 +116,7 @@ const formatter = new Intl.DateTimeFormat('ru', {
 
 // Преобразовать время в строку с учетом часового пояса пользователя
 const formattedDate = formatter.format(currentData);
+console.log(formattedDate);
 
 // Проверка и присвоение первого сообщения
 if (props.script && !$cookies.get("firstMessage")) {
@@ -124,7 +125,6 @@ if (props.script && !$cookies.get("firstMessage")) {
     ...messageBotScript,
     createdAt: formattedDate,
   });
-  console.log(Chat.value);
 }
 
 watchEffect(() => {
@@ -290,7 +290,7 @@ function checkText(text) {
     // Удаление лишних пробелов
     phoneMatches = phoneMatches.map((phone) => phone.replace(/\s/g, ""));
     console.log("Номер(а) телефона найден(ы):", phoneMatches);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   } else {
     console.log("Номер(а) телефона не найден(ы)");
   }
@@ -299,7 +299,7 @@ function checkText(text) {
   let emailMatches = text.match(emailRegex);
   if (emailMatches) {
     console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   } else {
     console.log("Адрес(а) электронной почты не найден(ы)");
   }
@@ -310,7 +310,7 @@ function firstMessageClient(sendCount) {
   sendCount++;
   if (sendCount === 1 && !$cookies.get("firstMessage")) {
     console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
     $cookies.set("firstMessage", sendCount, "1d");
   }
 }

@@ -34,7 +34,7 @@ const props = defineProps({
     validator: (value) => ["bot", "client"].includes(value),
   },
   createdAt: {
-    type: Object,
+    type: String,
   },
   managerImage: {
     type: String,
@@ -42,7 +42,6 @@ const props = defineProps({
 });
 
 const formattedTimeAgo = ref(""); // Инициализируем значение
-
 // Функция, которая будет вызываться каждую минуту
 const updateFormattedTimeAgo = () => {
   formattedTimeAgo.value = calculateTimeAgo();
@@ -55,8 +54,26 @@ setInterval(updateFormattedTimeAgo, 60000);
 updateFormattedTimeAgo();
 
 function calculateTimeAgo() {
+  // Получить часовой пояс клиента
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const formatter = new Intl.DateTimeFormat('ru', {
+    timeZone: userTimeZone,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  });
+
+  // Преобразовать строку в объект Date с явным указанием формата
+  const messageTime = new Date(props.createdAt.replace(/(\d{2}).(\d{2}).(\d{4}), (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
+
+  const formattedTime = formatter.format(messageTime);
+
+  console.log(formattedTime, messageTime);
+
   const currentTime = new Date();
-  const messageTime = new Date(props.createdAt);
   const timeDifference = Math.floor((currentTime - messageTime) / 1000);
 
   if (timeDifference < 60) {
@@ -68,6 +85,7 @@ function calculateTimeAgo() {
     return 'Давно';
   }
 }
+
 
 // склонения времени
 function getMinutesSuffix(minutes) {
