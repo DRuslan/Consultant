@@ -7,6 +7,8 @@
       <img :src="managerImage" alt="" />
     </div>
     <div class="msg__inner">
+      {{ createdAt }}
+      {{ new Date() }}
       <div class="msg__created"><small>{{ formattedTimeAgo }}</small></div>
       <div :class="[{ msg__bot_message: role === 'bot' }, { msg__client_message: role === 'client' }]">
         <p>{{ msg }}</p>
@@ -34,7 +36,7 @@ const props = defineProps({
     validator: (value) => ["bot", "client"].includes(value),
   },
   createdAt: {
-    type: Object,
+    type: String,
   },
   managerImage: {
     type: String,
@@ -56,9 +58,12 @@ updateFormattedTimeAgo();
 
 function calculateTimeAgo() {
   const currentTime = new Date();
-  const messageTime = new Date(props.createdAt);
-  const timeDifference = Math.floor((currentTime - messageTime) / 1000);
+  const messageTime = props.createdAt;
+  
+  const formattedDate = formatter.format(currentData);
 
+
+  const timeDifference = Math.floor((currentTime - messageTime) / 1000);
   if (timeDifference < 60) {
     return 'Только что';
   } else if (timeDifference < 1800) {

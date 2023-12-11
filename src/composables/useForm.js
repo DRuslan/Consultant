@@ -1,9 +1,7 @@
 import axios from "axios";
-import { inject, ref } from "vue";
+import { inject } from "vue";
 import { openModal } from "../store/modals";
 export default function useForm(form, thank, goal, dataGlobals) {
-    const isProcessing = ref(false)
-
     const validate = inject("validate"); // подключаю плагин validate.js
     const resetForm = inject("resetForm"); // подключаю плагин formsHelper.js
     const send = () => {
@@ -15,10 +13,11 @@ export default function useForm(form, thank, goal, dataGlobals) {
           const formData = new FormData(); // Constructor JS (Form building)
           formData.append("Site", location.href);
           formData.append("Political", true);
-          formData.append("allUTM", dataGlobals.allUtm);
-          formData.append("City", dataGlobals.City);
-          formData.append("Region", dataGlobals.Region);
-          formData.append("Country", dataGlobals.Country);
+          formData.append("allUTM", dataGlobals.allUTM);
+          formData.append("City", dataGlobals.geoInfo.city);
+          formData.append("Region", dataGlobals.geoInfo.subdivision);
+          formData.append("Country", dataGlobals.geoInfo.country);
+          formData.append("subId", dataGlobals.subId);
     
           // перебираем поля в форме с актальный value
           for (const key in form) {
@@ -30,7 +29,7 @@ export default function useForm(form, thank, goal, dataGlobals) {
           }
 
           // ловим цели
-          // getYandexGoal(goal);
+          getYandexGoal(goal);
     
           axios
             .post("/api/send-lead/bpm", formData, {withCredentials: true})

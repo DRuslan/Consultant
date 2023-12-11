@@ -9,6 +9,13 @@ import App from '../App.vue';
 import '../scss/app.scss'
 const app = createApp(App);
 // const fieldType = 'text'; // для инпутов в плагине где идет перебор все полей
+
+/* 
+    написать функцию которая будет использоваться в проде
+    чтобы опредлить когда обьект данных готов и когда можно отрисовывать консультант
+    вызвать эту функцию нужно будет в default.blade.php !!! 
+*/ 
+
 app.use(WidjetConnect);
 app.use(formsHelper);
 // app.use(formsHelper, { fieldType });

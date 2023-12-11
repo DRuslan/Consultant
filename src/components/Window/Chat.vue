@@ -90,6 +90,10 @@ const props = defineProps({
   figurePos: String,
   positionX: Number,
   script: Object,
+  dopFields: {
+    type: Object,
+    default: null
+  }
 });
 
 const $cookies = inject("$cookies");
@@ -103,6 +107,7 @@ let sendClientMessage = ref(0);
 const currentData = new Date();
 // Получить часовой пояс клиента
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const globalParamsForm = ref(props.dopFields);
 
 const formatter = new Intl.DateTimeFormat('ru', {
   timeZone: userTimeZone,
@@ -117,6 +122,8 @@ const formatter = new Intl.DateTimeFormat('ru', {
 // Преобразовать время в строку с учетом часового пояса пользователя
 const formattedDate = formatter.format(currentData);
 
+let ChatContactData = ref(false);
+
 // Проверка и присвоение первого сообщения
 if (props.script && !$cookies.get("firstMessage")) {
   const messageBotScript = props.script[countBotMessages.value]; // Сообщение от бота в скрипте
@@ -124,7 +131,6 @@ if (props.script && !$cookies.get("firstMessage")) {
     ...messageBotScript,
     createdAt: formattedDate,
   });
-  console.log(Chat.value);
 }
 
 watchEffect(() => {
@@ -141,6 +147,12 @@ const send = (e) => {
   const formData = new FormData(); // Constructor JS (Form building)
   formData.append("Site", location.href);
   formData.append("Name", "krible-chat");
+  formData.append("allUTM", globalParamsForm.value.allUTM);
+  formData.append("City", globalParamsForm.value.geoInfo.city);
+  formData.append("Region", globalParamsForm.value.geoInfo.subdivision);
+  formData.append("Country", globalParamsForm.value.geoInfo.country);
+  formData.append("subId", globalParamsForm.value.subId);
+  formData.append("ChatContactData", ChatContactData.value);
 
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "") {
@@ -173,16 +185,12 @@ const send = (e) => {
       props.script[countBotMessages.value] !== undefined
     ) {
       setTimeout(function () {
-        console.log(
-          "isMessageSend.value = true; // Отслеживаем ответ пользователя"
-        );
         isMessageSend.value = true; // Отслеживаем ответ пользователя
       }, 1500);
     } else {
       isMessageSend.value = false; // отключаем отслеживания так как длина маассива ответов от бота ограничена и если будут обращения то данных не будет
     }
     scrollLastMessage();
-    console.log("Сообщение отправлено пользователем");
   }
 
   $cookies.set("chat", Chat.value, "1d");
@@ -191,7 +199,6 @@ const send = (e) => {
 const waitResponceBot = computed(() => {
   // Проверка на ответ пользователя и количетсво сообщений бота чтобы остановить логику отправки сообщений (так как длина массива ответов от бота огранина)
   if (isMessageSend.value && countBotMessages.value < props.script.length - 1) {
-    // console.log("Пользователь ждет ответ на сообщение");
     countBotMessages.value++;
     sendBot();
   } else {
@@ -209,7 +216,6 @@ async function sendBot() {
     props.script[countBotMessages.value].ignore !== undefined &&
     props.script[countBotMessages.value].ignore
   ) {
-    console.log("Игнорирование ответов клиента");
     ignoreWaiting.value = true; // если игнор то точки тоже должны работать
 
     await delaysSendBot(delayTimeMessage);
@@ -219,9 +225,6 @@ async function sendBot() {
     });
     countBotMessages.value++;
     if (countBotMessages.value < props.script.length) {
-      console.log(
-        "Отображаем следующее сообщение бота после игнорирования клиента"
-      );
       // Вызываем delaysSendBot для следующего сообщения
       await delaysSendBot(delayTimeMessage);
 
@@ -232,12 +235,9 @@ async function sendBot() {
       isMessageSend.value = false;
       ignoreWaiting.value = false;
       scrollLastMessage();
-    } else {
-      console.log("Больше сообщений бота нет.");
     }
   } else {
     // отправляем сообщение от (бота)
-    console.log("Пользователь получил ответ на сообщение");
     Chat.value.push({
       ...props.script[countBotMessages.value],
       createdAt: formattedDate,
@@ -289,19 +289,15 @@ function checkText(text) {
   if (phoneMatches) {
     // Удаление лишних пробелов
     phoneMatches = phoneMatches.map((phone) => phone.replace(/\s/g, ""));
-    console.log("Номер(а) телефона найден(ы):", phoneMatches);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
-  } else {
-    console.log("Номер(а) телефона не найден(ы)");
+    ChatContactData.value = true;
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   }
 
   // Поиск адресов электронной почты
   let emailMatches = text.match(emailRegex);
   if (emailMatches) {
-    console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
-  } else {
-    console.log("Адрес(а) электронной почты не найден(ы)");
+    ChatContactData.value = true;
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   }
 }
 
@@ -309,8 +305,7 @@ function checkText(text) {
 function firstMessageClient(sendCount) {
   sendCount++;
   if (sendCount === 1 && !$cookies.get("firstMessage")) {
-    console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
     $cookies.set("firstMessage", sendCount, "1d");
   }
 }

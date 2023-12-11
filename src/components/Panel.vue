@@ -1,3 +1,172 @@
+<script setup>
+import { defineProps, onMounted, ref, computed, onBeforeUnmount, inject } from "vue";
+
+import PanelCol from "./PanelCol.vue";
+import WidjetLink from "./WidjetLink.vue";
+import WidjetDefault from "./WidjetDefault.vue";
+import WidjetSocial from "./WidjetSocial.vue";
+import WindowContact from "./Window/Contact.vue";
+import WindowFast from "./Window/Fast.vue";
+import WindowCatalog from "./Window/Catalog.vue";
+import WindowManager from "./Window/Manager.vue";
+import WindowChat from "./Window/Chat.vue";
+import Feedback from "./Base/Form/Feedback.vue";
+import ModalsContainer from "./Base/Modals/ModalContainer.vue";
+import audioNotification from "../audio/whatsapp_web.mp3";
+import { openModal } from "../store/modals";
+
+const props = defineProps({
+  entryData: {
+    type: Object,
+    required: true,
+  },
+});
+
+const widthDevice = ref(window.innerWidth);
+const isWindowVisible = ref(false);
+const windowType = ref(""); // Переменная для определения типа окна
+const audio = new Audio(audioNotification);
+const notificationMessage = ref(false);
+let windowPosition = ref(null);
+// передаем координаты и показываем чат автоматом
+const mangerElement = ref(null);
+// local storage autoMode
+const autoShowChat = ref(true); 
+// Session storage comeback
+let isComeback = sessionStorage.getItem("comeback");
+
+// function showWindow(event, type) {
+//   const el = event.target; // панель по которой кликнули
+//   const elTargetLeft = el.getBoundingClientRect().left;
+//   // Если тип окна уже открыт, то закрываем его
+//   if (windowType.value === type) {
+//     windowType.value = '';
+//     isWindowVisible.value = false;
+//   } else {
+//     windowPosition.value = elTargetLeft;
+//     elOutViewport(windowPosition.value);
+//     windowType.value = type;
+//     isWindowVisible.value = true;
+//     localStorage.setItem("managerDisabled", true);
+//     autoShowChat.value = false;
+//   }
+// }
+
+// if (localStorage.getItem("chatAutoMode")) {
+//   autoShowChat.value = false;
+// }
+
+// onMounted(() => {
+//   if (autoShowChat.value) {
+//     console.log('mangerElement.value');
+//     console.log(mangerElement.value.getBoundingClientRect().left);
+//     autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
+//   }
+
+//   if (isComeback === null || isComeback !== "false") {
+//     document.addEventListener("mouseleave", comeback);
+//   }
+
+//   if (localStorage.getItem('managerDisabled') === 'true') {
+//     managerExecuted.value = 'Chat'
+//   } 
+
+//   if (isComeback === null && widthDevice.value >= 768 || isComeback !== "false" && widthDevice.value >= 768) {
+//     setTimeout(() => {
+//       comeback();
+//     }, 120000)
+//   }
+
+//   window.addEventListener("resize", handleResize);
+// });
+
+// onBeforeUnmount(() => {
+//   window.removeEventListener("mouseleave", comeback);
+//   window.removeEventListener("resize", handleResize);
+// });
+
+// // вычисляем сценарий переписки
+// const outputScript = computed(() => autoShowChat.value ? props.entryData.autoMessage[1].script : props.entryData.autoMessage[0].script);
+
+// let showWindowChatExecuted = ref(false); // был ли открыт чат
+// let managerExecuted = ref('Manager_1'); // был ли открыт манагер
+
+// function showWindowChat() {
+//   if (!showWindowChatExecuted.value) {
+//     autoShowChat.value = false;
+//     isWindowVisible.value = true;
+//     localStorage.setItem("chatAutoMode", autoShowChat.value);
+//   }
+//   if (autoShowChat.value === true) {
+//     localStorage.setItem("chatAutoMode", autoShowChat.value);
+//   }
+
+//   if (managerExecuted.value === 'Manager_1' && localStorage.getItem('managerExecuted') === 'false' || localStorage.getItem('managerExecuted') === null) {
+//     localStorage.setItem("managerDisabled", true);  
+//     managerExecuted.value = 'Chat'  
+//   } else {
+//     managerExecuted.value = 'Chat'
+//   }
+
+//   windowType.value = "Chat";
+//   notificationMessage.value = false;
+// }
+
+// function autoShowWindowChat(pos) {
+//     setTimeout(function () {
+//         if (autoShowChat.value) {
+//           windowType.value = "Manager_1";
+//           notificationMessage.value = true;
+//           isWindowVisible.value = true;
+//           windowPosition.value = pos;
+//           elOutViewport(windowPosition.value);
+//           showWindowChatExecuted.value = true;
+//           managerExecuted.value = 'Chat';
+//           localStorage.setItem("managerDisabled", true);  
+//         }
+//       }, 5000);
+
+//       const soundPlugin = inject('sound'); // 'sound' плагин с обработкой когда воспроиводить мелодию
+//       soundPlugin(audio);
+// }
+
+// function hideWindow() {
+//   windowType.value = "";
+//   isWindowVisible.value = false;
+// }
+
+// // comeback
+// function comeback() {
+//   if (isComeback !== "false" && widthDevice.value > 768) {
+//     sessionStorage.setItem("comeback", "false");
+//     isComeback = sessionStorage.getItem("comeback");
+//     console.log(isComeback);
+//     openModal("callBack");
+//   }
+// }
+
+// // Функция, которая будет вызываться при изменении размера окна
+// function handleResize() {
+//   widthDevice.value = window.innerWidth; // Обновляем значение widthDevice при изменении размера окна
+// }
+
+// // Функция, которая считает выход элементов из потока ширины браузера
+// function elOutViewport(windowBounceLeft) {
+//   if (windowPosition.value + 300 < widthDevice.value) {
+//     windowPosition.value = windowBounceLeft;
+//     console.log('windowPosition.value < widthDevice.value');
+//   } 
+//   else if (windowPosition.value + 300 > widthDevice.value) {
+//     console.log('windowPosition.value + 300 > widthDevice.value');
+//     windowPosition.value = widthDevice.value - 324;
+//   }
+//   else {
+//     windowPosition.value = windowBounceLeft;
+//   }
+//   console.log(widthDevice.value + " " + (windowPosition.value + 300));
+// }
+</script>
+
 <template>
   <div class="widjet" :style="{ backgroundColor: $widjet().global.color }">
     <div class="widjet__col">
@@ -53,7 +222,7 @@
       </PanelCol>
     </div>
 
-    <div class="widjet__col widjet__col_r" ref="mangerElement">
+    <!-- <div class="widjet__col widjet__col_r" ref="mangerElement">
       <PanelCol
         hr="left"
         size="m"
@@ -73,7 +242,7 @@
       <PanelCol size="s" hr="left" :visibility="entryData.onlineConsultant[1].visibility" :windowWidth="widthDevice">
         <WidjetLink />
       </PanelCol>
-    </div>
+    </div> -->
     
 
     <WindowContact
@@ -123,6 +292,7 @@
       :dataWindow="entryData.chat[0]"
       :positionX="windowPosition"
       :script="outputScript"
+      :dopFields="$widjet() ? $widjet().global.data : null"
       figurePos="center"
     />
 
@@ -139,184 +309,6 @@
     <ModalsContainer />
   </div>
 </template>
-
-<script setup>
-import { defineProps, onMounted, ref, computed, onBeforeUnmount, inject } from "vue";
-
-import PanelCol from "./PanelCol.vue";
-import WidjetLink from "./WidjetLink.vue";
-import WidjetDefault from "./WidjetDefault.vue";
-import WidjetSocial from "./WidjetSocial.vue";
-import WindowContact from "./Window/Contact.vue";
-import WindowFast from "./Window/Fast.vue";
-import WindowCatalog from "./Window/Catalog.vue";
-import WindowManager from "./Window/Manager.vue";
-import WindowChat from "./Window/Chat.vue";
-import Feedback from "./Base/Form/Feedback.vue";
-import ModalsContainer from "./Base/Modals/ModalContainer.vue";
-import audioNotification from "../audio/whatsapp_web.mp3";
-import { openModal } from "../store/modals";
-
-const props = defineProps({
-  entryData: {
-    type: Object,
-    required: true,
-  },
-});
-
-const widthDevice = ref(window.innerWidth);
-const isWindowVisible = ref(false);
-const windowType = ref(""); // Переменная для определения типа окна
-const audio = new Audio(audioNotification);
-const notificationMessage = ref(false);
-let windowPosition = ref(null);
-
-function showWindow(event, type) {
-  const el = event.target; // панель по которой кликнули
-  const elTargetLeft = el.getBoundingClientRect().left;
-  // Если тип окна уже открыт, то закрываем его
-  if (windowType.value === type) {
-    windowType.value = '';
-    isWindowVisible.value = false;
-  } else {
-    windowPosition.value = elTargetLeft;
-    elOutViewport(windowPosition.value);
-    windowType.value = type;
-    isWindowVisible.value = true;
-  }
-  // const el = event.target; // панель по которой кликнули
-  // let elTargetLeft = el.getBoundingClientRect().left;
-  // windowPosition.value = elTargetLeft;
-  // elOutViewport(windowPosition.value);
-  // windowType.value = type;
-  // isWindowVisible.value = true;
-  // // если нажали по теущей панели закрыть окна
-  // if (windowType.value === type) {
-  //   windowType.value = '';
-  //   isWindowVisible.value = false;
-  // }
-}
-// передаем координаты и показываем чат автоматом
-const mangerElement = ref(null);
-// local storage autoMode
-const autoShowChat = ref(true); 
-// Session storage comeback
-let isComeback = sessionStorage.getItem("comeback");
-
-if (localStorage.getItem("chatAutoMode")) {
-  autoShowChat.value = false;
-}
-
-onMounted(() => {
-  if (autoShowChat.value) {
-    console.log('mangerElement.value');
-    console.log(mangerElement.value.getBoundingClientRect().left);
-    autoShowWindowChat(mangerElement.value.getBoundingClientRect().left);
-  }
-
-  if (isComeback === null || isComeback !== "false") {
-    document.addEventListener("mouseleave", comeback);
-  }
-
-  if (localStorage.getItem('managerDisabled') === 'true') {
-    managerExecuted.value = 'Chat'
-  } 
-
-  if (isComeback === null && widthDevice.value >= 768 || isComeback !== "false" && widthDevice.value >= 768) {
-    setTimeout(() => {
-      comeback();
-    }, 120000)
-  }
-
-  window.addEventListener("resize", handleResize);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("mouseleave", comeback);
-  window.removeEventListener("resize", handleResize);
-});
-
-// вычисляем сценарий переписки
-const outputScript = computed(() => autoShowChat.value ? props.entryData.autoMessage[1].script : props.entryData.autoMessage[0].script);
-
-let showWindowChatExecuted = ref(false); // был ли открыт чат
-let managerExecuted = ref('Manager_1'); // был ли открыт манагер
-
-function showWindowChat() {
-  if (!showWindowChatExecuted.value) {
-    autoShowChat.value = false;
-    isWindowVisible.value = true;
-    localStorage.setItem("chatAutoMode", autoShowChat.value);
-  }
-  if (autoShowChat.value === true) {
-    localStorage.setItem("chatAutoMode", autoShowChat.value);
-  }
-
-  if (managerExecuted.value === 'Manager_1' && localStorage.getItem('managerExecuted') === 'false' || localStorage.getItem('managerExecuted') === null) {
-    localStorage.setItem("managerDisabled", true);  
-    managerExecuted.value = 'Chat'  
-  } else {
-    managerExecuted.value = 'Chat'
-  }
-
-  windowType.value = "Chat";
-  notificationMessage.value = false;
-}
-
-function autoShowWindowChat(pos) {
-    setTimeout(function () {
-        if (autoShowChat.value) {
-          windowType.value = "Manager_1";
-          notificationMessage.value = true;
-          isWindowVisible.value = true;
-          windowPosition.value = pos;
-          elOutViewport(windowPosition.value);
-          showWindowChatExecuted.value = true;
-          managerExecuted.value = 'Chat';
-          localStorage.setItem("managerDisabled", true);  
-        }
-      }, 5000);
-
-      const soundPlugin = inject('sound'); // 'sound' плагин с обработкой когда воспроиводить мелодию
-      soundPlugin(audio);
-}
-
-function hideWindow() {
-  windowType.value = "";
-  isWindowVisible.value = false;
-}
-
-// comeback
-function comeback() {
-  if (isComeback !== "false" && widthDevice.value > 768) {
-    sessionStorage.setItem("comeback", "false");
-    isComeback = sessionStorage.getItem("comeback");
-    console.log(isComeback);
-    openModal("callBack");
-  }
-}
-
-// Функция, которая будет вызываться при изменении размера окна
-function handleResize() {
-  widthDevice.value = window.innerWidth; // Обновляем значение widthDevice при изменении размера окна
-}
-
-// Функция, которая считает выход элементов из потока ширины браузера
-function elOutViewport(windowBounceLeft) {
-  if (windowPosition.value + 300 < widthDevice.value) {
-    windowPosition.value = windowBounceLeft;
-    console.log('windowPosition.value < widthDevice.value');
-  } 
-  else if (windowPosition.value + 300 > widthDevice.value) {
-    console.log('windowPosition.value + 300 > widthDevice.value');
-    windowPosition.value = widthDevice.value - 324;
-  }
-  else {
-    windowPosition.value = windowBounceLeft;
-  }
-  console.log(widthDevice.value + " " + (windowPosition.value + 300));
-}
-</script>
 
 <style lang="scss" scoped>
 .widjet {
