@@ -34,7 +34,6 @@
     "imagemin-optipng": "^8.0.0",
     "imagemin-svgo": "^10.0.1",
     "mini-css-extract-plugin": "^2.4.4",
-    "nodemon": "^2.0.22",
     "postcss": "^8.3.11",
     "postcss-loader": "^7.0.0",
     "sass": "^1.50.1",
@@ -70,15 +69,12 @@
     "prod": "webpack --config configuration/webpack.prod.config.js --mode=production",
     "lint:sass": "sass-lint -v -q",
     "lint:js": "eslint --ext .js src/js/",
-    "stats": "webpack --config configuration/webpack.prod.config.js --mode=production --json > dist/stats.json && webpack-bundle-analyzer dist/stats.json",
-    "serve": "nodemon server.js"
+    "stats": "webpack --config configuration/webpack.prod.config.js --mode=production --json > dist/stats.json && webpack-bundle-analyzer dist/stats.json"
   },
   "target": "web",
   "dependencies": {
     "@vue/compiler-sfc": "^3.3.4",
     "axios": "^1.5.1",
-    "express": "^4.18.2",
-    "mongodb": "^5.1.0",
     "optipng-bin": "^9.0.0",
     "vue": "^3.2.36",
     "vue-cookies": "^1.8.3",

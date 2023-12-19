@@ -37,15 +37,14 @@ export default {
           // Активность кнопки при вводе
           app.provide('getBtnActive', (form) => {      
             for (const field of form) {
-              if (field.name === 'Name' || field.name === 'Site') {
+              if (field.name === 'Name' || field.name === 'Site' || field.name === 'File') {
                 continue;
               }
-              console.log(field.value.length);
               if (field.value.length > 0) {
                 return true;
               }
             }
-            return false
+            return false;
           });
     }
 };

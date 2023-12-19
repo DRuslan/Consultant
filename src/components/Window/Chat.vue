@@ -51,7 +51,8 @@
           <div class="chat__row">
             <FieldFile
               :title="false"
-              :disabled="true"
+              typeField="Chat"
+              @update:modelValue="getFile"
               :style="{ padding: '0 0 0 10px' }"
             />
             <textarea
@@ -82,6 +83,7 @@ import Wrapper from "./WindowWrapper.vue";
 import Message from "../Base/Chat/Message.vue";
 import { ref, defineProps, computed, watchEffect, nextTick, inject } from "vue";
 import axios from "axios";
+import { text } from "express";
 
 const props = defineProps({
   isVisible: Boolean,
@@ -94,6 +96,7 @@ const props = defineProps({
 
 const $cookies = inject("$cookies");
 const newMessage = ref(""); // Реактивная переменная для текстового поля
+// const fieldArea = ref(null); // Поле для текста
 const Chat = ref($cookies.get("chat") || []); // Реактивная переменная для всех сообщений
 const isMessageSend = ref(false); // Реактивная переменная для отслеживания ответа пользователя
 const countBotMessages = ref(0); // Количество ответов бота
@@ -290,7 +293,7 @@ function checkText(text) {
     // Удаление лишних пробелов
     phoneMatches = phoneMatches.map((phone) => phone.replace(/\s/g, ""));
     console.log("Номер(а) телефона найден(ы):", phoneMatches);
-    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   } else {
     console.log("Номер(а) телефона не найден(ы)");
   }
@@ -299,7 +302,7 @@ function checkText(text) {
   let emailMatches = text.match(emailRegex);
   if (emailMatches) {
     console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
-    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   } else {
     console.log("Адрес(а) электронной почты не найден(ы)");
   }
@@ -310,10 +313,27 @@ function firstMessageClient(sendCount) {
   sendCount++;
   if (sendCount === 1 && !$cookies.get("firstMessage")) {
     console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
-    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
+    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
     $cookies.set("firstMessage", sendCount, "1d");
   }
 }
+
+
+function getFile (updatedFile) {
+    newMessage.value = `${updatedFile.name}`
+    // const textarea = fieldArea.value;
+    // if (textarea) {
+    //   console.log(textarea);
+    // }
+}
+
+// function removeFile() {
+//   // Логика удаления файла
+//   console.log("File removed");
+
+//   // Сброс свойства newMessage после удаления файла
+//   this.newMessage = '';
+// }
 </script>
     
 <style lang="scss" scoped>

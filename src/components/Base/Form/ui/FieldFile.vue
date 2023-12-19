@@ -15,7 +15,7 @@
         <p v-if="title">Прикрепить файл</p>
       </label>
       <p
-        v-if="selectedFile != null"
+        v-if="selectedFile != null && typeField !== 'Chat'"
         class="input-file__name t_small"
         :style="{ color: $widjet().global.dopPrimary }"
       >
@@ -42,6 +42,9 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
+    },
+    typeField: {
+      type: String,
     },
   },
   data() {
@@ -74,31 +77,10 @@ export default {
           fileType === "image/jpg" ||
           fileType === "image/png" ||
           fileType === "image/heic" ||
-          fileType === "application/pdf"
-        ) {
-          this.selectedFile = file;
-          alert("Файл успешно выбран");
-        } else {
-          alert(
-            "Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF"
-          );
-          this.selectedFile = null;
-        }
-      } else {
-        this.selectedFile = null;
-      }
-      this.$emit("update:modelValue", this.selectedFile);
-    },
-    onFileSelected(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const fileType = file.type;
-        if (
-          fileType === "image/jpeg" ||
-          fileType === "image/jpg" ||
-          fileType === "image/png" ||
-          fileType === "image/heic" ||
-          fileType === "application/pdf"
+          fileType === "application/pdf" ||
+          fileType === "application/msword" || // Check for doc
+          fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // Check for docx
+          fileType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // Check for xlsx
         ) {
           this.selectedFile = file;
           alert("Файл успешно выбран");
@@ -179,15 +161,17 @@ export default {
 
   &__name {
     position: absolute;
-    bottom: -15px;
-    right: 0;
-    text-align: right;
-    width: 250px;
+    bottom: -10px;
+    left: 0;
+    text-align: left;
+    width: 100px;
     height: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 12px;
+    overflow: hidden;
+    margin-left: 0;
   }
 }
 </style>
