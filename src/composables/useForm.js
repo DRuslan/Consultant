@@ -15,10 +15,10 @@ export default function useForm(form, thank, goal, dataGlobals) {
           const formData = new FormData(); // Constructor JS (Form building)
           formData.append("Site", location.href);
           formData.append("Political", true);
-          formData.append("allUTM", dataGlobals.allUTM);
-          formData.append("City", dataGlobals.geoInfo.city);
-          formData.append("Region", dataGlobals.geoInfo.subdivision);
-          formData.append("Country", dataGlobals.geoInfo.country);
+          // formData.append("allUTM", dataGlobals.allUTM);
+          // formData.append("City", dataGlobals.geoInfo.city);
+          // formData.append("Region", dataGlobals.geoInfo.subdivision);
+          // formData.append("Country", dataGlobals.geoInfo.country);
     
           // перебираем поля в форме с актальный value
           for (const key in form) {
@@ -44,7 +44,7 @@ export default function useForm(form, thank, goal, dataGlobals) {
 
         function getYandexGoal (ymGoal) {
           if (ymGoal) {
-            window.ym(80162764, 'reachGoal', ymGoal);
+            // window.ym(80162764, 'reachGoal', ymGoal);
           } else {
             console.error('цель не присвоена');
           }

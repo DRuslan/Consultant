@@ -15,7 +15,7 @@
       type="text"
     />
     <div class="field-row">
-      <FieldFile v-model="form.File.value" :value="form.File.value" />
+      <FieldFile v-model:file="form.File.value" />
       <Button :active="getBtnActiveClass">Отправить</Button>
     </div>
   </Container>

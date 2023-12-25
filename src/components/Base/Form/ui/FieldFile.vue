@@ -15,7 +15,7 @@
         <p v-if="title">Прикрепить файл</p>
       </label>
       <p
-        v-if="selectedFile != null && typeField !== 'Chat'"
+        v-if="typeField !== 'Chat'"
         class="input-file__name t_small"
         :style="{ color: $widjet().global.dopPrimary }"
       >
@@ -31,10 +31,6 @@ export default {
   name: "InputFile",
   components: { Icon },
   props: {
-    value: {
-      type: Object,
-      default: null,
-    },
     title: {
       type: Boolean,
       default: true,
@@ -46,25 +42,19 @@ export default {
     typeField: {
       type: String,
     },
+    file: Object
   },
-  data() {
-    return {
-      selectedFile: null,
-    };
-  },
-  watch: {
-    value(newVal, oldVal) {
-      this.selectedFile = newVal;
-    },
-  },
+  // data() {
+  //   return {
+  //     selectedFile: null,
+  //   };
+  // },
   methods: {
     onInput(event) {
       if (this.disabled) {
         event.preventDefault();
         event.target.value = null;
-        console.log('[1]');
       } else {
-        console.log('[2]');
         this.onFileSelected(event);
       }
     },
@@ -82,24 +72,24 @@ export default {
           fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // Check for docx
           fileType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // Check for xlsx
         ) {
-          this.selectedFile = file;
+          // this.selectedFile = file;
           alert("Файл успешно выбран");
         } else {
           alert(
             "Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF"
           );
-          this.selectedFile = null;
+          // this.selectedFile = null;
         }
       } else {
-        this.selectedFile = null;
+        // this.selectedFile = null;
       }
-      this.$emit("update:modelValue", this.selectedFile);
+      this.$emit("update:file", file);
     },
   },
   computed: {
     getFileName() {
-      if (this.selectedFile == null) return "";
-      return this.selectedFile.name;
+      if (!this.file) return "";
+      return this.file.name;
     },
   },
 };

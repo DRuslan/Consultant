@@ -47,21 +47,33 @@
             </p>
           </transition>
         </div>
-        <form action="#" @submit="send" @keyup.enter="send" class="chat__form">
+        <form
+          action="#"
+          @submit="send"
+          @keyup.enter.exact.prevent="send"
+          class="chat__form"
+        >
           <div class="chat__row">
             <FieldFile
               :title="false"
               typeField="Chat"
-              @update:modelValue="getFile"
+              v-model:file="file"
               :style="{ padding: '0 0 0 10px' }"
             />
-            <textarea
+            <!-- <Textarea @updateTextInput="handleInput"></Textarea> -->
+            <!-- <Textarea @update:model-value="newMessage"></Textarea> -->
+            <!-- <Textarea v-model="newMessage" :new-message="newMessage" @clearTextarea="handleClearTextarea"></Textarea> -->
+            <Textarea :file=file?.name v-model="newMessage"></Textarea>
+            <div>
+
+            </div>
+            <!-- <textarea
               name="message"
               cols="30"
               rows="1"
               class="chat__area"
               v-model="newMessage"
-            ></textarea>
+            ></textarea> -->
             <button type="submit">
               <Icon class="tg-icon" size="m" icon-name="tg_send"></Icon>
             </button>
@@ -81,9 +93,9 @@ import Icon from "../Base/Icon.vue";
 import FieldFile from "../../components/Base/Form/ui/FieldFile.vue";
 import Wrapper from "./WindowWrapper.vue";
 import Message from "../Base/Chat/Message.vue";
+import Textarea from "../Base/Form/ui/Textarea.vue";
 import { ref, defineProps, computed, watchEffect, nextTick, inject } from "vue";
 import axios from "axios";
-import { text } from "express";
 
 const props = defineProps({
   isVisible: Boolean,
@@ -95,6 +107,7 @@ const props = defineProps({
 });
 
 const $cookies = inject("$cookies");
+const file =ref(null)
 const newMessage = ref(""); // Реактивная переменная для текстового поля
 // const fieldArea = ref(null); // Поле для текста
 const Chat = ref($cookies.get("chat") || []); // Реактивная переменная для всех сообщений
@@ -107,15 +120,19 @@ const currentData = new Date();
 // Получить часовой пояс клиента
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-const formatter = new Intl.DateTimeFormat('ru', {
+const formatter = new Intl.DateTimeFormat("ru", {
   timeZone: userTimeZone,
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-  second: 'numeric',
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
 });
+
+// function handleInput(text) {
+//   newMessage.value = text;
+// }
 
 // Преобразовать время в строку с учетом часового пояса пользователя
 const formattedDate = formatter.format(currentData);
@@ -144,7 +161,7 @@ const send = (e) => {
   const formData = new FormData(); // Constructor JS (Form building)
   formData.append("Site", location.href);
   formData.append("Name", "krible-chat");
-
+  console.log(newMessage);
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "") {
     Chat.value.push({
@@ -169,8 +186,8 @@ const send = (e) => {
       .catch((err) => {
         console.log(err);
       });
-
-    newMessage.value = "";
+      
+      newMessage.value = "" // очистка поля
     if (
       props.script[countBotMessages.value] != null &&
       props.script[countBotMessages.value] !== undefined
@@ -293,7 +310,7 @@ function checkText(text) {
     // Удаление лишних пробелов
     phoneMatches = phoneMatches.map((phone) => phone.replace(/\s/g, ""));
     console.log("Номер(а) телефона найден(ы):", phoneMatches);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   } else {
     console.log("Номер(а) телефона не найден(ы)");
   }
@@ -302,7 +319,7 @@ function checkText(text) {
   let emailMatches = text.match(emailRegex);
   if (emailMatches) {
     console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   } else {
     console.log("Адрес(а) электронной почты не найден(ы)");
   }
@@ -313,18 +330,17 @@ function firstMessageClient(sendCount) {
   sendCount++;
   if (sendCount === 1 && !$cookies.get("firstMessage")) {
     console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
     $cookies.set("firstMessage", sendCount, "1d");
   }
 }
 
-
-function getFile (updatedFile) {
-    newMessage.value = `${updatedFile.name}`
-    // const textarea = fieldArea.value;
-    // if (textarea) {
-    //   console.log(textarea);
-    // }
+function getFile(updatedFile) {
+  newMessage.value = `${updatedFile.name}`;
+  // const textarea = fieldArea.value;
+  // if (textarea) {
+  //   console.log(textarea);
+  // }
 }
 
 // function removeFile() {
@@ -429,11 +445,6 @@ function getFile (updatedFile) {
       // right: 0;
 
       // padding: 12px;
-    }
-  }
-  &__area {
-    &:focus-visible {
-      outline: none !important;
     }
   }
 }
