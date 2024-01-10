@@ -25,6 +25,7 @@
               :role="item.role"
               :created-at="item.createdAt"
               :manager-image="dataWindow.window.body.img"
+              :file="file.name ? file.name : ''"
             />
           </transition-group>
           <transition name="fade">
@@ -60,20 +61,10 @@
               v-model:file="file"
               :style="{ padding: '0 0 0 10px' }"
             />
-            <!-- <Textarea @updateTextInput="handleInput"></Textarea> -->
-            <!-- <Textarea @update:model-value="newMessage"></Textarea> -->
-            <!-- <Textarea v-model="newMessage" :new-message="newMessage" @clearTextarea="handleClearTextarea"></Textarea> -->
-            <Textarea :file=file?.name v-model="newMessage"></Textarea>
+            <Textarea :file=file?.name v-model="newMessage" @delete="deleteChatFile"></Textarea>
             <div>
 
             </div>
-            <!-- <textarea
-              name="message"
-              cols="30"
-              rows="1"
-              class="chat__area"
-              v-model="newMessage"
-            ></textarea> -->
             <button type="submit">
               <Icon class="tg-icon" size="m" icon-name="tg_send"></Icon>
             </button>
@@ -107,7 +98,7 @@ const props = defineProps({
 });
 
 const $cookies = inject("$cookies");
-const file =ref(null)
+const file = ref(null)
 const newMessage = ref(""); // Реактивная переменная для текстового поля
 // const fieldArea = ref(null); // Поле для текста
 const Chat = ref($cookies.get("chat") || []); // Реактивная переменная для всех сообщений
@@ -130,13 +121,9 @@ const formatter = new Intl.DateTimeFormat("ru", {
   second: "numeric",
 });
 
-// function handleInput(text) {
-//   newMessage.value = text;
-// }
-
 // Преобразовать время в строку с учетом часового пояса пользователя
 const formattedDate = formatter.format(currentData);
-console.log(formattedDate);
+// console.log(formattedDate);
 
 // Проверка и присвоение первого сообщения
 if (props.script && !$cookies.get("firstMessage")) {
@@ -162,15 +149,17 @@ const send = (e) => {
   formData.append("Site", location.href);
   formData.append("Name", "krible-chat");
   console.log(newMessage);
+
+  console.log(file.value.name);
   // Отправляем сообщение и очищаем текстовое поле
-  if (newMessage.value.trim() !== "") {
+  if (newMessage.value.trim() !== "" || file.value) {
     Chat.value.push({
       id: generateUniqueId(),
       createdAt: formattedDate,
       message: newMessage.value,
+      file: file.value.name,
       role: "client",
     });
-
     // Количество отправленных сообщений от клиента нужно для метрики только после 1 сообщения отрабатывает цель
     firstMessageClient(sendClientMessage.value);
     checkText(newMessage.value.trim());
@@ -335,21 +324,9 @@ function firstMessageClient(sendCount) {
   }
 }
 
-function getFile(updatedFile) {
-  newMessage.value = `${updatedFile.name}`;
-  // const textarea = fieldArea.value;
-  // if (textarea) {
-  //   console.log(textarea);
-  // }
+function deleteChatFile () {
+  file.value = null;
 }
-
-// function removeFile() {
-//   // Логика удаления файла
-//   console.log("File removed");
-
-//   // Сброс свойства newMessage после удаления файла
-//   this.newMessage = '';
-// }
 </script>
     
 <style lang="scss" scoped>

@@ -8,7 +8,11 @@
     </div>
     <div class="msg__inner">
       <div class="msg__created"><small>{{ formattedTimeAgo }}</small></div>
-      <div :class="[{ msg__bot_message: role === 'bot' }, { msg__client_message: role === 'client' }]">
+      <div v-if="msg && !file" :class="[{ msg__bot_message: role === 'bot' }, { msg__client_message: role === 'client' }]">
+        <p>{{ msg }}</p>
+      </div>
+      <div v-if="msg" :class="[{ msg__client_message: role === 'client' }]">
+        <p v-if="file">{{ file }}</p>
         <p>{{ msg }}</p>
       </div>
     </div>
@@ -39,6 +43,9 @@ const props = defineProps({
   managerImage: {
     type: String,
   },
+  file: {
+    type: String,
+  }
 });
 
 const formattedTimeAgo = ref(""); // Инициализируем значение
