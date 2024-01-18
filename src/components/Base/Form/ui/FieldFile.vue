@@ -61,6 +61,7 @@ export default {
     onFileSelected(event) {
       const file = event.target.files[0];
       if (file) {
+        alert(file);
         const fileType = file.type;
         if (
           fileType === "image/jpeg" ||
@@ -74,6 +75,9 @@ export default {
         ) {
           // this.selectedFile = file;
           alert("Файл успешно выбран");
+          const replaceFileType = fileType.split('/')[1];
+          console.log(replaceFileType);
+          this.$emit("type", replaceFileType);
         } else {
           alert(
             "Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF"
@@ -82,6 +86,7 @@ export default {
         }
       } else {
         // this.selectedFile = null;
+        alert('else file');
       }
       this.$emit("update:file", file);
     },

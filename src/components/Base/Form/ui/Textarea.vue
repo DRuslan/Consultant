@@ -1,7 +1,8 @@
 <template>
   <div class="v-textarea-block">
     <div class="file" v-if="file">
-      <p class="file__text" :style="{color: $widjet().global.color }">{{ file }}</p>
+      <p class="file__text" :style="{color: $widjet().global.color }">{{ file.split(".")[0] + '.' }}</p>
+      <p class="file__type" :style="{color: $widjet().global.color }">{{ file.split(".")[1] }}</p>
       <button class="file__btn" @click="deleteFile"><Icon class="tg-icon" size="s" icon-name="close"></Icon></button>
       <br>
   </div>
@@ -18,12 +19,12 @@
 </template>
   
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { computed } from "vue";
 import Icon from "../../Icon.vue";
 
 const emit = defineEmits();
 const props = defineProps({
-  file: String,
+  file: String, 
   modelValue: String,
 });
 
@@ -33,6 +34,12 @@ function handleInput(event) {
 
 function deleteFile () {
   emit("delete", true);
+}
+
+function fileType () {
+  const name = props.file.split(".")[1]
+  console.log(name);
+  return name;
 }
 
 // onMounted(() => {
@@ -75,10 +82,10 @@ function deleteFile () {
 .file {
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  padding: 8px;
   &__text {
     overflow-x: hidden;
-    max-width: 200px;
+    max-width: 130px;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
@@ -89,6 +96,10 @@ function deleteFile () {
     display: flex;
     align-items: center;
     padding: 0;
+    transition: opacity .3s ease-in-out ;
+    &:hover {
+      opacity: .67;
+    }
   }
 }
 </style>

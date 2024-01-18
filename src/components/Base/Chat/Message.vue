@@ -8,13 +8,16 @@
     </div>
     <div class="msg__inner">
       <div class="msg__created"><small>{{ formattedTimeAgo }}</small></div>
+      <div v-if="msg && file" :class="[{ msg__client_message: role === 'client' }]">
+        <p class="msg__file_name" :style="{color: $widjet().global.color }">{{ file }}</p>
+        <p>{{ msg }}</p>
+      </div>
       <div v-if="msg && !file" :class="[{ msg__bot_message: role === 'bot' }, { msg__client_message: role === 'client' }]">
         <p>{{ msg }}</p>
       </div>
-      <div v-if="msg" :class="[{ msg__client_message: role === 'client' }]">
-        <p v-if="file">{{ file }}</p>
+      <!-- <div v-if="msg && !file" :class="[{ msg__bot_message: role === 'bot' }, { msg__client_message: role === 'client' }]">
         <p>{{ msg }}</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

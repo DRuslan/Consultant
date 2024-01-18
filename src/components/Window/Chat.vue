@@ -25,7 +25,7 @@
               :role="item.role"
               :created-at="item.createdAt"
               :manager-image="dataWindow.window.body.img"
-              :file="file.name ? file.name : ''"
+              :file="item.file"
             />
           </transition-group>
           <transition name="fade">
@@ -60,8 +60,9 @@
               typeField="Chat"
               v-model:file="file"
               :style="{ padding: '0 0 0 10px' }"
+              @type="typeFile"
             />
-            <Textarea :file=file?.name v-model="newMessage" @delete="deleteChatFile"></Textarea>
+            <Textarea :file="file?.name" :fileType="typeFile" v-model="newMessage" @delete="deleteChatFile"></Textarea>
             <div>
 
             </div>
@@ -148,22 +149,21 @@ const send = (e) => {
   const formData = new FormData(); // Constructor JS (Form building)
   formData.append("Site", location.href);
   formData.append("Name", "krible-chat");
-  console.log(newMessage);
 
-  console.log(file.value.name);
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "" || file.value) {
     Chat.value.push({
       id: generateUniqueId(),
       createdAt: formattedDate,
       message: newMessage.value,
-      file: file.value.name,
+      file: file?.value?.name,
       role: "client",
     });
+    
     // Количество отправленных сообщений от клиента нужно для метрики только после 1 сообщения отрабатывает цель
     firstMessageClient(sendClientMessage.value);
     checkText(newMessage.value.trim());
-
+    deleteChatFile(); // очистка файла при отправке сообщения
     formData.append("Chat", JSON.stringify(Chat.value)); // подмешиваем данные с всего чата
     axios
       .post("/api/send-chat", formData, {
@@ -326,6 +326,15 @@ function firstMessageClient(sendCount) {
 
 function deleteChatFile () {
   file.value = null;
+}
+
+const typeFiles = ref(emitTypeFile);
+console.log(typeFiles);
+function emitTypeFile (name) {
+  if (name) {
+    console.log(name);
+    typeFile = name
+  }
 }
 </script>
     
