@@ -15,7 +15,7 @@
       type="text"
     />
     <div class="field-row">
-      <FieldFile v-model:file="form.File.value" />
+      <FieldFile v-model:file="form.File.value" :disabled="true" />
       <Button :active="getBtnActiveClass">Отправить</Button>
     </div>
   </Container>

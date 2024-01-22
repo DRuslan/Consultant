@@ -61,6 +61,7 @@
               v-model:file="file"
               :style="{ padding: '0 0 0 10px' }"
               @type="typeFile"
+              :disabled="true"
             />
             <Textarea :file="file?.name" :fileType="typeFile" v-model="newMessage" @delete="deleteChatFile"></Textarea>
             <div>
