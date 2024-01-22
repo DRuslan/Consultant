@@ -61,7 +61,6 @@ export default {
     onFileSelected(event) {
       const file = event.target.files[0];
       if (file) {
-        alert(file);
         const fileType = file.type;
         if (
           fileType === "image/jpeg" ||
@@ -76,7 +75,6 @@ export default {
           // this.selectedFile = file;
           alert("Файл успешно выбран");
           const replaceFileType = fileType.split('/')[1];
-          console.log(replaceFileType);
           this.$emit("type", replaceFileType);
         } else {
           alert(
@@ -86,7 +84,7 @@ export default {
         }
       } else {
         // this.selectedFile = null;
-        alert('else file');
+        // alert('else file');
       }
       this.$emit("update:file", file);
     },
@@ -104,8 +102,6 @@ export default {
 .input-file {
   position: relative;
   &__sendfile {
-    // cursor: not-allowed;
-    // pointer-events: none;
     transition: all .3s ease-in-out;
     &:hover {
       opacity: .67;
