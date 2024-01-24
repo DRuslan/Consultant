@@ -8,18 +8,19 @@
   </div>
   <div
     class="v-textarea"
-    contenteditable
+    contenteditable="true"
     :modelValue="modelValue"
     @input="handleInput"
     @keydown.enter.shift.exact.prevent="handleShiftEnter"
     role="textbox"
     aria-multiline="true"
+    ref="textareaRef"
   >{{ modelValue }}</div>
   </div>
 </template>
   
 <script setup>
-import { computed } from "vue";
+import { ref, watchEffect } from "vue";
 import Icon from "../../Icon.vue";
 
 const emit = defineEmits();
@@ -28,9 +29,44 @@ const props = defineProps({
   modelValue: String,
 });
 
+const textareaRef = ref(null);
+
 function handleInput(event) {
+  setEndOfContenteditable(textareaRef.value);
   emit("update:modelValue", event.target.innerText);
 }
+
+function setEndOfContenteditable(contentEditableElement) {
+    var range, selection;
+    if (document.createRange) {
+        range = document.createRange();
+        range.selectNodeContents(contentEditableElement);
+        range.collapse(false);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // Создаем и вставляем текстовый узел в конец contentEditable элемента
+        var textNode = document.createTextNode('\u200B'); // нулевой пробел
+        contentEditableElement.appendChild(textNode);
+
+        // Перемещаем каретку в созданный узел
+        range = document.createRange();
+        range.setStart(textNode, 1);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // Удаляем временно вставленный текстовый узел
+        contentEditableElement.removeChild(textNode);
+    } else if (document.selection) {
+        range = document.body.createTextRange();
+        range.moveToElementText(contentEditableElement);
+        range.collapse(false);
+        range.select();
+    }
+}
+
 
 function deleteFile () {
   emit("delete", true);
@@ -41,32 +77,21 @@ function fileType () {
   console.log(name);
   return name;
 }
-
-// onMounted(() => {
-//   // Инициализируем содержимое contenteditable
-//   if (textareaRef.value) {
-//     textareaRef.value.innerText = props.newMessage;
-//   }
-// });
-
-// function handleShiftEnter(event) {
-//   // Обработка Shift + Enter
-
-//   if (event.key === "Enter" && event.shiftKey) {
-//     console.log("Enter");
-//     const input = textareaRef.value;
-//     input.insertAdjacentHTML("beforebegin", "<br>");
-//     event.preventDefault();
-//   }
-// }
 </script>
   
 <style lang="scss" scoped>
+[contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
 .v-textarea {
   width: 100%;
   min-height: 42px;
   color: #000;
   padding: 12px 6px;
+  -webkit-user-select: text;
+    user-select: text;
   &:focus-visible {
     outline: none !important;
   }

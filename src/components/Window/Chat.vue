@@ -61,7 +61,6 @@
               v-model:file="file"
               :style="{ padding: '0 0 0 10px' }"
               @type="typeFile"
-              :disabled="true"
             />
             <Textarea :file="file?.name" :fileType="typeFile" v-model="newMessage" @delete="deleteChatFile"></Textarea>
             <div>
@@ -107,6 +106,7 @@ const Chat = ref($cookies.get("chat") || []); // Реактивная перем
 const isMessageSend = ref(false); // Реактивная переменная для отслеживания ответа пользователя
 const countBotMessages = ref(0); // Количество ответов бота
 const chatContainerRef = ref(null); // Для отслеживания высоты чата и его скролла
+const chatContactData = ref(false); // Для отслеживания передачи поля Паши что в переписке ыбли контакты чтобы зарегать лид на мененджера
 let sendClientMessage = ref(0);
 // Текущие дата и время
 const currentData = new Date();
@@ -145,8 +145,8 @@ watchEffect(() => {
 });
 
 const send = (e) => {
-  console.log('file.value');
-  console.log(file);
+  // console.log('file.value');
+  // console.log(file.value.name);
   e.preventDefault();
   // формируем данные для отправки
   const formData = new FormData(); // Constructor JS (Form building)
@@ -161,17 +161,19 @@ const send = (e) => {
       createdAt: formattedDate,
       message: newMessage.value,
       role: "client",
+      fileName: file?.value?.name,
     });
     
     // Количество отправленных сообщений от клиента нужно для метрики только после 1 сообщения отрабатывает цель
     firstMessageClient(sendClientMessage.value);
     checkText(newMessage.value.trim());
+    if (chatContactData.value === true) {
+      formData.append("ChatContactData", true); // Передаем Поле Паше для отслеживания дисквал лид или нет
+    }
     deleteChatFile(); // очистка файла при отправке сообщения
     formData.append("Chat", JSON.stringify(Chat.value)); // подмешиваем данные с всего чата
     axios
-      .post("/api/send-chat", formData, {
-        withCredentials: true,
-      })
+      .post("/api/send-chat", formData, { withCredentials: true, })
       .then((res) => {
         console.log(res);
       })
@@ -180,10 +182,7 @@ const send = (e) => {
       });
       
       newMessage.value = "" // очистка поля
-    if (
-      props.script[countBotMessages.value] != null &&
-      props.script[countBotMessages.value] !== undefined
-    ) {
+    if (props.script[countBotMessages.value] != null && props.script[countBotMessages.value] !== undefined) {
       setTimeout(function () {
         console.log(
           "isMessageSend.value = true; // Отслеживаем ответ пользователя"
@@ -302,7 +301,8 @@ function checkText(text) {
     // Удаление лишних пробелов
     phoneMatches = phoneMatches.map((phone) => phone.replace(/\s/g, ""));
     console.log("Номер(а) телефона найден(ы):", phoneMatches);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    chatContactData.value = true; // для передачи поля Паши
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   } else {
     console.log("Номер(а) телефона не найден(ы)");
   }
@@ -311,7 +311,8 @@ function checkText(text) {
   let emailMatches = text.match(emailRegex);
   if (emailMatches) {
     console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    chatContactData.value = true; // для передачи поля Паши
   } else {
     console.log("Адрес(а) электронной почты не найден(ы)");
   }
@@ -322,7 +323,7 @@ function firstMessageClient(sendCount) {
   sendCount++;
   if (sendCount === 1 && !$cookies.get("firstMessage")) {
     console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
-    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
+    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
     $cookies.set("firstMessage", sendCount, "1d");
   }
 }
