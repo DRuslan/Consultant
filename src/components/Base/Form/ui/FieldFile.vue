@@ -60,7 +60,7 @@ export default {
     },
     onFileSelected(event) {
       const file = event.target.files[0];
-      if (file) {
+      if (file && file.size <= 3000000) {
         const fileType = file.type;
         if (
           fileType === "image/jpeg" ||
@@ -80,11 +80,12 @@ export default {
           alert(
             "Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF"
           );
+          return;
           // this.selectedFile = null;
         }
       } else {
-        // this.selectedFile = null;
-        // alert('else file');
+        alert('Загрузите файл весом меньше 3мб');
+        return;
       }
       this.$emit("update:file", file);
     },

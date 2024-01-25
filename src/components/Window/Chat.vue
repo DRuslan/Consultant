@@ -25,7 +25,7 @@
               :role="item.role"
               :created-at="item.createdAt"
               :manager-image="dataWindow.window.body.img"
-              :file="item.file"
+              :file="item.fileName"
             />
           </transition-group>
           <transition name="fade">
@@ -96,6 +96,10 @@ const props = defineProps({
   figurePos: String,
   positionX: Number,
   script: Object,
+  dopFields: {
+    type: Object,
+    default: null
+  }
 });
 
 const $cookies = inject("$cookies");
@@ -153,6 +157,11 @@ const send = (e) => {
   formData.append("Site", location.href);
   formData.append("Name", "krible-chat");
   formData.append("File", file.value);
+  formData.append("UTM", props.dopFields.allUTM);
+  formData.append("SubId", props.dopFields.SubId);
+  formData.append("City", props.dopFields.geoInfo.city);
+  formData.append("Region", props.dopFields.geoInfo.subdivision);
+  formData.append("Country", props.dopFields.geoInfo.country);
 
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "" || file.value) {

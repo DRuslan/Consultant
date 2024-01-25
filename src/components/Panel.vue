@@ -123,6 +123,7 @@
       :dataWindow="entryData.chat[0]"
       :positionX="windowPosition"
       :script="outputScript"
+      :dopFields="entryData.global.data"
       figurePos="center"
     />
 
