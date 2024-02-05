@@ -73,7 +73,6 @@ export default {
           fileType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // Check for xlsx
         ) {
           // this.selectedFile = file;
-          alert("Файл успешно выбран");
           const replaceFileType = fileType.split('/')[1];
           this.$emit("type", replaceFileType);
         } else {
