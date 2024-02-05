@@ -43,6 +43,7 @@ export default {
       type: String,
     },
     file: {
+      type: Object,
       // default: () => null,
     }
   },
@@ -57,9 +58,7 @@ export default {
     },
     onFileSelected(event) {
       const file = event.target.files[0];
-      console.log('this.file');
-      console.log(typeof file, file);
-      if (file) {
+      if (file && file.size <= 3000000) {
         const fileType = file.type;
         if (
           fileType === "image/jpeg" ||
@@ -74,13 +73,14 @@ export default {
           const replaceFileType = fileType.split('/')[1];
           this.$emit("type", replaceFileType);
         } else {
-          alert(
-            "Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF"
-          );
+          alert("Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF");
           this.$emit("update:file", null);
         }
-      } else {
-        // alert('else file');
+      } else if (file.size > 3000000) {
+        alert('Загрузите файл весом меньше 3мб');
+        this.$emit("update:file", null);
+      }
+      else {
         this.$emit("update:file", null);
       }
       this.$emit("update:file", file);
