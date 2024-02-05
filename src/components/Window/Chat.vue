@@ -25,7 +25,7 @@
               :role="item.role"
               :created-at="item.createdAt"
               :manager-image="dataWindow.window.body.img"
-              :file="item.file"
+              :file="item.fileName"
             />
           </transition-group>
           <transition name="fade">
@@ -145,8 +145,6 @@ watchEffect(() => {
 });
 
 const send = (e) => {
-  // console.log('file.value');
-  // console.log(file.value.name);
   e.preventDefault();
   // формируем данные для отправки
   const formData = new FormData(); // Constructor JS (Form building)

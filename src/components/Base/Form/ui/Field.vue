@@ -43,7 +43,7 @@
 import { ref, computed, defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-  value: String,
+  value: [String, Object],
   placeholder: String,
   type: String,
   name: String,

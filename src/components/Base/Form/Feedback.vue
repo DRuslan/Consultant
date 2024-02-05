@@ -1,8 +1,8 @@
 <template>
   <Container :form="form" :goal="goal" thank="thankMail" :dopFields="$widjet() ? $widjet().global.data : null">
     <Field
-      v-for="field in getTextFields(form)"
-      :key="field"
+      v-for="(field, index) in getTextFields(form)"
+      :key="index"
       :placeholder="field.placeholder"
       v-model="field.value"
       :value="field.value"
@@ -15,7 +15,7 @@
       type="text"
     />
     <div class="field-row">
-      <FieldFile v-model:file="form.File.value" :disabled="true" />
+      <FieldFile v-model:file="form.File.value" />
       <Button :active="getBtnActiveClass">Отправить</Button>
     </div>
   </Container>
@@ -63,7 +63,7 @@ const form = ref({
     type: "file",
     name: "File",
     placeholder: "",
-    value: "",
+    value: null,
     rules: [],
     errorMessage: "",
   }

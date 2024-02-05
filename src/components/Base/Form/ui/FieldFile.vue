@@ -42,13 +42,10 @@ export default {
     typeField: {
       type: String,
     },
-    file: Object
+    file: {
+      // default: () => null,
+    }
   },
-  // data() {
-  //   return {
-  //     selectedFile: null,
-  //   };
-  // },
   methods: {
     onInput(event) {
       if (this.disabled) {
@@ -60,6 +57,8 @@ export default {
     },
     onFileSelected(event) {
       const file = event.target.files[0];
+      console.log('this.file');
+      console.log(typeof file, file);
       if (file) {
         const fileType = file.type;
         if (
@@ -72,18 +71,17 @@ export default {
           fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" || // Check for docx
           fileType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // Check for xlsx
         ) {
-          // this.selectedFile = file;
           const replaceFileType = fileType.split('/')[1];
           this.$emit("type", replaceFileType);
         } else {
           alert(
             "Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF"
           );
-          // this.selectedFile = null;
+          this.$emit("update:file", null);
         }
       } else {
-        // this.selectedFile = null;
         // alert('else file');
+        this.$emit("update:file", null);
       }
       this.$emit("update:file", file);
     },
@@ -156,6 +154,7 @@ export default {
     text-align: left;
     width: 100px;
     height: 10px;
+    line-height: 10px;
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 12px;
