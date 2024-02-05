@@ -83,8 +83,11 @@ export default {
           return;
           // this.selectedFile = null;
         }
-      } else {
+      } else if (file.size > 3000000) {
         alert('Загрузите файл весом меньше 3мб');
+        return;
+      }
+      else {
         return;
       }
       this.$emit("update:file", file);
@@ -158,6 +161,7 @@ export default {
     text-align: left;
     width: 100px;
     height: 10px;
+    line-height: 10px;
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 12px;
