@@ -50,6 +50,7 @@ export default function useForm(form, thank, goal, dataGlobals) {
 
         function getYandexGoal (ymGoal) {
           if (ymGoal) {
+            console.log('reachGoal', ymGoal);
             window.ym(80162764, 'reachGoal', ymGoal);
           } else {
             console.error('цель не присвоена');
