@@ -60,14 +60,12 @@ const formattedCreatedAt = computed(() => {
     const timeDifference = Math.floor((currentTime - messageTime) / 1000);
     count.value // ниициализация количества секунд
     if (timeDifference < 60) {
-      console.log(interval);
       return 'Только что';
     } else if (timeDifference < 20) {
       const minutesAgo = Math.floor(timeDifference / 60);
       return `${minutesAgo} минут${getMinutesSuffix(minutesAgo)} назад`;
     } else {
       clearInterval(interval);
-      console.log(interval);
       return 'Давно';
     }
 });
