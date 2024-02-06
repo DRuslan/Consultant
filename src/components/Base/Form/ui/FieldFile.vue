@@ -75,13 +75,16 @@ export default {
         } else {
           alert("Пожалуйста, выберите картинку (jpeg, jpg, png, heic) или файл PDF");
           this.$emit("update:file", null);
+          return;
         }
       } else if (file.size > 3000000) {
         alert('Загрузите файл весом меньше 3мб');
         this.$emit("update:file", null);
+        return;
       }
       else {
         this.$emit("update:file", null);
+        return;
       }
       this.$emit("update:file", file);
     },
