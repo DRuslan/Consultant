@@ -19,11 +19,11 @@
           <transition-group name="fade">
             <Message
               class="chat__message"
-              v-for="item in Chat"
-              :key="item.id"
+              v-for="(item, index) in Chat"
+              :key="index"
               :msg="item.message"
               :role="item.role"
-              :created-at="item.createdAt"
+              :created-at="Number(item.createdAt)"
               :manager-image="dataWindow.window.body.img"
               :file="item.fileName"
             />
@@ -112,31 +112,13 @@ const countBotMessages = ref(0); // Количество ответов бота
 const chatContainerRef = ref(null); // Для отслеживания высоты чата и его скролла
 const chatContactData = ref(false); // Для отслеживания передачи поля Паши что в переписке ыбли контакты чтобы зарегать лид на мененджера
 let sendClientMessage = ref(0);
-// Текущие дата и время
-const currentData = new Date();
-// Получить часовой пояс клиента
-const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-const formatter = new Intl.DateTimeFormat("ru", {
-  timeZone: userTimeZone,
-  year: "numeric",
-  month: "numeric",
-  day: "numeric",
-  hour: "numeric",
-  minute: "numeric",
-  second: "numeric",
-});
-
-// Преобразовать время в строку с учетом часового пояса пользователя
-const formattedDate = formatter.format(currentData);
-// console.log(formattedDate);
 
 // Проверка и присвоение первого сообщения
 if (props.script && !$cookies.get("firstMessage")) {
   const messageBotScript = props.script[countBotMessages.value]; // Сообщение от бота в скрипте
   Chat.value.push({
     ...messageBotScript,
-    createdAt: formattedDate,
+    createdAt: new Date().getTime(),
   });
 }
 
@@ -150,22 +132,21 @@ watchEffect(() => {
 
 const send = (e) => {
   e.preventDefault();
-  // формируем данные для отправки
   const formData = new FormData(); // Constructor JS (Form building)
   formData.append("Site", location.href);
   formData.append("Name", "krible-chat");
   formData.append("File", file.value);
-  formData.append("UTM", props.dopFields.allUTM);
-  formData.append("SubId", props.dopFields.SubId);
-  formData.append("City", props.dopFields.geoInfo.city);
-  formData.append("Region", props.dopFields.geoInfo.subdivision);
-  formData.append("Country", props.dopFields.geoInfo.country);
+  // formData.append("UTM", props.dopFields.allUTM);
+  // formData.append("SubId", props.dopFields.SubId);
+  // formData.append("City", props.dopFields.geoInfo.city);
+  // formData.append("Region", props.dopFields.geoInfo.subdivision);
+  // formData.append("Country", props.dopFields.geoInfo.country);
 
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "" || file.value) {
     Chat.value.push({
       id: generateUniqueId(),
-      createdAt: formattedDate,
+      createdAt: new Date().getTime(),
       message: newMessage.value,
       role: "client",
       fileName: file?.value?.name,
@@ -174,6 +155,9 @@ const send = (e) => {
     // Количество отправленных сообщений от клиента нужно для метрики только после 1 сообщения отрабатывает цель
     firstMessageClient(sendClientMessage.value);
     checkText(newMessage.value.trim());
+
+
+
     if (chatContactData.value === true) {
       formData.append("ChatContactData", true); // Передаем Поле Паше для отслеживания дисквал лид или нет
     }
@@ -233,7 +217,7 @@ async function sendBot() {
     await delaysSendBot(delayTimeMessage);
     Chat.value.push({
       ...props.script[countBotMessages.value],
-      createdAt: formattedDate,
+      createdAt: new Date().getTime(),
     });
     countBotMessages.value++;
     if (countBotMessages.value < props.script.length) {
@@ -245,7 +229,7 @@ async function sendBot() {
 
       Chat.value.push({
         ...props.script[countBotMessages.value],
-        createdAt: formattedDate,
+        createdAt: new Date().getTime(),
       });
       isMessageSend.value = false;
       ignoreWaiting.value = false;
@@ -258,7 +242,7 @@ async function sendBot() {
     console.log("Пользователь получил ответ на сообщение");
     Chat.value.push({
       ...props.script[countBotMessages.value],
-      createdAt: formattedDate,
+      createdAt: new Date().getTime(),
     });
     isMessageSend.value = false;
     scrollLastMessage();

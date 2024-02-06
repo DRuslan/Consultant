@@ -7,7 +7,7 @@
       <img :src="managerImage" alt="" />
     </div>
     <div class="msg__inner">
-      <div class="msg__created"><small>{{ formattedTimeAgo }}</small></div>
+      <div class="msg__created"><small>{{ formattedCreatedAt }}</small></div>
       <div v-if="msg && file || file" :class="[{ msg__client_message: role === 'client' }]">
         <p class="msg__file_name" :style="{color: $widjet().global.color }">{{ file }}</p>
         <p>{{ msg }}</p>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { defineProps, ref, computed } from "vue";
 
 const props = defineProps({
   msg: {
@@ -38,7 +38,8 @@ const props = defineProps({
     validator: (value) => ["bot", "client"].includes(value),
   },
   createdAt: {
-    type: String,
+    type: Number,
+    default: new Date().getTime(),
   },
   managerImage: {
     type: String,
@@ -48,51 +49,28 @@ const props = defineProps({
   }
 });
 
-const formattedTimeAgo = ref(""); // Инициализируем значение
-// Функция, которая будет вызываться каждую минуту
-const updateFormattedTimeAgo = () => {
-  formattedTimeAgo.value = calculateTimeAgo();
-};
+const count = ref(0);
 
-// Вызываем функцию каждую минуту
-setInterval(updateFormattedTimeAgo, 60000);
+const interval = setInterval(() => {count.value++}, 600);
 
-// Вызываем функцию при создании компонента
-updateFormattedTimeAgo();
 
-function calculateTimeAgo() {
-  // Получить часовой пояс клиента
-  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const formatter = new Intl.DateTimeFormat('ru', {
-    timeZone: userTimeZone,
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-  });
-
-  // Преобразовать строку в объект Date с явным указанием формата
-  const messageTime = new Date(props.createdAt.replace(/(\d{2}).(\d{2}).(\d{4}), (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
-
-  const formattedTime = formatter.format(messageTime);
-
-  console.log(formattedTime, messageTime);
-
-  const currentTime = new Date();
-  const timeDifference = Math.floor((currentTime - messageTime) / 1000);
-
-  if (timeDifference < 60) {
-    return 'Только что';
-  } else if (timeDifference < 1800) {
-    const minutesAgo = Math.floor(timeDifference / 60);
-    return `${minutesAgo} минут${getMinutesSuffix(minutesAgo)} назад`;
-  } else {
-    return 'Давно';
-  }
-}
-
+const formattedCreatedAt = computed(() => {
+    const messageTime = new Date(props.createdAt);
+    const currentTime = new Date();
+    const timeDifference = Math.floor((currentTime - messageTime) / 1000);
+    count.value // ниициализация количества секунд
+    if (timeDifference < 60) {
+      console.log(interval);
+      return 'Только что';
+    } else if (timeDifference < 20) {
+      const minutesAgo = Math.floor(timeDifference / 60);
+      return `${minutesAgo} минут${getMinutesSuffix(minutesAgo)} назад`;
+    } else {
+      clearInterval(interval);
+      console.log(interval);
+      return 'Давно';
+    }
+});
 
 // склонения времени
 function getMinutesSuffix(minutes) {
