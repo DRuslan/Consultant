@@ -2,8 +2,6 @@ import axios from "axios";
 import { inject, ref } from "vue";
 import { openModal } from "../store/modals";
 export default function useForm(form, thank, goal, dataGlobals) {
-    const isProcessing = ref(false)
-
     const validate = inject("validate"); // подключаю плагин validate.js
     const resetForm = inject("resetForm"); // подключаю плагин formsHelper.js
     const send = () => {

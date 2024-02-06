@@ -293,7 +293,7 @@ function checkText(text) {
     phoneMatches = phoneMatches.map((phone) => phone.replace(/\s/g, ""));
     console.log("Номер(а) телефона найден(ы):", phoneMatches);
     chatContactData.value = true; // для передачи поля Паши
-    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
   } else {
     console.log("Номер(а) телефона не найден(ы)");
   }
@@ -302,7 +302,7 @@ function checkText(text) {
   let emailMatches = text.match(emailRegex);
   if (emailMatches) {
     console.log("Адрес(а) электронной почты найден(ы):", emailMatches);
-    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
+    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[1]);
     chatContactData.value = true; // для передачи поля Паши
   } else {
     console.log("Адрес(а) электронной почты не найден(ы)");
@@ -314,7 +314,7 @@ function firstMessageClient(sendCount) {
   sendCount++;
   if (sendCount === 1 && !$cookies.get("firstMessage")) {
     console.log(`Цель отработала ${props.dataWindow.yandex.goal[0]}`);
-    // window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
+    window.ym(80162764, 'reachGoal', props.dataWindow.yandex.goal[0]);
     $cookies.set("firstMessage", sendCount, "1d");
   }
 }
