@@ -40,7 +40,7 @@
 
       <PanelCol
         hr="right"
-        size="l"
+        size="m"
         @click="showWindow($event, 'Fast')"
         :visibility="entryData.fastmail.visibility"
         :windowWidth="widthDevice"
