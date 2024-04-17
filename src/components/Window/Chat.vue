@@ -94,6 +94,7 @@ const props = defineProps({
   windowType: String,
   dataWindow: Object,
   figurePos: String,
+  manager: String,
   positionX: Number,
   script: Object,
   dopFields: {
@@ -141,6 +142,7 @@ const send = (e) => {
   formData.append("City", props.dopFields.geoInfo.city);
   formData.append("Region", props.dopFields.geoInfo.subdivision);
   formData.append("Country", props.dopFields.geoInfo.country);
+  formData.append("TypeAvatarFromSiteManeger", props.manager);
 
   // Отправляем сообщение и очищаем текстовое поле
   if (newMessage.value.trim() !== "" || file.value) {

@@ -1,6 +1,5 @@
 <template>
-  <transition name="fade">
-  <!-- <transition :name="transitionName"> -->
+  <transition name="cons-fade">
     <div v-if="isVisible" class="wrapper" :style="{left: `${position}px`}">
       <div 
         v-if="headerIcon || headerTitle"
@@ -33,19 +32,6 @@ const props = defineProps({
   headerIcon: String,
   position: Number
 });
-
-// const handleAfterEnter = () => {
-//   console.log('Анимация входа завершена');
-//   // Ваши дополнительные действия после окончания анимации входа
-// };
-
-// const handleAfterLeave = () => {
-//   console.log('Анимация выхода завершена');
-//   // Ваши дополнительные действия после окончания анимации выхода
-// };
-
-// const transitionName = ref("modal-animation");
-
 </script>
   
   <style lang="scss" scoped>
@@ -79,35 +65,35 @@ const props = defineProps({
   }
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+.cons-fade-enter-active,
+.cons-fade-leave-active {
+  transition: all 0.3s ease-in-out;
 }
 
-.fade-enter-from,
-.fade-leave-to {
+.cons-fade-enter-from,
+.cons-fade-leave-to {
   opacity: 0;
 }
 
-.modal-animation-enter-active,
-.modal-animation-leave-active {
-  transition: opacity 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02);
-}
-.modal-animation-enter-from,
-.modal-animation-leave-to {
-  opacity: 0;
-}
-.modal-animation-inner-enter-active {
-  transition: all 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02) 0.15s;
-}
-.modal-animation-inner-leave-active {
-  transition: all 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02);
-}
-.modal-animation-inner-enter-from {
-  opacity: 0;
-  transform: scale(0.8);
-}
-.modal-animation-inner-leave-to {
-  transform: scale(0.8);
-}
+// .modal-animation-enter-active,
+// .modal-animation-leave-active {
+//   transition: opacity 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02);
+// }
+// .modal-animation-enter-from,
+// .modal-animation-leave-to {
+//   opacity: 0;
+// }
+// .modal-animation-inner-enter-active {
+//   transition: all 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02) 0.15s;
+// }
+// .modal-animation-inner-leave-active {
+//   transition: all 0.3s cubic-bezier(0.52, 0.02, 0.19, 1.02);
+// }
+// .modal-animation-inner-enter-from {
+//   opacity: 0;
+//   transform: scale(0.8);
+// }
+// .modal-animation-inner-leave-to {
+//   transform: scale(0.8);
+// }
 </style>

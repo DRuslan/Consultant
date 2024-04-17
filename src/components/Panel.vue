@@ -124,6 +124,7 @@
       :positionX="windowPosition"
       :script="outputScript"
       :dopFields="entryData.global.data"
+      :manager="entryData.onlineConsultant[0].manager"
       figurePos="center"
     />
 
